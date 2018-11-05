@@ -21,6 +21,26 @@ class PlayerSpec() extends WordSpec with Matchers {
         player.status should be(Status.WAIT)
       }
     }
-  }
+    "takes a Tile" should {
+      val set = Set[Tile]()
+      val board = Board(set)
+      var player = Player("Name1", 1, board)
+      player.board.size() should be(0)
+      player = player.fromBagToBoard(Tile(1, Color.RED, 0))
+      "have one tile in board" in {
+        player.board.size() should be(1)
+      }
 
+    }
+    "lays down a Tile" should {
+      val set = Set[Tile](Tile(1, Color.RED, 0))
+      val board = Board(set)
+      var player = Player("Name1", 1, board)
+      player.board.size() should be(1)
+      player = player.fromBoardToTable(Tile(1, Color.RED, 0))
+      "have one tile in board" in {
+        player.board.size() should be(0)
+      }
+    }
+  }
 }
