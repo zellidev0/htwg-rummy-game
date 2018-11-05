@@ -1,5 +1,14 @@
 package model
 
-case class Player(name: String) {
-  var board = Board()
+
+case class Player(name: String, number: Int, board: Board) {
+  var status: Status.Value = Status.WAIT
+
+  override def toString: String = name
+
+  def fromBoardToTable(tile: Tile): Player = Player(name, number, board.remove(tile))
+
+  def fromBagToBoard(tile: Tile): Player = Player(name, number, board.add(tile))
+
+
 }

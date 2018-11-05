@@ -6,11 +6,12 @@ import org.scalatest.{Matchers, WordSpec}
 class TileSpec extends WordSpec with Matchers {
 
   "A tile" when {
-    "created with val 1 and color red" should {
-      val tile = Tile(1, Color.RED)
-      "have value 1 and color red" in {
+    "created with value and color" should {
+      val tile = Tile(1, Color.RED, 1)
+      "have value 1 and color red and num 1" in {
         tile.value should be(1)
-        tile.color should be (Color.RED)
+        tile.color should be(Color.RED)
+        tile.num should be(1)
       }
     }
   }
