@@ -24,4 +24,11 @@ case class Desk(players: Array[Player], bagOfTiles: Set[Tile], tileTable: Set[Ti
 
   private def getRandomTile(): Tile = bagOfTiles.toVector(Random.nextInt(bagOfTiles.size))
 
+  def switchToNextPlayer(current: Player, next: Player): Desk = {
+
+    players.apply(players.indexWhere(p => p == current)).status = Status.WAIT
+    players.apply(players.indexWhere(p => p == next)).status = Status.TURN
+    this.copy(players)
+  }
+
 }

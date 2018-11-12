@@ -12,6 +12,7 @@ class TileSpec extends WordSpec with Matchers {
         tile.value should be(1)
         tile.color should be(Color.RED)
         tile.num should be(1)
+        tile.identifier should be("1R1")
       }
     }
   }

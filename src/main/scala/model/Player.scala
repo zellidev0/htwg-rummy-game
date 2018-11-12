@@ -10,5 +10,8 @@ case class Player(name: String, number: Int, board: Board) {
 
   def fromBagToBoard(tile: Tile): Player = Player(name, number, board.add(tile))
 
-
+  def changeState(newStatus: Status.Value): Player = {
+    this.status = newStatus
+    this.copy()
+  }
 }
