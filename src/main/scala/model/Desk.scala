@@ -26,9 +26,16 @@ case class Desk(players: Array[Player], bagOfTiles: Set[Tile], tileTable: Set[Ti
 
   def switchToNextPlayer(current: Player, next: Player): Desk = {
 
-    players.apply(players.indexWhere(p => p == current)).status = Status.WAIT
-    players.apply(players.indexWhere(p => p == next)).status = Status.TURN
-    this.copy(players)
+    val indexOfPlayer1 = players.indexWhere(p => p == current)
+    val indexOfPlayer2 = players.indexWhere(p => p == next)
+    val player1 = players.apply(indexOfPlayer1)
+    val player2 = players.apply(indexOfPlayer2)
+
+    val player1New = player1.changeState(State.WAIT)
+    val player2New = player2.changeState(State.TURN)
+    players.update(indexOfPlayer1, player1New)
+    players.update(indexOfPlayer2, player2New)
+    this.copy()
   }
 
 }
