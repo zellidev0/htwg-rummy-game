@@ -1,4 +1,4 @@
-import model.{Board, Desk, Player, Tile}
+import model.{Board, Player, Tile}
 //import model.{Desk, Tile}
 //
 //def initializeBagOfTiles(): Desk = {
@@ -44,3 +44,5 @@ def switchToNextPlayer(current: Player, next: Player): Unit = {
   players.update(indexOfPlayer2, player2New)
   print(players)
 }
+
+

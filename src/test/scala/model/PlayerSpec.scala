@@ -5,9 +5,7 @@ import org.scalatest._
 class PlayerSpec() extends WordSpec with Matchers {
   "A Player" when {
     "created" should {
-      val set = Set[Tile]()
-      val board = Board(set)
-      val player = Player("Name1", 1, board)
+      val player = Player("Name1", 1, Board(Set[Tile]()))
       "have a name" in {
         player.name should be("Name1")
       }
@@ -22,9 +20,7 @@ class PlayerSpec() extends WordSpec with Matchers {
       }
     }
     "takes a Tile" should {
-      val set = Set[Tile]()
-      val board = Board(set)
-      var player = Player("Name1", 1, board)
+      var player = Player("Name1", 1, Board(Set[Tile]()))
       player.board.amountOfTiles() should be(0)
       player = player.addToBoard(Tile(1, Color.RED, 0))
       "have one tile in board" in {
@@ -33,9 +29,7 @@ class PlayerSpec() extends WordSpec with Matchers {
 
     }
     "lays down a Tile" should {
-      val set = Set[Tile](Tile(1, Color.RED, 0))
-      val board = Board(set)
-      var player = Player("Name1", 1, board)
+      var player = Player("Name1", 1, Board(Set[Tile](Tile(1, Color.RED, 0))))
       player.board.amountOfTiles() should be(1)
       player = player.takeFromBoard(Tile(1, Color.RED, 0))
       "have one tile in board" in {
@@ -43,13 +37,10 @@ class PlayerSpec() extends WordSpec with Matchers {
       }
     }
     "its status is changed" should {
-      val set1 = Set[Tile]()
-      val board1 = Board(set1)
-      val player1 = Player("Name1", 1, board1)
-      val newStatus = State.TURN
-      val player = player1.copy(state = newStatus)
+      val player1 = Player("Name1", 1, Board(Set[Tile]()))
+      val player = player1.copy(state = State.TURN)
       "the new status be turn " in {
-        player.state should be(newStatus)
+        player.state should be(State.TURN)
       }
     }
   }

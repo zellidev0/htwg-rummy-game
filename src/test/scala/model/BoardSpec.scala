@@ -7,10 +7,8 @@ class BoardSpec extends WordSpec with Matchers {
 
   "A Board" when {
     "created" should {
-      val set = Set[Tile]()
-      val board = Board(set)
       "have 0 tiles" in {
-        board.tiles.isEmpty should be(true)
+        Board(Set[Tile]()).tiles.isEmpty should be(true)
       }
     }
     "created with 1" should {
@@ -24,8 +22,7 @@ class BoardSpec extends WordSpec with Matchers {
       }
     }
     "gets added a tile" should {
-      val set = Set[Tile]()
-      var board = Board(set)
+      var board = Board(Set[Tile]())
       val tile = Tile(1, Color.RED, 0)
       board = board.add(tile)
       "have 1 tiles" in {
@@ -41,8 +38,7 @@ class BoardSpec extends WordSpec with Matchers {
     }
     "gets removed a tile" should {
       val tile = Tile(1, Color.RED, 0)
-      val set = Set[Tile](tile)
-      var board = Board(set)
+      var board = Board(Set[Tile](tile))
       board.amountOfTiles() should be(1)
       board.contains(tile) should be(true)
 

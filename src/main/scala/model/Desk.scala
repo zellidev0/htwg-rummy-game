@@ -1,70 +1,94 @@
 package model
 
+import scala.collection.SortedSet
 import scala.util.Random
 
-case class Desk(players: Set[Player], bagOfTiles: Set[Tile], tileTable: Set[Tile]) {
+case class Desk(players: Set[Player], bagOfTiles: Set[Tile], tileSets: Set[SortedSet[Tile]]) {
+
+  def size: Int = {
+    var x = 0
+    for (sets <- tileSets) {
+      x += sets.size
+    }
+    x
+  }
+
+
+  def moveTile(tile1: Tile, tile2: Tile): Desk = {
+    if (tileSetContains(tile1) && tileSetContains(tile2)) {
+
+      var tileSetWithou1 = SortedSet[Tile]()
+      var all = tileSets
+
+      getTileSetWhereTileIsIn(tile1) match {
+        case Some(value) => tileSetWithou1 = value.-(tile1)
+          all = tileSets.-(value).+(tileSetWithou1)
+      }
+      getTileSetWhereTileIsIn(tile2) match {
+        case Some(value) => val x = value.+(tile1)
+          all = all.-(value).+(x)
+      }
+      copy(tileSets = all)
+    }
+    this
+  }
+
+
+  def tileSetContains(tile: Tile): Boolean = {
+    for (set <- tileSets) {
+      if (set.contains(tile)) {
+        return true
+      }
+    }
+    false
+  }
+
+  def getTileSetWhereTileIsIn(tile: Tile): Option[SortedSet[Tile]] = {
+    for (set <- tileSets) {
+      if (set.contains(tile)) {
+        return Option(set)
+      }
+    }
+    None
+  }
 
   def layDownTileOnTable(player: Player, tile: Tile): Desk = {
-    var playerInSetOptional = players.find(p => p == player)
-    playerInSetOptional match {
-      case Some(value) => copy(players = players.-(value).+(value.takeFromBoard(tile)), tileTable = tileTable + tile)
-      case None => throw new IllegalArgumentException("wrong argument")
+    players.find(p => p == player) match {
+      case Some(value) => copy(players = players.-(value).+(value.takeFromBoard(tile)),
+        tileSets = tileSets.+(SortedSet[Tile]().+(tile)))
+      case None => throw new IllegalArgumentException("Could not find the player tat puts the tile on the table")
     }
   }
 
   def takeTileFromBag(player: Player): Desk = {
     val tile = getRandomTile
-    var playerInSetOptional = players.find(p => p == player)
-    playerInSetOptional match {
-      case Some(value) => {
-        val newBagOfTiles = bagOfTiles - tile
-        val newPlayer = value.addToBoard(tile)
-        val newPlayerArray = players.-(value)
-        val newPlayerarray2 = newPlayerArray.+(newPlayer)
-        copy(players = newPlayerarray2, bagOfTiles = newBagOfTiles)
-      }
-      case None => throw new IllegalArgumentException("wrong argument")
+    players.find(p => p == player) match {
+      case Some(value) => copy(players = players.-(value).+(value.addToBoard(tile)), bagOfTiles = bagOfTiles - tile)
+      case None => throw new IllegalArgumentException("The Player does not exist!")
     }
   }
 
-  private def getRandomTile: Tile = bagOfTiles.toVector(Random.nextInt(bagOfTiles.size))
+
+  def getRandomTile: Tile = bagOfTiles.toVector(Random.nextInt(bagOfTiles.size))
+
+
 
   def switchToNextPlayer(current: Player, next: Player): Desk = {
 
-
-    var currentFoundnd = players.find(p => p == current)
     var newPlayers = Set[Player]()
-    currentFoundnd match {
-      case Some(value) =>
-        var newPlayer = value.changeState(State.WAIT)
-        var x = players.-(value)
-        var y = x.+(newPlayer)
-        newPlayers = y
-      case None => throw new IllegalArgumentException("wrong argument")
+    players.find(p => p == current) match {
+      case Some(value) => newPlayers = players.-(value).+(value.changeState(State.WAIT))
+      case None => throw new IllegalArgumentException("Could not set current player on WAIT!")
     }
-    var nextFoundnd = newPlayers.find(p => p == next)
-
-    nextFoundnd match {
-      case Some(value) =>
-        var newPlayer = value.changeState(State.TURN)
-        var x = newPlayers.-(value)
-        var y = x.+(newPlayer)
-        newPlayers = y
-      case None => throw new IllegalArgumentException("wrong argument")
+    newPlayers.find(p => p == next) match {
+      case Some(value) => newPlayers = newPlayers.-(value).+(value.changeState(State.TURN))
+      case None => throw new IllegalArgumentException("Could not set next Player on TURN!")
     }
     copy(players = newPlayers)
   }
 
   def addPlayers(player: Player): Desk = copy(players = players.+(player))
 
-  def hasEnoughPlayers: Boolean = players.size >= 2 && players.size <= 4
+  def hasCorrectAmountOfPlayers: Boolean = players.size >= 2 && players.size + 1 <= 4
 
-  def hasStarted: Boolean = {
-    for (player <- players) {
-      if (player.board.amountOfTiles() != 0) {
-        true
-      }
-    }
-    false
-  }
 }

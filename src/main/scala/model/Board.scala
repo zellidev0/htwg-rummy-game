@@ -7,6 +7,7 @@ package model
 */
 
 case class Board(tiles: Set[Tile]) {
+
   def amountOfTiles(): Int = tiles.size
 
   def add(tile: Tile): Board = Board(tiles + tile)
