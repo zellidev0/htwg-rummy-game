@@ -5,8 +5,9 @@ package model
 * Was ist besser: tiles etwas hinzufügen und dann zurückgeben
 * oder tiles als var un neues Objet erzeugen, das einhänge und das zurückgeben
 */
+
 case class Board(tiles: Set[Tile]) {
-  def size(): Int = tiles.size
+  def amountOfTiles(): Int = tiles.size
 
   def add(tile: Tile): Board = Board(tiles + tile)
 

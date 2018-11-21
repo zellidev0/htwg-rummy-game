@@ -25,10 +25,10 @@ class PlayerSpec() extends WordSpec with Matchers {
       val set = Set[Tile]()
       val board = Board(set)
       var player = Player("Name1", 1, board)
-      player.board.size() should be(0)
-      player = player.fromBagToBoard(Tile(1, Color.RED, 0))
+      player.board.amountOfTiles() should be(0)
+      player = player.addToBoard(Tile(1, Color.RED, 0))
       "have one tile in board" in {
-        player.board.size() should be(1)
+        player.board.amountOfTiles() should be(1)
       }
 
     }
@@ -36,10 +36,10 @@ class PlayerSpec() extends WordSpec with Matchers {
       val set = Set[Tile](Tile(1, Color.RED, 0))
       val board = Board(set)
       var player = Player("Name1", 1, board)
-      player.board.size() should be(1)
-      player = player.fromBoardToTable(Tile(1, Color.RED, 0))
+      player.board.amountOfTiles() should be(1)
+      player = player.takeFromBoard(Tile(1, Color.RED, 0))
       "have one tile in board" in {
-        player.board.size() should be(0)
+        player.board.amountOfTiles() should be(0)
       }
     }
     "its status is changed" should {

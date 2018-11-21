@@ -31,7 +31,7 @@ class BoardSpec extends WordSpec with Matchers {
       "have 1 tiles" in {
         var opt = board.tiles.find(t => tile.identifier == t.identifier)
         if (opt.isDefined) {
-          board.size() should be(1)
+          board.amountOfTiles() should be(1)
           board.contains(tile) should be(true)
           (opt.get.identifier == tile.identifier) should be(true)
         } else {
@@ -43,7 +43,7 @@ class BoardSpec extends WordSpec with Matchers {
       val tile = Tile(1, Color.RED, 0)
       val set = Set[Tile](tile)
       var board = Board(set)
-      board.size() should be(1)
+      board.amountOfTiles() should be(1)
       board.contains(tile) should be(true)
 
       board = board.remove(tile)
@@ -51,7 +51,7 @@ class BoardSpec extends WordSpec with Matchers {
         var opt = board.tiles.find(t => tile.identifier == t.identifier)
         if (opt.isEmpty) {
           board.contains(tile) should be(false)
-          board.size() should be(0)
+          board.amountOfTiles() should be(0)
         } else {
           1 should be(0)
         }
