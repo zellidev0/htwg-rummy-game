@@ -18,7 +18,7 @@ class PlayerSpec() extends WordSpec with Matchers {
         player.number should be(1)
       }
       "have the status Wait" in {
-        player.status should be(Status.WAIT)
+        player.state should be(State.WAIT)
       }
     }
     "takes a Tile" should {
@@ -40,6 +40,16 @@ class PlayerSpec() extends WordSpec with Matchers {
       player = player.fromBoardToTable(Tile(1, Color.RED, 0))
       "have one tile in board" in {
         player.board.size() should be(0)
+      }
+    }
+    "its status is changed" should {
+      val set1 = Set[Tile]()
+      val board1 = Board(set1)
+      val player1 = Player("Name1", 1, board1)
+      val newStatus = State.TURN
+      val player = player1.copy(state = newStatus)
+      "the new status be turn " in {
+        player.state should be(newStatus)
       }
     }
   }

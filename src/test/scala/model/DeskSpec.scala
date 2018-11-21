@@ -14,10 +14,10 @@ class DeskSpec extends WordSpec with Matchers {
       val player1 = Player("Name1", 1, board1)
       val player2 = Player("Name2", 2, board2)
       val players = Array(player1, player2)
-      var tile1 = Tile(1, Color.RED, 0)
-      var tile2 = Tile(1, Color.RED, 1)
-      var tile3 = Tile(2, Color.RED, 0)
-      var tile4 = Tile(2, Color.RED, 1)
+      val tile1 = Tile(1, Color.RED, 0)
+      val tile2 = Tile(1, Color.RED, 1)
+      val tile3 = Tile(2, Color.RED, 0)
+      val tile4 = Tile(2, Color.RED, 1)
       val bagOfTiles = Set(tile1, tile2, tile3, tile4)
       val tileTable = Set[Tile]()
       val desk = Desk(players, bagOfTiles, tileTable)
@@ -62,6 +62,25 @@ class DeskSpec extends WordSpec with Matchers {
       "have one more tile on table" in {
         desk.bagOfTiles.size should be(amountOfTilesInBag - 1) // 1
         desk.players.apply(0).board.size() should be(amountOfTilesOnBoardOfPlayer1 + 1) // 1
+      }
+    }
+    "its palyer is next" should {
+      val set1 = Set[Tile]()
+      val board1 = Board(set1)
+      val set2 = Set[Tile]()
+      val board2 = Board(set2)
+      var player1 = Player("Name1", 1, board1)
+      var player2 = Player("Name2", 2, board2)
+      val bagOfTiles = Set[Tile]()
+      val tileTable = Set[Tile]()
+      player1 = player1.changeState(State.TURN) //TURN
+      player2 = player2.changeState(State.WAIT) //WAIT
+      val players = Array(player1, player2)
+      val desk = Desk(players, bagOfTiles, tileTable)
+      val current = desk.switchToNextPlayer(player1, player2)
+      "players status" in{
+        current.players.apply(0).state should be(State.WAIT) //WAIT
+        current.players.apply(1).state should be(State.TURN) //TURN
       }
     }
   }
