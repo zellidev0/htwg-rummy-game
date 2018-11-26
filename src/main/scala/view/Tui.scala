@@ -10,8 +10,8 @@ class Tui(controller: Controller) extends Observer {
   val PlayerNamePattern: Regex = "name ([A-Za-z])+".r
 
   controller.add(this)
-  val LayDownTilePattern: Regex = "(l [1-13] [RBYG] [01])".r
-  val MoveTilePattern: Regex = "(m [1-13] [RBYG] [01] l [1-13] [RBYG] [01])".r
+  val LayDownTilePattern: Regex = "(l [1-13][RBYG][01])".r
+  val MoveTilePattern: Regex = "(m [1-13][RBYG][01] t [1-13][RBYG][01])".r
   var playerOnTurn = false
   var mustInsertNames = false
 
@@ -19,29 +19,29 @@ class Tui(controller: Controller) extends Observer {
     if (playerOnTurn) {
       handleOnTurnInout(input)
     } else if (mustInsertNames) {
-      handleNameInput(input)
+      handleNameInput(input.substring(4).trim)
     } else {
       handleMenuInput(input)
     }
   }
 
-  def handleNameInput(input: String): Unit = {
-    input match {
+  def handleNameInput(name: String): Unit = {
+    name match {
       case "f" =>
-        if (!controller.desk.hasCorrectAmountOfPlayers) {
+        if (!controller.hasEnoughPlayers) {
           println("Not enough Players. Please insert another name")
           return
         }
         mustInsertNames = false
         println("You finished great. Now type in 's' and enter to start.")
-      case PlayerNamePattern(c) =>
-        if (controller.desk.players.size == 4) {
+      case PlayerNamePattern() =>
+        if (controller.hasEnoughPlayers) {
           mustInsertNames = false
           println("The Maximum amount of players is set. Type 's' to start")
           return
         }
-        if (controller.setPlayerName(input.substring(4))) {
-          println("Player " + controller.desk.players.size + "is named" + input.substring(4))
+        if (controller.setPlayerName(name)) {
+          println("Player " + controller.desk.players.size + " is named" + name.substring(4))
           println("Type in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
         } else {
           println("Could not identify your input. Are you sure it was in the format 'name <name1>'?")
@@ -70,9 +70,9 @@ class Tui(controller: Controller) extends Observer {
         controller.createDesk(13)
         mustInsertNames = true
         println("Desk created. Please type in 'name <name1>' where name1 is the first players name. Confirm with enter")
-      case "s" => playerOnTurn = true;
-        controller.initPlayer()
-        println("Player 0 starts the game.")
+      case "s" => playerOnTurn = true
+        controller.initPlayersWithStones(12)
+        println("Player 1 starts the game.")
         println("Type 't' to take a tile")
         println("Type 'l <value> <FirstLetterOfColor> <num>' to put it on the table")
         println("Type 'm <valueA> <FirstLetterOfColorA> <numA> l <valueB> <FirstLetterOfColorB> <numB>"
@@ -84,7 +84,8 @@ class Tui(controller: Controller) extends Observer {
 
 
   override def update: Boolean = {
-    println("test")
+    println("test") //TODO
     true
   }
+
 }

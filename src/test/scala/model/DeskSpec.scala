@@ -16,7 +16,7 @@ class DeskSpec extends WordSpec with Matchers {
         desk.bagOfTiles.size should be(2)
       }
       "have a correct amount of players" in {
-        desk.hasCorrectAmountOfPlayers should be(true)
+        desk.hasNotMorePlayersThanAllowed should be(true)
 
       }
 
@@ -28,7 +28,7 @@ class DeskSpec extends WordSpec with Matchers {
       desk = desk.addPlayers(Player("Name4", 3, Board(Set[Tile]())))
       desk = desk.addPlayers(Player("Name5", 4, Board(Set[Tile]())))
       "not have a correct amount of players" in {
-        desk.hasCorrectAmountOfPlayers should be(false)
+        desk.hasNotMorePlayersThanAllowed should be(false)
       }
     }
 
@@ -96,7 +96,7 @@ class DeskSpec extends WordSpec with Matchers {
 
     }
 
-    "user moves tile to//BIRGIT tile from bag" should {
+    "user moves tile to tile from bag" should {
       val players = Set(Player("Name1", 0, Board(Set[Tile]())))
       var desk = Desk(players, Set[Tile](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1)), Set[SortedSet[Tile]]())
       val amountOfTilesInBag = desk.bagOfTiles.size // 2
@@ -118,20 +118,16 @@ class DeskSpec extends WordSpec with Matchers {
     }
 
 
-    "two players switch turn its player" should {
-      val player1 = Player("Name1", 0, Board(Set[Tile]())).changeState(State.TURN) //TURN
-      val player2 = Player("Name2", 1, Board(Set[Tile]())).changeState(State.WAIT) //WAIT
+    "two players switch turn, -> its player" should {
+      val player1 = Player("Name1", 0, Board(Set[Tile]()), state = State.TURN)
+      val player2 = Player("Name2", 1, Board(Set[Tile]()))
       val players = Set(player1, player2)
       val desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]]()).switchToNextPlayer(player1, player2)
       "have status Wait (current)" in {
-        desk.players.find(p => p.number == player1.number) match {
-          case Some(value) => value.state should be(State.WAIT) //WAIT
-        }
+        desk.players.exists(p => p.number == player1.number && p.state == State.WAIT) should be(true)
       }
       "have status TURN (next)" in {
-        desk.players.find(p => p.number == player2.number) match {
-          case Some(value) => value.state should be(State.TURN) //WAIT
-        }
+        desk.players.exists(p => p.number == player2.number && p.state == State.TURN) should be(true)
       }
     }
   }
