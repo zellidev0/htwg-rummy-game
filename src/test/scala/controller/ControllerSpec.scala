@@ -12,13 +12,13 @@ class ControllerSpec extends WordSpec with Matchers {
     "should move a tile" should {
       val players = Set(Player("Name1", 0, Board(Set[Tile]()), state = State.TURN), Player("Name2", 1, Board(Set[Tile]())))
       var desk = Desk(players, Set(), Set[SortedSet[Tile]]())
-      desk = desk.copy(tileSets = desk.tileSets.+(SortedSet(Tile(2, Color.RED, 0))))
-      desk = desk.copy(tileSets = desk.tileSets.+(SortedSet(Tile(1, Color.RED, 0))))
+      desk = desk.copy(sets = desk.sets.+(SortedSet(Tile(2, Color.RED, 0))))
+      desk = desk.copy(sets = desk.sets.+(SortedSet(Tile(1, Color.RED, 0))))
       val controller = new Controller(desk)
       controller.moveTile("m 2R0 t 1R0")
       "have only one set with the 2 tiles side by side" in {
-        controller.desk.tileSets.size should be(1)
-        controller.desk.tileSets.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
+        controller.desk.sets.size should be(1)
+        controller.desk.sets.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
       }
     }
     "lay Down a tile" should {
@@ -27,8 +27,8 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.layDownTile("l 1R0")
       "have only one set with one tile" in {
-        controller.desk.tileSets.size should be(1)
-        controller.desk.tileSets.contains(SortedSet(Tile(1, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
+        controller.desk.sets.size should be(1)
+        controller.desk.sets.contains(SortedSet(Tile(1, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
       }
     }
     "get Current Player" should {
@@ -42,9 +42,9 @@ class ControllerSpec extends WordSpec with Matchers {
           controller.desk = controller.desk.copy(players = players.-(s).+(player))
       }
       "get the one player" in {
-        controller.getCurrentPlayer.name should be(player.name)
-        controller.getCurrentPlayer.number should be(player.number)
-        controller.getCurrentPlayer.board should be(player.board)
+        controller.currentPlayer.name should be(player.name)
+        controller.currentPlayer.number should be(player.number)
+        controller.currentPlayer.board should be(player.board)
       }
     }
     "get tile from regex Player" should {
@@ -71,19 +71,14 @@ class ControllerSpec extends WordSpec with Matchers {
       val players = Set[Player]()
       var desk = Desk(players, Set(), Set[SortedSet[Tile]]())
       val controller = new Controller(desk)
-      val pl1 = controller.setPlayerName("name")
-      val pl2 = controller.setPlayerName("nameA")
-      val pl3 = controller.setPlayerName("nameB")
-      val pl4 = controller.setPlayerName("nameC")
-      val pl5 = controller.setPlayerName("nameD")
-      val pl6 = controller.setPlayerName("nameE")
-      "work for first 4 and for the last one not" in {
-        pl1 should be(true)
-        pl2 should be(true)
-        pl3 should be(true)
-        pl4 should be(true)
-        pl5 should be(false)
-        pl6 should be(false)
+      controller.setPlayerName("name")
+      controller.setPlayerName("nameA")
+      controller.setPlayerName("nameB")
+      controller.setPlayerName("nameC")
+      controller.setPlayerName("nameD")
+      controller.setPlayerName("nameE")
+      "work for first 4 and for the last two not" in {
+        controller.desk.players.size should be(4)
       }
     }
     "creates a desk" should {

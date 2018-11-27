@@ -16,7 +16,8 @@ class DeskSpec extends WordSpec with Matchers {
         desk.bagOfTiles.size should be(2)
       }
       "have a correct amount of players" in {
-        desk.hasNotMorePlayersThanAllowed should be(true)
+        desk.hasLessThan4Players should be(true)
+        desk.hasMoreThan1Player should be(true)
 
       }
 
@@ -28,7 +29,7 @@ class DeskSpec extends WordSpec with Matchers {
       desk = desk.addPlayers(Player("Name4", 3, Board(Set[Tile]())))
       desk = desk.addPlayers(Player("Name5", 4, Board(Set[Tile]())))
       "not have a correct amount of players" in {
-        desk.hasNotMorePlayersThanAllowed should be(false)
+        desk.hasLessThan4Players should be(false)
       }
     }
 
@@ -67,7 +68,7 @@ class DeskSpec extends WordSpec with Matchers {
         }
       }
       "have a tile in a tileSet" in {
-        desk.getTileSetWhereTileIsIn(Tile(1, Color.RED, 0)) match {
+        desk.setWithTile(Tile(1, Color.RED, 0)) match {
           case Some(value) =>
             value should be(SortedSet[Tile](Tile(1, Color.RED, 0)))
             value.size should be(1)

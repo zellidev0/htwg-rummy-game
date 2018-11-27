@@ -1,69 +1,62 @@
 package controller
 
-import model._
+import model.{ControllerState, _}
 import util.Observable
 
 import scala.collection.SortedSet
 
 class Controller(var desk: Desk) extends Observable {
+  var state: ControllerState.Value = ControllerState.MENU
 
-  def moveTile(toMoveString: String): Unit = {
-    //assert(toMoveString.matches("(m [1-13][RBYG][01] t [1-13][RBYG][01])"))
+  def moveTile(toMoveString: String): Unit = desk = desk.moveTile(currentPlayer, getTileFromRegex(toMoveString.split(" t ").apply(0).split(" ").apply(1)), getTileFromRegex(toMoveString.split(" t ").apply(1)));
+  notifyObservers()
 
-    val tiles = toMoveString.split(" t ")
-    val tile1 = getTileFromRegex(tiles.apply(0).split(" ").apply(1))
-    val tile2 = getTileFromRegex(tiles.apply(1))
-    desk = desk.moveTile(getCurrentPlayer, tile1, tile2)
-  }
+  def layDownTile(toInsert: String): Unit = desk = desk.layDownTileOnTable(currentPlayer, getTileFromRegex(toInsert.split(" ").apply(1)));
+  notifyObservers()
 
-
-  def layDownTile(toInsert: String): Unit = {
-    assert(toInsert.matches("(l [1-13][RBYG][01])"))
-
-    val tile = getTileFromRegex(toInsert.split(" ").apply(1))
-
-    if (getCurrentPlayer.board.contains(tile)) {
-      desk = desk.layDownTileOnTable(getCurrentPlayer, tile)
-    }
-  }
-
-  def getCurrentPlayer: Player = {
-    desk.players.find(p => p.state == State.TURN) match {
-      case Some(value) => value
-      case None => throw new IllegalAccessException("Could not find the current player")
-    }
-  }
+  def currentPlayer: Player = desk.players.find(_.state == State.TURN).getOrElse(throw new IllegalAccessException("Could not find the current player"))
 
   def getTileFromRegex(regexString: String): Tile = {
-    val value = Integer.parseInt(regexString.charAt(0).toString)
     val color = regexString.charAt(1) match {
       case 'R' => Color.RED
       case 'B' => Color.BLUE
       case 'Y' => Color.YELLOW
       case 'G' => Color.GREEN
     }
-    val num = Integer.parseInt(regexString.charAt(2).toString)
-    Tile(value, color, num)
+    Tile(Integer.parseInt(regexString.charAt(0).toString), color, Integer.parseInt(regexString.charAt(2).toString))
   }
 
-  def takeFromBagOfTiles() = desk = desk.takeTileFromBag(getCurrentPlayer)
+  def takeFromBagOfTiles(): Unit = desk = desk.takeTileFromBag(currentPlayer)
 
-  def setPlayerName(newName: String): Boolean = {
-    if (!newName.matches("([A-Za-z]+)")) return false
-    if (!desk.hasNotMorePlayersThanAllowed) return false
-    if (desk.players.nonEmpty) {
-      desk = desk.copy(players = desk.players.+(Player(newName, desk.players.size, Board(Set[Tile]()), State.WAIT)))
-      return true
-    }
-    desk = desk.copy(players = desk.players.+(Player(newName, desk.players.size, Board(Set[Tile]()), State.TURN)))
-    true
-  }
+  notifyObservers()
 
+  def setPlayerName(newName: String): Unit = desk = desk.copy(players = desk.players + Player(newName, desk.players.size, Board(Set[Tile]()), if (desk.players.nonEmpty) State.WAIT else State.TURN))
 
-  def createDesk(amountOfDifferentTiles: Int): Unit = {
+  def switchToNextPlayer(): Unit = desk = desk.switchToNextPlayer(currentPlayer, getNextPlayer)
+
+  def getNextPlayer: Player = if (currentPlayer.number + 1 == desk.players.size) desk.players.find(_.number == 0).getOrElse(throw new IllegalAccessError("Could not get next player!")) else desk.players.find(_.number == currentPlayer.number + 1).getOrElse(throw new IllegalAccessError("Could not get next player!"))
+
+  def initPlayersWithStones(amountOfStones: Int): Unit = (1 to amountOfStones).foreach(_ => desk.players.foreach(p => desk = desk.takeTileFromBag(p)))
+
+  def hasMoreThan1Player: Boolean = desk.hasMoreThan1Player
+
+  def hasLessThan4Players: Boolean = desk.hasLessThan4Players
+
+  def getAmountOfPlayers: Int = desk.getAmountOfPlayers
+
+  def switchControllerState(controllerState: ControllerState.Value): Unit = state = controllerState
+
+  def hasCorrectAmountOfPlayers: Boolean = desk.hasCorrectAmountOfPlayers
+
+  def getTileSet: Set[SortedSet[Tile]] = desk.sets
+
+  def createDesk(amount: Int): Unit = {
+    val colorSet = Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
+
     var bagOfTiles: Set[Tile] = Set[Tile]()
-    for (number <- 1 to amountOfDifferentTiles) {
-      for (color <- Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)) {
+
+    for (number <- 1 to amount) {
+      for (color <- colorSet) {
         for (ident <- 0 to 1) {
           bagOfTiles += Tile(number, color, ident)
         }
@@ -71,42 +64,5 @@ class Controller(var desk: Desk) extends Observable {
     }
     desk = Desk(Set[Player](), bagOfTiles, Set[SortedSet[Tile]]())
   }
-
-  def switchToNextPlayer(): Unit = desk = desk.switchToNextPlayer(getCurrentPlayer, getNextPlayer)
-
-
-  def getNextPlayer: Player = {
-    val amountOfPlayers = desk.players.size
-    val currentPlayerNumber = getCurrentPlayer.number
-    var next: Player = null
-
-    if (currentPlayerNumber + 1 == amountOfPlayers) {
-      desk.players.find(p => p.number == 0) match {
-        case Some(value) => next = value
-        case None => throw new IllegalAccessError("Could not get next player!")
-      }
-    } else {
-      desk.players.find(p => p.number == currentPlayerNumber + 1) match {
-        case Some(value) => next = value
-        case None => throw new IllegalAccessError("Could not get next player!")
-      }
-    }
-    next
-  }
-
-  def initPlayersWithStones(amountOfStones: Int): Unit = {
-
-    for (player <- desk.players) {
-      for (num <- 1 to amountOfStones) {
-        desk = desk.copy(players = desk.players.-(player).+(player.addToBoard(desk.getRandomTile)))
-      }
-
-
-    }
-  }
-
-  def hasEnoughPlayers: Boolean = desk.hasEnoughPlayers
-
-  def hasMorePlayersThanAllowed: Boolean = desk.hasNotMorePlayersThanAllowed
 
 }
