@@ -8,15 +8,15 @@ import scala.collection.SortedSet
 class Controller(var desk: Desk) extends Observable {
   var state: ControllerState.Value = ControllerState.MENU
 
-  def moveTile(toMoveString: String): Unit = desk = desk.moveTile(currentPlayer, getTileFromRegex(toMoveString.split(" t ").apply(0).split(" ").apply(1)), getTileFromRegex(toMoveString.split(" t ").apply(1)));
+  def moveTile(tile: String, tile2: String): Unit = desk = desk.moveTwoTilesOnDesk(currentP, regexToTile(tile), regexToTile(tile));
   notifyObservers()
 
-  def layDownTile(toInsert: String): Unit = desk = desk.layDownTileOnTable(currentPlayer, getTileFromRegex(toInsert.split(" ").apply(1)));
+  def layDownTile(tile: String): Unit = desk = desk.putDownTile(currentP, regexToTile(tile));
   notifyObservers()
 
-  def currentPlayer: Player = desk.players.find(_.state == State.TURN).getOrElse(throw new IllegalAccessException("Could not find the current player"))
+  def currentP: Player = desk.currentP
 
-  def getTileFromRegex(regexString: String): Tile = {
+  private[controller] def regexToTile(regexString: String): Tile = {
     val color = regexString.charAt(1) match {
       case 'R' => Color.RED
       case 'B' => Color.BLUE
@@ -26,23 +26,25 @@ class Controller(var desk: Desk) extends Observable {
     Tile(Integer.parseInt(regexString.charAt(0).toString), color, Integer.parseInt(regexString.charAt(2).toString))
   }
 
-  def takeFromBagOfTiles(): Unit = desk = desk.takeTileFromBag(currentPlayer)
+  def takeATile(): Unit = desk = desk.takeTile(currentP);
 
+  def addPlayerAndInit(newName: String): Unit = {
+    val playerNumber = desk.amountOfPlayers
+    val p = Player(newName, playerNumber, Board(SortedSet[Tile]()), if (desk.players.nonEmpty) State.WAIT else State.TURN)
+    desk = desk.addPlayer(p)
+    for (_ <- 1 to 12) {
+      desk = desk.takeTile(desk.findPlayer(playerNumber).getOrElse(throw new IllegalArgumentException("Player not found")))
+    }
+  }
+
+  def switchToNextPlayer(): Unit = desk = desk.switchToNextPlayer(currentP, nextP);
   notifyObservers()
-
-  def setPlayerName(newName: String): Unit = desk = desk.copy(players = desk.players + Player(newName, desk.players.size, Board(Set[Tile]()), if (desk.players.nonEmpty) State.WAIT else State.TURN))
-
-  def switchToNextPlayer(): Unit = desk = desk.switchToNextPlayer(currentPlayer, getNextPlayer)
-
-  def getNextPlayer: Player = if (currentPlayer.number + 1 == desk.players.size) desk.players.find(_.number == 0).getOrElse(throw new IllegalAccessError("Could not get next player!")) else desk.players.find(_.number == currentPlayer.number + 1).getOrElse(throw new IllegalAccessError("Could not get next player!"))
-
-  def initPlayersWithStones(amountOfStones: Int): Unit = (1 to amountOfStones).foreach(_ => desk.players.foreach(p => desk = desk.takeTileFromBag(p)))
 
   def hasMoreThan1Player: Boolean = desk.hasMoreThan1Player
 
   def hasLessThan4Players: Boolean = desk.hasLessThan4Players
 
-  def getAmountOfPlayers: Int = desk.getAmountOfPlayers
+  def nextP: Player = desk.nextP
 
   def switchControllerState(controllerState: ControllerState.Value): Unit = state = controllerState
 
@@ -64,5 +66,10 @@ class Controller(var desk: Desk) extends Observable {
     }
     desk = Desk(Set[Player](), bagOfTiles, Set[SortedSet[Tile]]())
   }
+
+  def getAmountOfPlayers: Int = desk.amountOfPlayers
+
+  def setsOnDeskAreCorrect: Boolean = desk.setsOnDeskAreCorrect
+
 
 }

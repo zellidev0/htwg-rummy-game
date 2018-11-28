@@ -9,12 +9,14 @@ class DeskSpec extends WordSpec with Matchers {
 
   "A Desk" when {
     "created with 2 players and 2 tiles" should {
-      val players = Set(Player("Name1", 0, Board(Set[Tile]())), Player("Name2", 1, Board(Set[Tile]())))
+      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]())), Player("Name2", 1, Board(SortedSet[Tile]())))
       var desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[Tile]]())
       "have a player Set with 2 players and a tile set with 2 tiles" in {
-        desk.players.size should be(2)
+        desk.amountOfPlayers should be(2)
         desk.bagOfTiles.size should be(2)
+        desk.amountOfTilesOnTable should be(0)
       }
+
       "have a correct amount of players" in {
         desk.hasLessThan4Players should be(true)
         desk.hasMoreThan1Player should be(true)
@@ -23,11 +25,11 @@ class DeskSpec extends WordSpec with Matchers {
 
     }
     "created with 2 and gets added 3 more players" should {
-      val players = Set(Player("Name1", 0, Board(Set[Tile]())), Player("Name2", 1, Board(Set[Tile]())))
+      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]())), Player("Name2", 1, Board(SortedSet[Tile]())))
       var desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[Tile]]())
-      desk = desk.addPlayers(Player("Name3", 2, Board(Set[Tile]())))
-      desk = desk.addPlayers(Player("Name4", 3, Board(Set[Tile]())))
-      desk = desk.addPlayers(Player("Name5", 4, Board(Set[Tile]())))
+      desk = desk.addPlayer(Player("Name3", 2, Board(SortedSet[Tile]())))
+      desk = desk.addPlayer(Player("Name4", 3, Board(SortedSet[Tile]())))
+      desk = desk.addPlayer(Player("Name5", 4, Board(SortedSet[Tile]())))
       "not have a correct amount of players" in {
         desk.hasLessThan4Players should be(false)
       }
@@ -39,24 +41,24 @@ class DeskSpec extends WordSpec with Matchers {
         desk.players.size should be(0)
       }
       "after adding a player should have size 1" in {
-        desk = desk.addPlayers(Player("Name1", 0, Board(Set[Tile]())))
+        desk = desk.addPlayer(Player("Name1", 0, Board(SortedSet[Tile]())))
         desk.players.size should be(1)
       }
 
     }
 
     "layed down a tile on desk" should {
-      val player1 = Player("Name1", 0, Board(Set[Tile](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1))))
+      val player1 = Player("Name1", 0, Board(SortedSet[Tile](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1))))
       val players = Set(player1)
       var desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]]())
-      val amountOfTilesOnTable = desk.size // 0
+      val amountOfTilesOnTable = desk.amountOfTilesOnTable // 0
       var amountOfTilesOnBoardOfPlayer1 = 0
       players.find(p => p.number == 0) match {
         case Some(value) => amountOfTilesOnBoardOfPlayer1 = value.board.amountOfTiles()
-          desk = desk.layDownTileOnTable(value, Tile(1, Color.RED, 0))
+          desk = desk.putDownTile(value, Tile(1, Color.RED, 0))
       }
       "have one more tile on table" in {
-        desk.size should be(amountOfTilesOnTable + 1) // 1
+        desk.amountOfTilesOnTable should be(amountOfTilesOnTable + 1) // 1
         desk.tileSetContains(Tile(1, Color.RED, 0)) should be(true)
         desk.tileSetContains(Tile(1, Color.RED, 1)) should be(false)
 
@@ -77,14 +79,14 @@ class DeskSpec extends WordSpec with Matchers {
 
     }
     "user takes tile from bag" should {
-      val players = Set(Player("Name1", 0, Board(Set[Tile]())))
+      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]())))
       var desk = Desk(players, Set[Tile](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1)), Set[SortedSet[Tile]]())
       val amountOfTilesInBag = desk.bagOfTiles.size // 2
       var amountOfTilesOnBoardOfPlayer1 = 0
       players.find(p => p.number == 0) match {
         case Some(value) =>
           amountOfTilesOnBoardOfPlayer1 = value.board.amountOfTiles()
-          desk = desk.takeTileFromBag(value)
+          desk = desk.takeTile(value)
       }
       "user have one more tile on board" in {
         desk.players.find(p => p.number == 0) match {
@@ -98,14 +100,14 @@ class DeskSpec extends WordSpec with Matchers {
     }
 
     "user moves tile to tile from bag" should {
-      val players = Set(Player("Name1", 0, Board(Set[Tile]())))
+      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]())))
       var desk = Desk(players, Set[Tile](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1)), Set[SortedSet[Tile]]())
       val amountOfTilesInBag = desk.bagOfTiles.size // 2
       var amountOfTilesOnBoardOfPlayer1 = 0
       players.find(p => p.number == 0) match {
         case Some(value) =>
           amountOfTilesOnBoardOfPlayer1 = value.board.amountOfTiles()
-          desk = desk.takeTileFromBag(value)
+          desk = desk.takeTile(value)
       }
       "user have one more tile on board" in {
         desk.players.find(p => p.number == 0) match {
@@ -120,8 +122,8 @@ class DeskSpec extends WordSpec with Matchers {
 
 
     "two players switch turn, -> its player" should {
-      val player1 = Player("Name1", 0, Board(Set[Tile]()), state = State.TURN)
-      val player2 = Player("Name2", 1, Board(Set[Tile]()))
+      val player1 = Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN)
+      val player2 = Player("Name2", 1, Board(SortedSet[Tile]()))
       val players = Set(player1, player2)
       val desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]]()).switchToNextPlayer(player1, player2)
       "have status Wait (current)" in {

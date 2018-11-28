@@ -15,5 +15,17 @@ class TileSpec extends WordSpec with Matchers {
         tile.identifier should be("1R1")
       }
     }
+    "compares with other tile" should {
+      val tile = Tile(5, Color.RED, 1)
+      "be 0 if same identifier" in {
+        tile.compare(Tile(5, Color.RED, 1)) should be(0)
+      }
+      "be 1 if higher value" in {
+        tile.compare(Tile(3, Color.RED, 1)) should be(1)
+      }
+      "be -1 if lower value" in {
+        tile.compare(Tile(7, Color.RED, 1)) should be(-1)
+      }
+    }
   }
 }

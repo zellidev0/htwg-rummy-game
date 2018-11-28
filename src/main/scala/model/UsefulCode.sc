@@ -1,4 +1,6 @@
 import model.{Board, Player, Tile}
+
+import scala.collection.SortedSet
 //import model.{Desk, Tile}
 //
 //def initializeBagOfTiles(): Desk = {
@@ -13,9 +15,9 @@ import model.{Board, Player, Tile}
 //}
 
 
-val set1 = Set[Tile]()
+val set1 = SortedSet[Tile]()
 val board1 = Board(set1)
-val set2 = Set[Tile]()
+val set2 = SortedSet[Tile]()
 val board2 = Board(set2)
 var player1 = Player("Name1", 1, board1)
 var player2 = Player("Name2", 2, board2)
@@ -35,4 +37,16 @@ def switchToNextPlayer(current: Player, next: Player): Unit = {
 
 }
 
-
+//
+//
+//test private method
+//
+//class PersonSpec extends FlatSpec with PrivateMethodTester {
+//
+//  "A Person" should "transform correctly" in {
+//    val p1 = new Person(1)
+//    val transform = PrivateMethod[Person]('transform)
+//    assert(p2 === invokePrivate transform(p1))
+//  }
+//}
+//

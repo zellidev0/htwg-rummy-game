@@ -1,18 +1,20 @@
 package model
 
+import scala.collection.SortedSet
+
 
 /*
 * Was ist besser: tiles etwas hinzufügen und dann zurückgeben
 * oder tiles als var un neues Objet erzeugen, das einhänge und das zurückgeben
 */
 
-case class Board(tiles: Set[Tile]) {
+case class Board(tiles: SortedSet[Tile]) {
 
   def amountOfTiles(): Int = tiles.size
 
-  def add(tile: Tile): Board = Board(tiles + tile)
+  def +(tile: Tile): Board = Board(tiles + tile)
 
-  def remove(tile: Tile): Board = Board(tiles.filterNot(t => tile.identifier == t.identifier))
+  def -(tile: Tile): Board = Board(tiles.filterNot(t => tile.identifier == t.identifier))
 
   def contains(tile: Tile): Boolean = tiles contains tile
 }
