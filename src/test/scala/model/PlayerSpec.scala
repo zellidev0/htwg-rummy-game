@@ -2,8 +2,6 @@ package model
 
 import org.scalatest._
 
-import scala.collection.SortedSet
-
 class PlayerSpec() extends WordSpec with Matchers {
   "A Player" when {
     "created" should {

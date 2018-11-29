@@ -1,6 +1,6 @@
 package model
 
-import model.State.state
+import State.state
 
 
 case class Player(name: String, number: Int, board: Board, state: state = State.WAIT) {
