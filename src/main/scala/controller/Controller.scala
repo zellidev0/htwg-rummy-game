@@ -56,11 +56,11 @@ class Controller(var desk: Desk) extends Observable {
 
   def takeATile(): Unit = desk = desk.takeTile(currentP)
 
-  def addPlayerAndInit(newName: String, max: Int): Unit = {
+  def addPlayerAndInit(newName: String): Unit = {
     val playerNumber = desk.amountOfPlayers
     val p = Player(newName, playerNumber, Board(SortedSet[Tile]()), if (desk.players.nonEmpty) State.WAIT else State.TURN)
     desk = desk.addPlayer(p)
-    for (_ <- 1 to max) {
+    for (_ <- 1 to 12) {
       desk = desk.takeTile(desk.findPlayer(playerNumber).getOrElse(throw new IllegalArgumentException("Player not found")))
     }
   }
@@ -70,7 +70,7 @@ class Controller(var desk: Desk) extends Observable {
 
   def hasMoreThan1Player: Boolean = desk.hasMoreThan1Player
 
-  def hasLessThan4Players(): Boolean = desk.hasLessThan4Players
+  def hasLessThan4Players: Boolean = desk.hasLessThan4Players
 
   def nextP: Player = desk.nextP
 
