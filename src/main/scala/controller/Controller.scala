@@ -1,72 +1,74 @@
 package controller
 
-import model.{ControllerState, _}
+import model.{ContState, _}
 import util.Observable
 
 import scala.collection.SortedSet
 
 class Controller(var desk: Desk) extends Observable {
-  var state: ControllerState.Value = ControllerState.MENU
+  var state: ContState.Value = ContState.MENU
+  var userDidSomething = false
 
-  def moveTile(tile: String, tile2: String): Unit = desk = desk.moveTwoTilesOnDesk(currentP, regexToTile(tile), regexToTile(tile))
-  notifyObservers()
+  def userFinishedPlay(): Unit = {
+    if (!userDidSomething) {
+      desk = desk.takeTile(currentP)
+      userDidSomething = false
+      swState(ContState.PLAYER_FINISHED)
+      return
+    }
+    if (desk.checkTable()) {
+      if (desk.currentPlayerWon()) {
+        swState(controllerState = ContState.PLAYER_WON)
+      } else {
+        swState(controllerState = ContState.PLAYER_FINISHED)
+      }
+    } else {
+      swState(controllerState = ContState.TABLE_NOT_CORRECT)
+    }
+  }
 
-  def layDownTile(tile: String): Unit = desk = desk.putDownTile(currentP, regexToTile(tile))
-  notifyObservers()
+
+  def moveTile(tile: String, tile2: String): Unit = {
+    desk = desk.moveTwoTilesOnDesk(currentP, regexToTile(tile), regexToTile(tile2))
+    userDidSomething = true
+    notifyObservers()
+  }
+
+  private[controller] def regexToTile(regexString: String): Tile = {
+    val color = regexString.charAt(regexString.length - 2) match {
+      case 'R' => Color.RED
+      case 'B' => Color.BLUE
+      case 'Y' => Color.YELLOW
+      case 'G' => Color.GREEN
+    }
+    Tile(Integer.parseInt(regexString.substring(0, regexString.length - 2)), color, Integer.parseInt(regexString.charAt(regexString.length - 1).toString))
+  }
 
   def currentP: Player = desk.currentP
 
-  private[controller] def regexToTile(regexString: String): Tile = {
-    regexString.length match {
-      case 6 =>
-        val color = regexString.charAt(4) match {
-          case 'R' => Color.RED
-          case 'B' => Color.BLUE
-          case 'Y' => Color.YELLOW
-          case 'G' => Color.GREEN
-        }
-        return Tile(Integer.parseInt(regexString.subSequence(2, 3).toString), color, Integer.parseInt(regexString.charAt(5).toString))
-      case 5 =>
-        val color = regexString.charAt(3) match {
-          case 'R' => Color.RED
-          case 'B' => Color.BLUE
-          case 'Y' => Color.YELLOW
-          case 'G' => Color.GREEN
-        }
-        return Tile(Integer.parseInt(regexString.charAt(2).toString), color, Integer.parseInt(regexString.charAt(4).toString))
-
-      case 4 =>
-        val color = regexString.charAt(2) match {
-          case 'R' => Color.RED
-          case 'B' => Color.BLUE
-          case 'Y' => Color.YELLOW
-          case 'G' => Color.GREEN
-        }
-        return Tile(Integer.parseInt(regexString.subSequence(0, 1).toString), color, Integer.parseInt(regexString.charAt(3).toString))
-      case 3 =>
-        val color = regexString.charAt(1) match {
-          case 'R' => Color.RED
-          case 'B' => Color.BLUE
-          case 'Y' => Color.YELLOW
-          case 'G' => Color.GREEN
-        }
-        Tile(Integer.parseInt(regexString.charAt(0).toString), color, Integer.parseInt(regexString.charAt(2).toString))
-    }
+  def layDownTile(tile: String): Unit = {
+    desk = desk.putDownTile(currentP, regexToTile(tile))
+    userDidSomething = true
+    notifyObservers()
   }
 
-  def takeATile(): Unit = desk = desk.takeTile(currentP)
-
-  def addPlayerAndInit(newName: String): Unit = {
+  def addPlayerAndInit(newName: String, max: Int): Unit = {
+    if (!hasLessThan4Players) {
+      swState(ContState.ENOUGH_PLAYERS)
+    }
     val playerNumber = desk.amountOfPlayers
     val p = Player(newName, playerNumber, Board(SortedSet[Tile]()), if (desk.players.nonEmpty) State.WAIT else State.TURN)
     desk = desk.addPlayer(p)
-    for (_ <- 1 to 12) {
+    for (_ <- 1 to max) {
       desk = desk.takeTile(desk.findPlayer(playerNumber).getOrElse(throw new IllegalArgumentException("Player not found")))
     }
+    swState(ContState.INSERTED_NAME)
   }
 
-  def switchToNextPlayer(): Unit = desk = desk.switchToNextPlayer(currentP, nextP)
-  notifyObservers()
+  def switchToNextPlayer(): Unit = {
+    desk = desk.switchToNextPlayer(currentP, nextP)
+    swState(ContState.PLAYER_TURN)
+  }
 
   def hasMoreThan1Player: Boolean = desk.hasMoreThan1Player
 
@@ -74,15 +76,10 @@ class Controller(var desk: Desk) extends Observable {
 
   def nextP: Player = desk.nextP
 
-  def switchControllerState(controllerState: ControllerState.Value): Unit = state = controllerState
-
-  def hasCorrectAmountOfPlayers: Boolean = desk.hasCorrectAmountOfPlayers
-
-  def getTileSet: Set[SortedSet[Tile]] = desk.sets
+  def nameInputFinished(): Unit = if (desk.hasCorrectAmountOfPlayers) swState(ContState.START) else swState(ContState.NOT_ENOUGH_PLAYERS)
 
   def createDesk(amount: Int): Unit = {
     val colorSet = Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
-
     var bagOfTiles: Set[Tile] = Set[Tile]()
 
     for (number <- 1 to amount) {
@@ -93,6 +90,14 @@ class Controller(var desk: Desk) extends Observable {
       }
     }
     desk = Desk(Set[Player](), bagOfTiles, Set[SortedSet[Tile]]())
+    swState(ContState.CREATED)
+  }
+
+  def getTileSet: Set[SortedSet[Tile]] = desk.sets
+
+  def swState(controllerState: ContState.Value): Unit = {
+    state = controllerState
+    notifyObservers()
   }
 
   def getAmountOfPlayers: Int = desk.amountOfPlayers

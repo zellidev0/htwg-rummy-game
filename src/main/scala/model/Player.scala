@@ -1,6 +1,6 @@
 package model
 
-import State.state
+import model.State.state
 
 
 case class Player(name: String, number: Int, board: Board, state: state = State.WAIT) {
@@ -12,6 +12,8 @@ case class Player(name: String, number: Int, board: Board, state: state = State.
   def +(tile: Tile): Player = copy(board = board + tile)
 
   def changeState(newState: State.Value): Player = copy(state = newState)
+
+  def boardIsEmpty(): Boolean = board.isEmpty()
 
 
 }

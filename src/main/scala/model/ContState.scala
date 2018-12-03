@@ -1,0 +1,12 @@
+package model
+
+
+object ContState extends Enumeration {
+
+
+  type state = Value
+  val MENU, INSERTING_NAMES, PLAYER_TURN, PLAYER_FINISHED, TABLE_NOT_CORRECT,
+  NOT_ENOUGH_PLAYERS, START, PLAYER_INSERTED, ENOUGH_PLAYERS, CREATED, INSERTED_NAME, PLAYER_WON = Value
+
+
+}

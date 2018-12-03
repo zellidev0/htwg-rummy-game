@@ -1,9 +1,60 @@
 package model
 
+import model.Color.Color
+
 import scala.collection.SortedSet
 import scala.util.Random
 
 case class Desk(players: Set[Player], bagOfTiles: Set[Tile], sets: Set[SortedSet[Tile]]) {
+  def currentPlayerWon(): Boolean = currentP.boardIsEmpty()
+
+
+  def checkTable(): Boolean = {
+
+    for (set <- sets) {
+      if (set.size < 3) return false
+      if (checkStreet(set) || checkPair(set)) {
+        return true
+      } else {
+        return false
+      }
+    }
+    true
+  }
+
+
+  def checkStreet(set: SortedSet[Tile]): Boolean = {
+    if (set.isEmpty) return false
+    val x = set.toArray
+    var first = x.apply(0)
+    for (i <- x.indices) {
+      if (i != x.length - 1) {
+        if (first.value != x.apply(i + 1).value - 1) return false
+        if (first.color != x.apply(i + 1).color) return false
+        first = x.apply(i + 1)
+      } else {
+        if (first.value != x.apply(i - 1).value + 2) return false
+        if (first.color != x.apply(i - 1).color) return false
+      }
+    }
+    true
+  }
+
+  def checkPair(set: SortedSet[Tile]): Boolean = {
+    if (set.isEmpty) return false
+    if (set.size < 3 || set.size > 4) {
+      return false
+    }
+    var setOfValues = Set[Int]()
+    var setOfColors = Set[Color]()
+    for (tile <- set) {
+      setOfValues = setOfValues + tile.value
+      setOfColors = setOfColors + tile.color
+    }
+    if (setOfValues.size != 1) return false
+    if (setOfColors.size != set.size) return false
+    true
+  }
 
   def amountOfPlayers: Int = players.size
 
