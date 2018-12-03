@@ -13,7 +13,13 @@ case class Desk(players: Set[Player], bagOfTiles: Set[Tile], sets: Set[SortedSet
     x
   }
 
-  def nextP: Player = if (currentP.number + 1 == players.size) players.find(_.number == 0).getOrElse(throw new IllegalAccessError("Could not get next player!")) else players.find(_.number == currentP.number + 1).getOrElse(throw new IllegalAccessError("Could not get next player!"))
+  def nextP: Player = {
+    if (currentP.number + 1 == players.size) {
+      players.find(_.number == 0).getOrElse(throw new IllegalAccessError("Could not get next player!"))
+    } else {
+      players.find(_.number == currentP.number + 1).getOrElse(throw new IllegalAccessError("Could not get next player!"))
+    }
+  }
 
   def currentP: Player = players.find(_.state == State.TURN).getOrElse(throw new IllegalAccessException("Could not find the current player"))
 
@@ -45,14 +51,14 @@ case class Desk(players: Set[Player], bagOfTiles: Set[Tile], sets: Set[SortedSet
 
   def switchToNextPlayer(curr: Player, next: Player): Desk = {
     val newPlayers = players - curr + players.find(_ == curr).getOrElse(throw new IllegalArgumentException("Could not set current player on WAIT!")).changeState(State.WAIT)
-    copy(players = newPlayers - curr + newPlayers.find(_ == next).getOrElse(throw new IllegalArgumentException("Could not set next Player on TURN!")).changeState(State.TURN))
+    copy(players = newPlayers - next + newPlayers.find(_ == next).getOrElse(throw new IllegalArgumentException("Could not set next Player on TURN!")).changeState(State.TURN))
   }
 
   def addPlayer(p: Player): Desk = copy(players = players + p)
 
   def hasMoreThan1Player: Boolean = players.size >= 2
 
-  def hasLessThan5Players: Boolean = players.size < 5
+  def hasLessThan4Players: Boolean = players.size < 4
 
   def hasCorrectAmountOfPlayers: Boolean = players.size >= 2 && players.size <= 4
 

@@ -42,7 +42,7 @@ class Controller(var desk: Desk) extends Observable {
 
   def hasMoreThan1Player: Boolean = desk.hasMoreThan1Player
 
-  def hasLessThan5Players: Boolean = desk.hasLessThan5Players
+  def hasLessThan4Players: Boolean = desk.hasLessThan4Players
 
   def nextP: Player = desk.nextP
 

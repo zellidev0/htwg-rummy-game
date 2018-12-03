@@ -9,10 +9,9 @@ import scala.util.matching.Regex
 class Tui(controller: Controller) extends Observer {
   controller.add(this)
 
-  val AmountOfPlayersPattern: Regex = "[2-4]".r
   val PlayerNamePattern: Regex = "name [A-Za-z]+".r
-  val LayDownTilePattern: Regex = "l [1-13][RBYG][01]".r
-  val MoveTilePattern: Regex = "m [1-13][RBYG][01] t [1-13][RBYG][01]".r
+  val LayDownTilePattern: Regex = "l [1-9][RBGY][01]|l 1[0123][RBGY][01]".r
+  val MoveTilePattern: Regex = "m [1-9][RBGY][01] t [1-9][RBGY][01]|m 1[0123][RBGY][01] t [1-9][RBYG][01]|m 1[0-3][RBGY][01] t 1[0-3][RBGY][01]|m [1-9][RBGY][01] 1[0-3][RBYG][01]".r
 
   def processInputLine(input: String): Unit = {
     controller.state match {
@@ -27,14 +26,14 @@ class Tui(controller: Controller) extends Observer {
   def handleNameInput(name: String): Unit = {
     name match {
       case "f" =>
-        if (controller.hasMoreThan1Player && controller.hasLessThan5Players) {
+        if (controller.hasCorrectAmountOfPlayers) {
           controller.switchControllerState(ControllerState.MENU)
           println("\tNEWS:\tYou're finished. Great. Now type in 's' and enter to start.")
         } else {
           println("\tNEWS:\tNot enough Players. Please insert another name")
         }
       case PlayerNamePattern() =>
-        if (controller.hasLessThan5Players) {
+        if (controller.hasLessThan4Players) {
           controller.addPlayerAndInit(name.substring(4).trim)
           println("\tNEWS:\tPlayer " + controller.getAmountOfPlayers + " is named " + name.substring(4).trim + "\n" +
             "\tNEWS:\tType in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
@@ -51,7 +50,9 @@ class Tui(controller: Controller) extends Observer {
         controller.switchControllerState(ControllerState.PLAYER_FINISHED)
         println("\tNEWS:\tYou took a tile, you are finished. The next player has to type 'n' to continue.");
       case "p" =>
-        println("\tNEWS:\tYou don't take a tile. Your can play now"); controller.switchToNextPlayer(); controller.switchControllerState(ControllerState.PLAY)
+        println("\tNEWS:\tYou decided to play");
+        controller.switchControllerState(ControllerState.PLAY)
+        update
       case _ => println("\tNEWS:\tCould not identify your input. Are you sure it was correct'?")
 
     }
@@ -59,10 +60,10 @@ class Tui(controller: Controller) extends Observer {
 
   def handleOnTurnPlay(input: String): Unit = {
     input match {
-      case LayDownTilePattern(c) => controller.layDownTile(c.split(" ").apply(1))
-      case MoveTilePattern(c) => controller.moveTile(c.split(" t ").apply(0).split(" ").apply(1), c.split(" t ").apply(1))
+      case LayDownTilePattern(c) => controller.layDownTile(c.split(" ").apply(1)); update
+      case MoveTilePattern(c) => controller.moveTile(c.split(" t ").apply(0).split(" ").apply(1), c.split(" t ").apply(1)); update
       case "f" =>
-        println("\tNEWS:\tYou are finished. The next player has to type 'n' to continue."); controller.switchToNextPlayer(); controller.switchControllerState(ControllerState.PLAYER_FINISHED)
+        println("\tNEWS:\tYou are finished. The next player has to type 'n' to continue."); controller.switchControllerState(ControllerState.PLAYER_FINISHED)
       case _ => println("\tNEWS:\tCould not identify your input. Are you sure it was correct'?")
     }
   }
