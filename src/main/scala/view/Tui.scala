@@ -27,15 +27,15 @@ class Tui(controller: Controller) extends Observer {
   def handleNameInput(name: String): Unit = {
     name match {
       case "f" =>
-        if (controller.hasMoreThan1Player && controller.hasLessThan5Players) {
+        if (controller.hasCorrectAmountOfPlayers) {
           controller.switchControllerState(ControllerState.MENU)
           println("\tNEWS:\tYou're finished. Great. Now type in 's' and enter to start.")
         } else {
           println("\tNEWS:\tNot enough Players. Please insert another name")
         }
       case PlayerNamePattern() =>
-        if (controller.hasLessThan5Players) {
-          controller.addPlayerAndInit(name.substring(4).trim)
+        if (controller.hasLessThan4Players()) {
+          controller.addPlayerAndInit(name.substring(4).trim, 12)
           println("\tNEWS:\tPlayer " + controller.getAmountOfPlayers + " is named " + name.substring(4).trim + "\n" +
             "\tNEWS:\tType in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
         } else {

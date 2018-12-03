@@ -17,22 +17,50 @@ class Controller(var desk: Desk) extends Observable {
   def currentP: Player = desk.currentP
 
   private[controller] def regexToTile(regexString: String): Tile = {
-    val color = regexString.charAt(1) match {
-      case 'R' => Color.RED
-      case 'B' => Color.BLUE
-      case 'Y' => Color.YELLOW
-      case 'G' => Color.GREEN
+    regexString.length match {
+      case 6 =>
+        val color = regexString.charAt(4) match {
+          case 'R' => Color.RED
+          case 'B' => Color.BLUE
+          case 'Y' => Color.YELLOW
+          case 'G' => Color.GREEN
+        }
+        return Tile(Integer.parseInt(regexString.subSequence(2, 3).toString), color, Integer.parseInt(regexString.charAt(5).toString))
+      case 5 =>
+        val color = regexString.charAt(3) match {
+          case 'R' => Color.RED
+          case 'B' => Color.BLUE
+          case 'Y' => Color.YELLOW
+          case 'G' => Color.GREEN
+        }
+        return Tile(Integer.parseInt(regexString.charAt(2).toString), color, Integer.parseInt(regexString.charAt(4).toString))
+
+      case 4 =>
+        val color = regexString.charAt(2) match {
+          case 'R' => Color.RED
+          case 'B' => Color.BLUE
+          case 'Y' => Color.YELLOW
+          case 'G' => Color.GREEN
+        }
+        return Tile(Integer.parseInt(regexString.subSequence(0, 1).toString), color, Integer.parseInt(regexString.charAt(3).toString))
+      case 3 =>
+        val color = regexString.charAt(1) match {
+          case 'R' => Color.RED
+          case 'B' => Color.BLUE
+          case 'Y' => Color.YELLOW
+          case 'G' => Color.GREEN
+        }
+        Tile(Integer.parseInt(regexString.charAt(0).toString), color, Integer.parseInt(regexString.charAt(2).toString))
     }
-    Tile(Integer.parseInt(regexString.charAt(0).toString), color, Integer.parseInt(regexString.charAt(2).toString))
   }
 
   def takeATile(): Unit = desk = desk.takeTile(currentP)
 
-  def addPlayerAndInit(newName: String): Unit = {
+  def addPlayerAndInit(newName: String, max: Int): Unit = {
     val playerNumber = desk.amountOfPlayers
     val p = Player(newName, playerNumber, Board(SortedSet[Tile]()), if (desk.players.nonEmpty) State.WAIT else State.TURN)
     desk = desk.addPlayer(p)
-    for (_ <- 1 to 12) {
+    for (_ <- 1 to max) {
       desk = desk.takeTile(desk.findPlayer(playerNumber).getOrElse(throw new IllegalArgumentException("Player not found")))
     }
   }
@@ -42,7 +70,7 @@ class Controller(var desk: Desk) extends Observable {
 
   def hasMoreThan1Player: Boolean = desk.hasMoreThan1Player
 
-  def hasLessThan5Players: Boolean = desk.hasLessThan5Players
+  def hasLessThan4Players(): Boolean = desk.hasLessThan4Players
 
   def nextP: Player = desk.nextP
 

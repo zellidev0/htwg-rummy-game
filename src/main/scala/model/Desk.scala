@@ -52,7 +52,7 @@ case class Desk(players: Set[Player], bagOfTiles: Set[Tile], sets: Set[SortedSet
 
   def hasMoreThan1Player: Boolean = players.size >= 2
 
-  def hasLessThan5Players: Boolean = players.size < 5
+  def hasLessThan4Players(): Boolean = players.size < 4
 
   def hasCorrectAmountOfPlayers: Boolean = players.size >= 2 && players.size <= 4
 

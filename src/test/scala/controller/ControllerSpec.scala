@@ -1,6 +1,6 @@
 package controller
 
-import model._
+import model.{Tile, _}
 import org.scalatest.{Matchers, WordSpec}
 
 import scala.collection.SortedSet
@@ -51,32 +51,32 @@ class ControllerSpec extends WordSpec with Matchers {
       val players = Set(Player("Name1", 0, Board(SortedSet[Tile]())))
       var desk = Desk(players, Set(), Set[SortedSet[Tile]]())
       val controller = new Controller(desk)
-      val tile = controller.regexToTile("1R0")
+      val tile = controller.regexToTile("13R0")
       "get the one player" in {
-        tile should be(Tile(1, Color.RED, 0))
+        tile should be(Tile(13, Color.RED, 0))
       }
     }
     "set Player name" should {
       val players = Set(Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN))
-      var desk = Desk(players, Set(), Set[SortedSet[Tile]]())
+      var desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[Tile]]())
       val controller = new Controller(desk)
-
       val amountOfPlayersBefore = controller.desk.players.size
-      controller.addPlayerAndInit("name")
+      controller.addPlayerAndInit("name",2)
       "have one player more" in {
         controller.desk.players.size should be(amountOfPlayersBefore + 1)
       }
     }
     "set 5 Players " should {
+      val set = Set(Tile(1, Color.RED, 0),Tile(2, Color.RED, 0),Tile(4, Color.RED, 0),Tile(1, Color.RED, 0),Tile(5, Color.RED, 0),Tile(6, Color.RED, 0),Tile(7, Color.RED, 0))
       val players = Set[Player]()
-      var desk = Desk(players, Set(), Set[SortedSet[Tile]]())
+      var desk = Desk(players, set, Set[SortedSet[Tile]]())
       val controller = new Controller(desk)
-      controller.addPlayerAndInit("name")
-      controller.addPlayerAndInit("nameA")
-      controller.addPlayerAndInit("nameB")
-      controller.addPlayerAndInit("nameC")
-      controller.addPlayerAndInit("nameD")
-      controller.addPlayerAndInit("nameE")
+      controller.addPlayerAndInit("name",1)
+      controller.addPlayerAndInit("nameA",1)
+      controller.addPlayerAndInit("nameB",1)
+      controller.addPlayerAndInit("nameC",1)
+      controller.addPlayerAndInit("nameD",1)
+      controller.addPlayerAndInit("nameE",1)
       "work for first 4 and for the last two not" in {
         controller.desk.players.size should be(4)
       }
@@ -92,7 +92,7 @@ class ControllerSpec extends WordSpec with Matchers {
     }
     "gets next player by 2 ones" should {
       val players = Set(Player("Name", 0, Board(SortedSet[Tile]()), state = State.TURN), Player("Name1", 1, Board(SortedSet[Tile]())),
-        Player("Name2", 2, Board(SortedSet[Tile]())), Player("Name3", 4, Board(SortedSet[Tile]())))
+        Player("Name2", 2, Board(SortedSet[Tile]())), Player("Name3", 3, Board(SortedSet[Tile]())))
       var desk = Desk(players, Set(), Set[SortedSet[Tile]]())
       val controller = new Controller(desk)
       val player1 = controller.switchToNextPlayer()
@@ -109,9 +109,10 @@ class ControllerSpec extends WordSpec with Matchers {
       }
       val player4 = controller.switchToNextPlayer()
       "have the correct next player0" in {
-        player4.toString should be(Player("Name2", 0, Board(SortedSet[Tile]())).toString)
+        player4.toString should be(Player("Name", 0, Board(SortedSet[Tile]())).toString)
       }
     }
+
 
 
   }
