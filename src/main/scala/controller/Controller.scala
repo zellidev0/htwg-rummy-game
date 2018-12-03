@@ -8,10 +8,10 @@ import scala.collection.SortedSet
 class Controller(var desk: Desk) extends Observable {
   var state: ControllerState.Value = ControllerState.MENU
 
-  def moveTile(tile: String, tile2: String): Unit = desk = desk.moveTwoTilesOnDesk(currentP, regexToTile(tile), regexToTile(tile));
+  def moveTile(tile: String, tile2: String): Unit = desk = desk.moveTwoTilesOnDesk(currentP, regexToTile(tile), regexToTile(tile))
   notifyObservers()
 
-  def layDownTile(tile: String): Unit = desk = desk.putDownTile(currentP, regexToTile(tile));
+  def layDownTile(tile: String): Unit = desk = desk.putDownTile(currentP, regexToTile(tile))
   notifyObservers()
 
   def currentP: Player = desk.currentP
@@ -26,7 +26,7 @@ class Controller(var desk: Desk) extends Observable {
     Tile(Integer.parseInt(regexString.charAt(0).toString), color, Integer.parseInt(regexString.charAt(2).toString))
   }
 
-  def takeATile(): Unit = desk = desk.takeTile(currentP);
+  def takeATile(): Unit = desk = desk.takeTile(currentP)
 
   def addPlayerAndInit(newName: String): Unit = {
     val playerNumber = desk.amountOfPlayers
@@ -37,12 +37,12 @@ class Controller(var desk: Desk) extends Observable {
     }
   }
 
-  def switchToNextPlayer(): Unit = desk = desk.switchToNextPlayer(currentP, nextP);
+  def switchToNextPlayer(): Unit = desk = desk.switchToNextPlayer(currentP, nextP)
   notifyObservers()
 
   def hasMoreThan1Player: Boolean = desk.hasMoreThan1Player
 
-  def hasLessThan4Players: Boolean = desk.hasLessThan4Players
+  def hasLessThan5Players: Boolean = desk.hasLessThan5Players
 
   def nextP: Player = desk.nextP
 

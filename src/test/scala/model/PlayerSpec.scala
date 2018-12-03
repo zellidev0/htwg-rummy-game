@@ -2,6 +2,8 @@ package model
 
 import org.scalatest._
 
+import scala.collection.SortedSet
+
 class PlayerSpec() extends WordSpec with Matchers {
   "A Player" when {
     "created" should {
@@ -10,7 +12,7 @@ class PlayerSpec() extends WordSpec with Matchers {
         player.name should be("Name1")
       }
       "have a nice String representation" in {
-        player.toString should be("Name1")
+        player.toString should be("Player 1: 1 with state: WAIT boardsize: 0")
       }
       "have a player number" in {
         player.number should be(1)

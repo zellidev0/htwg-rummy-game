@@ -27,14 +27,14 @@ class Tui(controller: Controller) extends Observer {
   def handleNameInput(name: String): Unit = {
     name match {
       case "f" =>
-        if (controller.hasMoreThan1Player && controller.hasLessThan4Players) {
+        if (controller.hasMoreThan1Player && controller.hasLessThan5Players) {
           controller.switchControllerState(ControllerState.MENU)
           println("\tNEWS:\tYou're finished. Great. Now type in 's' and enter to start.")
         } else {
           println("\tNEWS:\tNot enough Players. Please insert another name")
         }
       case PlayerNamePattern() =>
-        if (controller.hasLessThan4Players) {
+        if (controller.hasLessThan5Players) {
           controller.addPlayerAndInit(name.substring(4).trim)
           println("\tNEWS:\tPlayer " + controller.getAmountOfPlayers + " is named " + name.substring(4).trim + "\n" +
             "\tNEWS:\tType in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
@@ -51,7 +51,7 @@ class Tui(controller: Controller) extends Observer {
         controller.switchControllerState(ControllerState.PLAYER_FINISHED)
         println("\tNEWS:\tYou took a tile, you are finished. The next player has to type 'n' to continue.");
       case "p" =>
-        println("\tNEWS:\tYou don't take a tile. Your can now play"); controller.switchToNextPlayer(); controller.switchControllerState(ControllerState.PLAY)
+        println("\tNEWS:\tYou don't take a tile. Your can play now"); controller.switchToNextPlayer(); controller.switchControllerState(ControllerState.PLAY)
       case _ => println("\tNEWS:\tCould not identify your input. Are you sure it was correct'?")
 
     }

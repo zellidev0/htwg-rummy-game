@@ -18,7 +18,7 @@ class DeskSpec extends WordSpec with Matchers {
       }
 
       "have a correct amount of players" in {
-        desk.hasLessThan4Players should be(true)
+        desk.hasLessThan5Players should be(true)
         desk.hasMoreThan1Player should be(true)
 
       }
@@ -31,7 +31,7 @@ class DeskSpec extends WordSpec with Matchers {
       desk = desk.addPlayer(Player("Name4", 3, Board(SortedSet[Tile]())))
       desk = desk.addPlayer(Player("Name5", 4, Board(SortedSet[Tile]())))
       "not have a correct amount of players" in {
-        desk.hasLessThan4Players should be(false)
+        desk.hasLessThan5Players should be(false)
       }
     }
 
