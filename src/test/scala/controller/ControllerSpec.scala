@@ -25,7 +25,7 @@ class ControllerSpec extends WordSpec with Matchers {
       val players = Set(Player("Name1", 0, Board(SortedSet[Tile](Tile(1, Color.RED, 0))), state = State.TURN), Player("Name2", 1, Board(SortedSet[Tile]())))
       var desk = Desk(players, Set(), Set[SortedSet[Tile]]())
       val controller = new Controller(desk)
-      controller.layDownTile("l 1R0")
+      controller.layDownTile("1R0")
       "have only one set with one tile" in {
         controller.desk.sets.size should be(1)
         controller.desk.sets.contains(SortedSet(Tile(1, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
@@ -38,7 +38,7 @@ class ControllerSpec extends WordSpec with Matchers {
       var player = Player("", -1, Board(SortedSet()))
       controller.desk.players.find(p => p.number == 0) match {
         case Some(s) =>
-          player = s.changeState(State.TURN);
+          player = s.changeState(State.TURN)
           controller.desk = controller.desk.copy(players = players.-(s).+(player))
       }
       "get the one player" in {
@@ -91,30 +91,26 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "gets next player by 2 ones" should {
-      val players = Set(Player("Name", 0, Board(SortedSet[Tile]()), state = State.TURN), Player("Name1", 1, Board(SortedSet[Tile]())),
-        Player("Name2", 2, Board(SortedSet[Tile]())), Player("Name3", 3, Board(SortedSet[Tile]())))
-      var desk = Desk(players, Set(), Set[SortedSet[Tile]]())
-      val controller = new Controller(desk)
-      val player1 = controller.switchToNextPlayer()
+      var player1 = Player("Name", 0, Board(SortedSet[Tile]()), state = State.TURN)
+      val players = Set[Player](player1, Player("Name1", 1, Board(SortedSet[Tile]())), Player("Name2", 2, Board(SortedSet[Tile]())), Player("Name3", 3, Board(SortedSet[Tile]())))
+      val controller = new Controller(Desk(players, Set(), Set[SortedSet[Tile]]()))
       "have the correct next player1" in {
-        player1.toString should be(Player("Name1", 1, Board(SortedSet[Tile]())).toString)
+        player1 should be(controller.currentP)
+        controller.switchToNextPlayer()
       }
-      val player2 = controller.switchToNextPlayer()
       "have the correct next player2" in {
-        player2.toString should be(Player("Name2", 2, Board(SortedSet[Tile]())).toString)
+        Player("Name1", 1, Board(SortedSet[Tile]()), State.TURN) should be(controller.currentP)
+        controller.switchToNextPlayer()
       }
-      val player3 = controller.switchToNextPlayer()
       "have the correct next player3" in {
-        player3.toString should be(Player("Name3", 3, Board(SortedSet[Tile]())).toString)
+        Player("Name2", 2, Board(SortedSet[Tile]()), State.TURN) should be(controller.currentP)
+        controller.switchToNextPlayer()
       }
-      val player4 = controller.switchToNextPlayer()
       "have the correct next player0" in {
-        player4.toString should be(Player("Name", 0, Board(SortedSet[Tile]())).toString)
+        Player("Name3", 3, Board(SortedSet[Tile]()), State.TURN) should be(controller.currentP)
+        controller.switchToNextPlayer()
       }
     }
-
-
-
   }
 }
 
