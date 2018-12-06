@@ -32,7 +32,6 @@ class Tui(contr: Controller) extends Observer {
     }
   }
 
-
   def handleOnTurnFinished(input: String): Unit = input match {
     case "n" => contr.switchToNextPlayer();
     case _ => printWrongArgument()
@@ -55,64 +54,27 @@ class Tui(contr: Controller) extends Observer {
     }
   }
 
-  def printWrongArgument(): Unit = println("\tNEWS:\tCould not identify your input. Are you sure it was correct'?")
-
   override def update: Boolean = {
     contr.stateM match {
-      case ContState.P_DOES_NOT_OWN_TILE =>
-        println("\tNEWS:\tYou dont have this tile on the board. Please select another one")
-        contr.swState(ContState.P_TURN)
-        printWhatUserCanDo()
-        printUserBoard()
-        printTable()
-      case ContState.CREATED =>
-        println("\tNEWS:\tDesk created. Please type in 'name <name1>' where name1 is the first players name. Confirm with enter")
-        contr.swState(ContState.INSERTING_NAMES)
-      case ContState.TABLE_NOT_CORRECT =>
-        println("\tNEWS:\tTable looks not correct, please move tiles to match the rules")
-        contr.swState(ContState.P_TURN)
-      case ContState.START =>
-        println("" +
-          "SSSSS  TTTTT    A    RRRR   TTTTT \n" +
-          "SS       T     A A   R   R    T   \n" +
-          "SSSSS    T    A   A  RRRR     T   \n" +
-          "   SS    T    AAAAA  RRR      T   \n" +
-          "SSSSS    T    A   A  R  RR    T   \n\n\n\n")
-        contr.swState(ContState.P_TURN)
-      case ContState.ENOUGH_PS =>
-        println("\tNEWS:\tThe Maximum amount of players is set. Type 'f' to finish inserting names")
-        contr.swState(ContState.INSERTING_NAMES)
-      case ContState.INSERTING_NAMES =>
-      case ContState.P_FINISHED =>
-        printPlayerFinished()
-      case ContState.P_TURN =>
-        printWhatUserCanDo()
-        printUserBoard()
-        printTable()
-      case ContState.INSERTED_NAME =>
-        println("\tNEWS:\tPlayer " + contr.getAmountOfPlayers + " is added\n" +
-          "\tNEWS:\tType in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
-        contr.swState(ContState.INSERTING_NAMES)
-      case ContState.NOT_ENOUGH_PS =>
-        println("\tNEWS:\tNot enough Players. Type <c> to create a desk and insert names")
-        contr.swState(ContState.INSERTING_NAMES)
+      case ContState.P_DOES_NOT_OWN_TILE => println("\tNEWS:\tYou dont have this tile on the board. Please select another one")
+      case ContState.CREATED => println("\tNEWS:\tDesk created. Please type in 'name <name1>' where name1 is the first players name. Confirm with enter")
+      case ContState.TABLE_NOT_CORRECT => println("\tNEWS:\tTable looks not correct, please move tiles to match the rules")
+      case ContState.START => println("SSSSS  TTTTT    A    RRRR   TTTTT \nSS       T     A A   R   R    T   \nSSSSS    T    A   A  RRRR     T   \n   SS    T    AAAAA  RRR      T   \nSSSSS    T    A   A  R  RR    T   \n")
+      case ContState.ENOUGH_PS => println("\tNEWS:\tThe Maximum amount of players is set. Type 'f' to finish inserting names")
+      case ContState.P_FINISHED => printPlayerFinished()
+      case ContState.P_TURN => printWhatUserCanDo(); printUserBoard(); printTable()
+      case ContState.INSERTED_NAME => println("\tNEWS:\tPlayer " + contr.getAmountOfPlayers + " is added\n\tNEWS:\tType in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
+      case ContState.NOT_ENOUGH_PS => println("\tNEWS:\tNot enough Players. Type <c> to create a desk and insert names")
       case ContState.MENU => println("\tNEWS:\tYou're finished. Great. Now type in 's' and enter to start.")
       case ContState.P_WON => printPlayerWon()
-        contr.swState(ContState.MENU)
-
+      case _ =>
     }
     true
   }
 
-  def printPlayerWon() = {
-    println(
-      "FFFFFF  I  NN   N  I  SSSSS  H   H  EEEEE  DDD                                          " +
-      "F       I  N N  N  I  SS     H   H  E      D  D                                         " +
-      "FFFFFF  I  N  N N  I  SSSSS  HHHHH  EEEEE  D   D                                        " +
-      "F       I  N  N N  I     SS  H   H  E      D  D                                         " +
-      "F       I  N   NN  I  SSSSS  H   H  EEEEE  DDD                                          \n\n" +
-        contr.currentP + "is the winner.")
-  }
+  def printPlayerWon(): Unit = printf("FFFFFF  I  NN   N  I  SSSSS  H   H  EEEEE  DDD\nF       I  N N  N  I  SS     H   H  E      D  D\nFFFFFF  I  N  N N  I  SSSSS  HHHHH  EEEEE  D   D\nF       I  N  N N  I     SS  H   H  E      D  D\nF       I  N   NN  I  SSSSS  H   H  EEEEE  DDD\n%s is the winner.", contr.currentP)
+
+  def printPlayerFinished(): Unit = println("\tNEWS:\tYou are finished. The next player has to type 'n' to continue.");
 
   def printUserBoard(): Unit = {
     printf(
@@ -174,7 +136,7 @@ class Tui(contr: Controller) extends Observer {
     }
   }
 
-  def printPlayerFinished() = println("\tNEWS:\tYou are finished. The next player has to type 'n' to continue.");
+  def printWrongArgument(): Unit = println("\tNEWS:\tCould not identify your input. Are you sure it was correct'?")
 
   def printWhatUserCanDo(): Unit = {
     printf(

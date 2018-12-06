@@ -18,9 +18,17 @@ class Controller(var desk: Desk) extends Observable {
       return
     }
     if (desk.checkTable())
-      if (desk.currentPlayerWon()) swState(P_WON) else swState(P_FINISHED)
-    else
+      if (desk.currentPlayerWon()) {
+        swState(P_WON)
+        swState(ContState.MENU)
+      } else {
+        swState(P_FINISHED)
+      }
+    else {
       swState(TABLE_NOT_CORRECT)
+      swState(ContState.P_TURN)
+    }
+
   }
 
   def moveTile(tile: String, tile2: String): Unit = {
@@ -32,6 +40,7 @@ class Controller(var desk: Desk) extends Observable {
   def layDownTile(tile: String): Unit = {
     if (!currentP.board.contains(regexToTile(tile))) {
       swState(P_DOES_NOT_OWN_TILE)
+      swState(ContState.P_TURN)
       return
     }
     desk = desk.putDownTile(currentP, regexToTile(tile))
@@ -54,6 +63,8 @@ class Controller(var desk: Desk) extends Observable {
   def addPlayerAndInit(newName: String, max: Int): Unit = {
     if (!hasLessThan4Players) {
       swState(ENOUGH_PS)
+      swState(ContState.INSERTING_NAMES)
+
       return
     }
     desk = desk.addPlayer(Player(newName, desk.amountOfPlayers, Board(SortedSet[Tile]()), if (desk.players.nonEmpty) State.WAIT else State.TURN))
@@ -61,6 +72,8 @@ class Controller(var desk: Desk) extends Observable {
       desk = desk.takeTile(desk.players.find(_.number == desk.amountOfPlayers - 1).get)
     }
     swState(INSERTED_NAME)
+    swState(ContState.INSERTING_NAMES)
+
   } /*t*/
 
   def swState(c: ContState.Value): Unit = {
@@ -68,18 +81,11 @@ class Controller(var desk: Desk) extends Observable {
     notifyObservers()
   }
 
-  def hasLessThan4Players: Boolean = desk.hasLessThan4Players
-
-  def nextP: Player = desk.nextP /*t*/
-
   def switchToNextPlayer(): Unit = {
     desk = desk.switchToNextPlayer(currentP, nextP)
     swState(P_TURN)
   } /*t*/
 
-  def nameInputFinished(): Unit = if (desk.hasCorrectAmountOfPlayers) swState(START) else swState(NOT_ENOUGH_PS)
-
-  def getTileSet: Set[SortedSet[Tile]] = desk.sets
 
   def createDesk(amount: Int): Unit = {
     val colorSet = Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
@@ -93,7 +99,25 @@ class Controller(var desk: Desk) extends Observable {
     }
     desk = Desk(Set[Player](), bagOfTiles, Set[SortedSet[Tile]]())
     swState(CREATED)
+    swState(ContState.INSERTING_NAMES)
+
   } /*t*/
+
+  def nextP: Player = desk.nextP /*t*/
+
+  def hasLessThan4Players: Boolean = desk.hasLessThan4Players
+
+  def nameInputFinished(): Unit = {
+    if (desk.hasCorrectAmountOfPlayers) {
+      swState(START)
+      swState(P_TURN)
+    } else {
+      swState(NOT_ENOUGH_PS)
+      swState(ContState.INSERTING_NAMES)
+    }
+  }
+
+  def getTileSet: Set[SortedSet[Tile]] = desk.sets
 
   def getAmountOfPlayers: Int = desk.amountOfPlayers
 

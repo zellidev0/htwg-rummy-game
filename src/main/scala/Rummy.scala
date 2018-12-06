@@ -9,7 +9,7 @@ object Rummy {
   val tui = new Tui(controller)
 
   def main(args: Array[String]): Unit = {
-    print("Type <c>")
+    println("Type <c>")
     var input: String = ""
     if (args.length > 0) input = args(0)
     if (!input.isEmpty) tui.processInputLine(input)
