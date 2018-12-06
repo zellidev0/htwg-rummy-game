@@ -6,8 +6,8 @@ import util.Observer
 
 import scala.util.matching.Regex
 
-class Tui(controller: Controller) extends Observer {
-  controller.add(this)
+class Tui(contr: Controller) extends Observer {
+  contr.add(this)
 
   val AmountOfPlayersPattern: Regex = "[2-4]".r
   val PlayerNamePattern: Regex = "name [A-Za-z]+".r
@@ -16,34 +16,33 @@ class Tui(controller: Controller) extends Observer {
 
 
   def processInputLine(input: String): Unit = {
-    controller.state match {
+    contr.stateM match {
       case ContState.MENU => handleMenuInput(input)
       case ContState.INSERTING_NAMES => handleNameInput(input)
-      case ContState.PLAYER_TURN => handleOnTurn(input)
-      case ContState.PLAYER_FINISHED => handleOnTurnFinished(input)
+      case ContState.P_TURN => handleOnTurn(input)
+      case ContState.P_FINISHED => handleOnTurnFinished(input)
     }
   }
 
   def handleNameInput(name: String): Unit = {
     name match {
-      case "f" => controller.nameInputFinished()
-      case PlayerNamePattern() => controller.addPlayerAndInit(name.substring(4).trim, 12)
+      case "f" => contr.nameInputFinished()
+      case PlayerNamePattern() => contr.addPlayerAndInit(name.substring(4).trim, 12)
       case _ => printWrongArgument()
     }
   }
 
-  def printWrongArgument(): Unit = println("\tNEWS:\tCould not identify your input. Are you sure it was correct'?")
 
   def handleOnTurnFinished(input: String): Unit = input match {
-    case "n" => controller.switchToNextPlayer();
+    case "n" => contr.switchToNextPlayer();
     case _ => printWrongArgument()
   }
 
   def handleOnTurn(input: String): Unit = {
     input match {
-      case LayDownTilePattern(c) => controller.layDownTile(c.split(" ").apply(1));
-      case MoveTilePattern(c) => controller.moveTile(c.split(" t ").apply(0).split(" ").apply(1), c.split(" t ").apply(1));
-      case "f" => controller.userFinishedPlay()
+      case LayDownTilePattern(c) => contr.layDownTile(c.split(" ").apply(1));
+      case MoveTilePattern(c) => contr.moveTile(c.split(" t ").apply(0).split(" ").apply(1), c.split(" t ").apply(1));
+      case "f" => contr.userFinishedPlay()
       case _ => printWrongArgument()
     }
   }
@@ -51,19 +50,27 @@ class Tui(controller: Controller) extends Observer {
   def handleMenuInput(input: String): Unit = {
     input match {
       case "q" =>
-      case "c" => controller.createDesk(13);
+      case "c" => contr.createDesk(13);
       case _ => printWrongArgument()
     }
   }
 
+  def printWrongArgument(): Unit = println("\tNEWS:\tCould not identify your input. Are you sure it was correct'?")
+
   override def update: Boolean = {
-    controller.state match {
+    contr.stateM match {
+      case ContState.P_DOES_NOT_OWN_TILE =>
+        println("\tNEWS:\tYou dont have this tile on the board. Please select another one")
+        contr.swState(ContState.P_TURN)
+        printWhatUserCanDo()
+        printUserBoard()
+        printTable()
       case ContState.CREATED =>
         println("\tNEWS:\tDesk created. Please type in 'name <name1>' where name1 is the first players name. Confirm with enter")
-        controller.swState(ContState.INSERTING_NAMES)
+        contr.swState(ContState.INSERTING_NAMES)
       case ContState.TABLE_NOT_CORRECT =>
         println("\tNEWS:\tTable looks not correct, please move tiles to match the rules")
-        controller.swState(ContState.PLAYER_TURN)
+        contr.swState(ContState.P_TURN)
       case ContState.START =>
         println("" +
           "SSSSS  TTTTT    A    RRRR   TTTTT \n" +
@@ -71,39 +78,40 @@ class Tui(controller: Controller) extends Observer {
           "SSSSS    T    A   A  RRRR     T   \n" +
           "   SS    T    AAAAA  RRR      T   \n" +
           "SSSSS    T    A   A  R  RR    T   \n\n\n\n")
-        controller.swState(ContState.PLAYER_TURN)
-      case ContState.ENOUGH_PLAYERS =>
+        contr.swState(ContState.P_TURN)
+      case ContState.ENOUGH_PS =>
         println("\tNEWS:\tThe Maximum amount of players is set. Type 'f' to finish inserting names")
-        controller.swState(ContState.INSERTING_NAMES)
+        contr.swState(ContState.INSERTING_NAMES)
       case ContState.INSERTING_NAMES =>
-      case ContState.PLAYER_FINISHED =>
+      case ContState.P_FINISHED =>
         printPlayerFinished()
-      case ContState.PLAYER_TURN =>
-        printWahtUserCanDo()
+      case ContState.P_TURN =>
+        printWhatUserCanDo()
         printUserBoard()
         printTable()
       case ContState.INSERTED_NAME =>
-        println("\tNEWS:\tPlayer " + controller.getAmountOfPlayers + " is added\n" +
+        println("\tNEWS:\tPlayer " + contr.getAmountOfPlayers + " is added\n" +
           "\tNEWS:\tType in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
-        controller.swState(ContState.INSERTING_NAMES)
-      case ContState.NOT_ENOUGH_PLAYERS =>
+        contr.swState(ContState.INSERTING_NAMES)
+      case ContState.NOT_ENOUGH_PS =>
         println("\tNEWS:\tNot enough Players. Type <c> to create a desk and insert names")
-        controller.swState(ContState.INSERTING_NAMES)
+        contr.swState(ContState.INSERTING_NAMES)
       case ContState.MENU => println("\tNEWS:\tYou're finished. Great. Now type in 's' and enter to start.")
-      case ContState.PLAYER_WON => printPlayerWon()
-        controller.swState(ContState.MENU)
+      case ContState.P_WON => printPlayerWon()
+        contr.swState(ContState.MENU)
 
     }
     true
   }
 
   def printPlayerWon() = {
-    println("FFFFFF  I  NN   N  I  SSSSS  H   H  EEEEE  DDD                                          " +
+    println(
+      "FFFFFF  I  NN   N  I  SSSSS  H   H  EEEEE  DDD                                          " +
       "F       I  N N  N  I  SS     H   H  E      D  D                                         " +
       "FFFFFF  I  N  N N  I  SSSSS  HHHHH  EEEEE  D   D                                        " +
       "F       I  N  N N  I     SS  H   H  E      D  D                                         " +
       "F       I  N   NN  I  SSSSS  H   H  EEEEE  DDD                                          \n\n" +
-      controller.currentP + "is the winner.")
+        contr.currentP + "is the winner.")
   }
 
   def printUserBoard(): Unit = {
@@ -111,24 +119,24 @@ class Tui(controller: Controller) extends Observer {
       "|---------------------------------------------------------------------------------------|\n" +
         "| %20s thats on your board.                                             |\n" +
         "|---------------------------------------------------------------------------------------|\n",
-      controller.currentP.name)
-    for (_ <- controller.currentP.board.tiles) {
+      contr.currentP.name)
+    for (_ <- contr.currentP.board.tiles) {
       print("____ ")
     }
     println()
-    for (tile <- controller.currentP.board.tiles) {
+    for (tile <- contr.currentP.board.tiles) {
       printf("|%2s| ", tile.value)
     }
     println()
-    for (tile <- controller.currentP.board.tiles) {
+    for (tile <- contr.currentP.board.tiles) {
       printf("|%s | ", tile.color.toString.charAt(0))
     }
     println()
-    for (tile <- controller.currentP.board.tiles) {
+    for (tile <- contr.currentP.board.tiles) {
       printf("|%s | ", tile.ident)
     }
     println()
-    for (tile <- controller.currentP.board.tiles) {
+    for (_ <- contr.currentP.board.tiles) {
       print("\u203E\u203E\u203E\u203E ")
     }
     println()
@@ -141,8 +149,8 @@ class Tui(controller: Controller) extends Observer {
       "|---------------------------------------------------------------------------------------|\n" +
         "| %20s thats on the desk.                                               |\n" +
         "|---------------------------------------------------------------------------------------|\n\n",
-      controller.currentP.name)
-    for (sortedSet <- controller.getTileSet) {
+      contr.currentP.name)
+    for (sortedSet <- contr.getTileSet) {
       for (_ <- sortedSet) {
         print("____ ")
       }
@@ -168,7 +176,7 @@ class Tui(controller: Controller) extends Observer {
 
   def printPlayerFinished() = println("\tNEWS:\tYou are finished. The next player has to type 'n' to continue.");
 
-  def printWahtUserCanDo(): Unit = {
+  def printWhatUserCanDo(): Unit = {
     printf(
       "|---------------------------------------------------------------------------------------|\n" +
         "| %50s it's your turn. Do your stuff.     |\n" +
@@ -178,6 +186,6 @@ class Tui(controller: Controller) extends Observer {
         "|  to put A in where B is                                                               |\n" +
         "| Type 'f' to finish (and take a tile automatically if you did nothing)                 |\n" +
         "|---------------------------------------------------------------------------------------|\n\n",
-      controller.currentP.name)
+      contr.currentP.name)
   }
 }

@@ -19,7 +19,7 @@ class DeskSpec extends WordSpec with Matchers {
       "have a correct amount of players" in {
         desk.hasLessThan4Players should be(true)
         desk.hasMoreThan1Player should be(true)
-
+        desk.hasCorrectAmountOfPlayers should be(true)
       }
 
     }
@@ -31,6 +31,7 @@ class DeskSpec extends WordSpec with Matchers {
       desk = desk.addPlayer(Player("Name5", 4, Board(SortedSet[Tile]())))
       "not have a correct amount of players" in {
         desk.hasLessThan4Players should be(false)
+        desk.hasCorrectAmountOfPlayers should be(false)
       }
     }
     "created with empty players" should {
@@ -53,14 +54,14 @@ class DeskSpec extends WordSpec with Matchers {
       desk = desk.putDownTile(desk.currentP, Tile(1, Color.RED, 0))
       "have one more tile on table" in {
         desk.amountOfTilesOnTable should be(amountOfTilesOnTable + 1) // 1
-        desk.tileSetContains(Tile(1, Color.RED, 0)) should be(true)
-        desk.tileSetContains(Tile(1, Color.RED, 1)) should be(false)
+        desk.setContains(Tile(1, Color.RED, 0)) should be(true)
+        desk.setContains(Tile(1, Color.RED, 1)) should be(false)
       }
       "Player 1 have one tile less" in {
         desk.players.find(p => p.number == 0).get.board.amountOfTiles() should be(amountOfTilesOnBoardOfPlayer1 - 1)
       }
       "have a tile in a tileSet" in {
-        desk.setWithTile(Tile(1, Color.RED, 0)).get should be(SortedSet[Tile](Tile(1, Color.RED, 0)))
+        desk.setWithTile(Tile(1, Color.RED, 0)) should be(SortedSet[Tile](Tile(1, Color.RED, 0)))
       }
     }
     "user takes tile from bag" should {
@@ -192,6 +193,15 @@ class DeskSpec extends WordSpec with Matchers {
       desk = desk.putDownTile(desk.currentP, tile)
       "have that player win" in {
         desk.currentPlayerWon() should be(true)
+      }
+    }
+    "remove empty sets" should {
+      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN))
+      var desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]](SortedSet(Tile(1, Color.GREEN, 0), Tile(2, Color.GREEN, 1), Tile(3, Color.GREEN, 1)), SortedSet()))
+      val amountOfSetsBefore = desk.sets.size
+      desk = desk.copy(sets = desk.removeEmptySets(desk.sets))
+      "have 2 sets less" in {
+        desk.sets.size should be(amountOfSetsBefore - 1)
       }
     }
   }
