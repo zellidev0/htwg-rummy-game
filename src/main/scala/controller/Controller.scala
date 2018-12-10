@@ -86,7 +86,6 @@ class Controller(var desk: Desk) extends Observable {
     swState(P_TURN)
   } /*t*/
 
-
   def createDesk(amount: Int): Unit = {
     val colorSet = Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
     var bagOfTiles: Set[Tile] = Set[Tile]()
