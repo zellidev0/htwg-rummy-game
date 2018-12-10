@@ -50,7 +50,7 @@ case class Desk(players: Set[Player], bagOfTiles: Set[Tile], sets: Set[SortedSet
 
   def currentP: Player = players.find(_.state == State.TURN).get /*t*/
 
-  def moveTwoTilesOnDesk(current: Player, tile1: Tile, tile2: Tile): Desk = if (setContains(tile1) && setContains(tile2)) copy(sets = removeEmptySets(sets - setWithTile(tile1) + (setWithTile(tile1) - tile1) - setWithTile(tile2) + (setWithTile(tile2) + tile1))) else this
+  def moveTwoTilesOnDesk(current: Player, tile1: Tile, tile2: Tile): Desk = if (setContains(tile1) && setContains(tile2)) copy(sets = removeEmptySets(sets - setWithTile(tile1) + (setWithTile(tile1) - tile1) - setWithTile(tile2) + (setWithTile(tile2) + tile1))) else this /*t*/
 
   private[model] def removeEmptySets(set: Set[SortedSet[Tile]]): Set[SortedSet[Tile]] = set.filter(f => f.nonEmpty) /*t*/
 

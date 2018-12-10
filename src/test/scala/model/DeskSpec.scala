@@ -204,5 +204,17 @@ class DeskSpec extends WordSpec with Matchers {
         desk.sets.size should be(amountOfSetsBefore - 1)
       }
     }
+    "move a tile form one set to another" should {
+      val tile = Tile(4, Color.BLUE, 0)
+      val tile2 = Tile(3, Color.BLUE, 0)
+      val players = Set(Player("Name1", 0, Board(SortedSet[Tile](tile)), state = State.TURN))
+      var desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]](SortedSet(Tile(1, Color.BLUE, 0), Tile(2, Color.BLUE, 0), tile2), SortedSet()))
+      desk = desk.putDownTile(desk.currentP, tile)
+      desk = desk.moveTwoTilesOnDesk(desk.currentP, tile, tile2)
+      "have 4 tiles in Set on Deks" in {
+        desk.setWithTile(tile).size should be(4)
+      }
+
+    }
   }
 }
