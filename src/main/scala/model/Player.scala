@@ -15,6 +15,4 @@ case class Player(name: String, number: Int, board: Board, state: state = State.
 
   override def toString: String = "Player " + number + ": " + number + " with state: " + state.toString + " boardsize: " + board.amountOfTiles()
 
-
-
 }

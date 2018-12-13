@@ -9,9 +9,9 @@ case class Board(tiles: SortedSet[Tile]) {
 
   def amountOfTiles(): Int = tiles.size
 
-  def +(tile: Tile): Board = Board(tiles + tile)
+  def +(tile: Tile): Board = copy(tiles + tile)
 
-  def -(tile: Tile): Board = Board(tiles.filterNot(t => tile.identifier == t.identifier))
+  def -(tile: Tile): Board = copy(tiles.filterNot(t => tile.identifier == t.identifier))
 
   def contains(tile: Tile): Boolean = tiles contains tile
 }

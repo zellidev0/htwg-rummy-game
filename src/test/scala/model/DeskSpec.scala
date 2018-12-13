@@ -17,9 +17,9 @@ class DeskSpec extends WordSpec with Matchers {
         desk.amountOfTilesOnTable should be(0)
       }
       "have a correct amount of players" in {
-        desk.hasLessThan4Players should be(true)
-        desk.hasMoreThan1Player should be(true)
-        desk.hasCorrectAmountOfPlayers should be(true)
+        desk.lessThan4P should be(true)
+        desk.moreThan1P should be(true)
+        desk.correctAmountOfPlayers should be(true)
       }
 
     }
@@ -30,8 +30,8 @@ class DeskSpec extends WordSpec with Matchers {
       desk = desk.addPlayer(Player("Name4", 3, Board(SortedSet[Tile]())))
       desk = desk.addPlayer(Player("Name5", 4, Board(SortedSet[Tile]())))
       "not have a correct amount of players" in {
-        desk.hasLessThan4Players should be(false)
-        desk.hasCorrectAmountOfPlayers should be(false)
+        desk.lessThan4P should be(false)
+        desk.correctAmountOfPlayers should be(false)
       }
     }
     "created with empty players" should {
@@ -54,14 +54,14 @@ class DeskSpec extends WordSpec with Matchers {
       desk = desk.putDownTile(desk.currentP, Tile(1, Color.RED, 0))
       "have one more tile on table" in {
         desk.amountOfTilesOnTable should be(amountOfTilesOnTable + 1) // 1
-        desk.setContains(Tile(1, Color.RED, 0)) should be(true)
-        desk.setContains(Tile(1, Color.RED, 1)) should be(false)
+        desk.setsContains(Tile(1, Color.RED, 0)) should be(true)
+        desk.setsContains(Tile(1, Color.RED, 1)) should be(false)
       }
       "Player 1 have one tile less" in {
         desk.players.find(p => p.number == 0).get.board.amountOfTiles() should be(amountOfTilesOnBoardOfPlayer1 - 1)
       }
       "have a tile in a tileSet" in {
-        desk.setWithTile(Tile(1, Color.RED, 0)) should be(SortedSet[Tile](Tile(1, Color.RED, 0)))
+        desk.sortedSet(Tile(1, Color.RED, 0)) should be(SortedSet[Tile](Tile(1, Color.RED, 0)))
       }
     }
     "user takes tile from bag" should {
@@ -70,7 +70,7 @@ class DeskSpec extends WordSpec with Matchers {
       val amountOfTilesInBag = desk.bagOfTiles.size // 2
       var amountOfTilesOnBoardOfPlayer1 = 0
       amountOfTilesOnBoardOfPlayer1 = players.find(p => p.number == 0).get.board.amountOfTiles()
-      desk = desk.takeTile(players.find(p => p.number == 0).get)
+      desk = desk.takeTileFromBagToPlayer(players.find(p => p.number == 0).get, desk.randomTileInBag)
       "user have one more tile on board" in {
         desk.players.find(p => p.number == 0).get.board.amountOfTiles() should be(amountOfTilesOnBoardOfPlayer1 + 1)
       }
@@ -84,7 +84,7 @@ class DeskSpec extends WordSpec with Matchers {
       var desk = Desk(players, Set[Tile](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1)), Set[SortedSet[Tile]]())
       val amountOfTilesInBag = desk.bagOfTiles.size // 2
       var x = players.find(p => p.number == 0).get.board.amountOfTiles()
-      desk = desk.takeTile(players.find(p => p.number == 0).get)
+      desk = desk.takeTileFromBagToPlayer(players.find(p => p.number == 0).get, desk.randomTileInBag)
       "user have one more tile on board" in {
         desk.players.find(p => p.number == 0).get.board.amountOfTiles() should be(x + 1)
       }
@@ -195,24 +195,15 @@ class DeskSpec extends WordSpec with Matchers {
         desk.currentPlayerWon() should be(true)
       }
     }
-    "remove empty sets" should {
-      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN))
-      var desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]](SortedSet(Tile(1, Color.GREEN, 0), Tile(2, Color.GREEN, 1), Tile(3, Color.GREEN, 1)), SortedSet()))
-      val amountOfSetsBefore = desk.sets.size
-      desk = desk.copy(sets = desk.removeEmptySets(desk.sets))
-      "have 2 sets less" in {
-        desk.sets.size should be(amountOfSetsBefore - 1)
-      }
-    }
     "move a tile form one set to another" should {
       val tile = Tile(4, Color.BLUE, 0)
       val tile2 = Tile(3, Color.BLUE, 0)
       val players = Set(Player("Name1", 0, Board(SortedSet[Tile](tile)), state = State.TURN))
       var desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]](SortedSet(Tile(1, Color.BLUE, 0), Tile(2, Color.BLUE, 0), tile2), SortedSet()))
       desk = desk.putDownTile(desk.currentP, tile)
-      desk = desk.moveTwoTilesOnDesk(desk.currentP, tile, tile2)
+      desk = desk.moveTwoTilesOnDesk(tile, tile2)
       "have 4 tiles in Set on Deks" in {
-        desk.setWithTile(tile).size should be(4)
+        desk.sortedSet(tile).size should be(4)
       }
 
     }

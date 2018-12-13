@@ -2,40 +2,26 @@ package controller
 
 import model.ContState._
 import model.{ContState, _}
-import util.Observable
+import util.{Observable, UndoManager}
 
 import scala.collection.SortedSet
 
 class Controller(var desk: Desk) extends Observable {
   var stateM: state = MENU
-  var userDidSomething = false
-
+  private val undoManager = new UndoManager
+  var userPutTileDown = 0
   def userFinishedPlay(): Unit = {
-    if (!userDidSomething) {
-      desk = desk.takeTile(currentP)
-      userDidSomething = false
-      swState(P_FINISHED)
-      return
-    }
-    if (desk.checkTable())
-      if (desk.currentPlayerWon()) {
-        swState(P_WON)
-        swState(ContState.MENU)
-      } else {
-        swState(P_FINISHED)
-      }
-    else {
+    if (userPutTileDown == 0) {
+      undoManager.doStep(new TakeTileCommand(this))
+    } else if (desk.checkTable()) {
+      undoManager.doStep(new FinishedCommand(this))
+    } else {
       swState(TABLE_NOT_CORRECT)
       swState(ContState.P_TURN)
     }
-
   }
 
-  def moveTile(tile: String, tile2: String): Unit = {
-    desk = desk.moveTwoTilesOnDesk(currentP, regexToTile(tile), regexToTile(tile2))
-    userDidSomething = true
-    notifyObservers()
-  } /*t*/
+  def moveTile(tile1: String, tile2: String): Unit = undoManager.doStep(new MoveTileCommand(tile1, tile2, this)) /*t*/
 
   def layDownTile(tile: String): Unit = {
     if (!currentP.board.contains(regexToTile(tile))) {
@@ -43,9 +29,7 @@ class Controller(var desk: Desk) extends Observable {
       swState(ContState.P_TURN)
       return
     }
-    desk = desk.putDownTile(currentP, regexToTile(tile))
-    userDidSomething = true
-    notifyObservers()
+    undoManager.doStep(new LayDownCommand(tile, this))
   } /*t*/
 
   private[controller] def regexToTile(regexString: String): Tile = {
@@ -58,33 +42,27 @@ class Controller(var desk: Desk) extends Observable {
     Tile(Integer.parseInt(regexString.substring(0, regexString.length - 2)), color, Integer.parseInt(regexString.charAt(regexString.length - 1).toString))
   } /*t*/
 
+
+  def previousP: Player = desk.previousP
+
   def currentP: Player = desk.currentP /*t*/
+
+  def nextP: Player = desk.nextP /*t*/
 
   def addPlayerAndInit(newName: String, max: Int): Unit = {
     if (!hasLessThan4Players) {
       swState(ENOUGH_PS)
       swState(ContState.INSERTING_NAMES)
-
       return
     }
-    desk = desk.addPlayer(Player(newName, desk.amountOfPlayers, Board(SortedSet[Tile]()), if (desk.players.nonEmpty) State.WAIT else State.TURN))
-    for (_ <- 1 to max) {
-      desk = desk.takeTile(desk.players.find(_.number == desk.amountOfPlayers - 1).get)
-    }
-    swState(INSERTED_NAME)
-    swState(ContState.INSERTING_NAMES)
-
+    undoManager.doStep(new NameCommand(newName, max, this))
   } /*t*/
 
   def swState(c: ContState.Value): Unit = {
     stateM = c
     notifyObservers()
   }
-
-  def switchToNextPlayer(): Unit = {
-    desk = desk.switchToNextPlayer(currentP, nextP)
-    swState(P_TURN)
-  } /*t*/
+  def hasLessThan4Players: Boolean = desk.lessThan4P
 
   def createDesk(amount: Int): Unit = {
     val colorSet = Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
@@ -101,13 +79,11 @@ class Controller(var desk: Desk) extends Observable {
     swState(ContState.INSERTING_NAMES)
 
   } /*t*/
-
-  def nextP: Player = desk.nextP /*t*/
-
-  def hasLessThan4Players: Boolean = desk.hasLessThan4Players
-
+  def switchToNextPlayer(): Unit = undoManager.doStep(new SwitchPlayerCommand(this))
+  /*t*/
   def nameInputFinished(): Unit = {
-    if (desk.hasCorrectAmountOfPlayers) {
+    if (desk.correctAmountOfPlayers) {
+      undoManager.emptyStack
       swState(START)
       swState(P_TURN)
     } else {
@@ -122,5 +98,16 @@ class Controller(var desk: Desk) extends Observable {
 
   def setsOnDeskAreCorrect: Boolean = desk.checkTable()
 
+  def removeTileFromSet(tile: Tile): Unit = desk = desk.removeFromTable(tile)
+
+  def undo: Unit = {
+    undoManager.undoStep
+    notifyObservers()
+  }
+
+  def redo: Unit = {
+    undoManager.redoStep
+    notifyObservers()
+  }
 
 }

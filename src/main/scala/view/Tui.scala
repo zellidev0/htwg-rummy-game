@@ -13,6 +13,7 @@ class Tui(contr: Controller) extends Observer {
   val PlayerNamePattern: Regex = "name [A-Za-z]+".r
   val LayDownTilePattern: Regex = "(l [1-9][RBGY][01]|l 1[0123][RBGY][01])".r
   val MoveTilePattern: Regex = "(m [1-9][RBGY][01] t [1-9][RBGY][01]|m 1[0123][RBGY][01] t [1-9][RBYG][01]|m 1[0-3][RBGY][01] t 1[0-3][RBGY][01]|m [1-9][RBGY][01] 1[0-3][RBYG][01])".r
+  val elements = 12
 
 
   def processInputLine(input: String): Unit = {
@@ -27,13 +28,15 @@ class Tui(contr: Controller) extends Observer {
   def handleNameInput(name: String): Unit = {
     name match {
       case "f" => contr.nameInputFinished()
-      case PlayerNamePattern() => contr.addPlayerAndInit(name.substring(4).trim, 12)
+      case "z" => contr.undo
+      case "r" => contr.redo
+      case PlayerNamePattern() => contr.addPlayerAndInit(name.substring(4).trim, elements)
       case _ => printWrongArgument()
     }
   }
 
   def handleOnTurnFinished(input: String): Unit = input match {
-    case "n" => contr.switchToNextPlayer();
+    case "n" => contr.switchToNextPlayer()
     case _ => printWrongArgument()
   }
 
@@ -42,6 +45,8 @@ class Tui(contr: Controller) extends Observer {
       case LayDownTilePattern(c) => contr.layDownTile(c.split(" ").apply(1));
       case MoveTilePattern(c) => contr.moveTile(c.split(" t ").apply(0).split(" ").apply(1), c.split(" t ").apply(1));
       case "f" => contr.userFinishedPlay()
+      case "z" => contr.undo
+      case "r" => contr.redo
       case _ => printWrongArgument()
     }
   }
@@ -49,7 +54,7 @@ class Tui(contr: Controller) extends Observer {
   def handleMenuInput(input: String): Unit = {
     input match {
       case "q" =>
-      case "c" => contr.createDesk(13);
+      case "c" => contr.createDesk(elements + 1);
       case _ => printWrongArgument()
     }
   }
@@ -67,6 +72,9 @@ class Tui(contr: Controller) extends Observer {
       case ContState.NOT_ENOUGH_PS => println("\tNEWS:\tNot enough Players. Type <c> to create a desk and insert names")
       case ContState.MENU => println("\tNEWS:\tYou're finished. Great. Now type in 's' and enter to start.")
       case ContState.P_WON => printPlayerWon()
+
+      case ContState.PLAYER_REMOVED => println("\tNEWS:\tYou removed the player you inserted .")
+      case ContState.UNDO_LAY_DOWN_TILE => println("\tNEWS:\tYou took the tile up.")
       case _ =>
     }
     true
@@ -150,4 +158,6 @@ class Tui(contr: Controller) extends Observer {
         "|---------------------------------------------------------------------------------------|\n\n",
       contr.currentP.name)
   }
+
+
 }
