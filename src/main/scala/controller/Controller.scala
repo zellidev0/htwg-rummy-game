@@ -14,17 +14,26 @@ class Controller(var desk: Desk) extends Observable {
     if (userPutTileDown == 0) {
       undoManager.doStep(new TakeTileCommand(this))
     } else if (desk.checkTable()) {
-      undoManager.doStep(new FinishedCommand(this))
+      undoManager.doStep(new FinishedCommand(userPutTileDown, this))
     } else {
       swState(TABLE_NOT_CORRECT)
       swState(ContState.P_TURN)
     }
   }
-
-  def moveTile(tile1: String, tile2: String): Unit = undoManager.doStep(new MoveTileCommand(tile1, tile2, this)) /*t*/
+  //TODO NEVER GONNA GIVE YOU UP
+  //TODO NEVER GONNA LET YOU DOWN
+  //TODO YOU JUST GOT RICK ROLLED BOI <3
+  def moveTile(tile1: String, tile2: String): Unit = {
+    if (!desk.setsContains(regexToTile(tile1)) || !desk.setsContains(regexToTile(tile2))) {
+      swState(TILE_NOT_ON_TABLE)
+      swState(ContState.P_TURN)
+      return
+    }
+    undoManager.doStep(new MoveTileCommand(tile1, tile2, this))
+  } /*t*/
 
   def layDownTile(tile: String): Unit = {
-    if (!currentP.board.contains(regexToTile(tile))) {
+    if (!currentP.hasTile(regexToTile(tile))) {
       swState(P_DOES_NOT_OWN_TILE)
       swState(ContState.P_TURN)
       return

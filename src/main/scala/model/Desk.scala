@@ -15,8 +15,8 @@ case class Desk(players: Set[Player], bagOfTiles: Set[Tile], sets: Set[SortedSet
   def addToTable(t: Tile): Desk = copy(sets = sets + (SortedSet[Tile]() + t))
   def removeFromPlayer(p: Player, t: Tile): Desk = copy(players - p + (players.find(_ == p).get - t))
 
-  def amountOfPlayers: Int = players.size /*t*/
-
+  def amountOfPlayers: Int = players.size
+  /*t*/
   def amountOfTilesOnTable: Int = {
     var x = 0
     sets.foreach(sorted => x += sorted.size)
@@ -50,23 +50,26 @@ case class Desk(players: Set[Player], bagOfTiles: Set[Tile], sets: Set[SortedSet
     set.foreach(t => setOfColors += t.color)
     if (setOfValues.size != 1 || setOfColors.size != set.size) return false
     true
-  } /*t*/
+  }
+  /*t*/
   def previousP: Player = if (currentP.number - 1 == 0) players.find(_.number == 0).get else if (currentP.number - 1 < 0) players.find(_.number == players.size - 1).get else players.find(_.number == currentP.number - 1).get
   /*t*/
-  def nextP: Player = if (currentP.number + 1 == players.size) players.find(_.number == 0).get else players.find(_.number == currentP.number + 1).get /*t*/
+  def nextP: Player = if (currentP.number + 1 == players.size) players.find(_.number == 0).get else players.find(_.number == currentP.number + 1).get
+  /*t*/
   def currentP: Player = players.find(_.state == State.TURN).get
   def moveTwoTilesOnDesk(t1: Tile, t2: Tile): Desk = if (setsContains(t1) && setsContains(t2)) copy(sets = (sets - sortedSet(t1) + (sortedSet(t1) - t1) - sortedSet(t2) + (sortedSet(t2) + t1)).filter(_.nonEmpty)) else this
   /*t*/
   def sortedSet(t: Tile): SortedSet[Tile] = sets.find(_.contains(t)).get
   /*t*/
-  private[model] def setsContains(t: Tile): Boolean = sets.exists(_.contains(t))
+  def setsContains(t: Tile): Boolean = sets.exists(_.contains(t))
   /*t*/
   def randomTileInBag: Tile = bagOfTiles.toVector(Random.nextInt(bagOfTiles.size))
   def switchToNextPlayer(curr: Player, next: Player): Desk = {
 
     val newPlayers = players - curr + players.find(_ == curr).get.changeState(State.WAIT)
     copy(players = newPlayers - next + newPlayers.find(_ == next).get.changeState(State.TURN))
-  } /*t*/
+  }
+  /*t*/
   def addPlayer(p: Player): Desk = copy(players = players + p)
   /*t*/
   def removePlayer(p: Player): Desk = copy(players - players.find(_.number == p.number).get)

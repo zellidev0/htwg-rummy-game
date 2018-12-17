@@ -12,7 +12,7 @@ class Tui(contr: Controller) extends Observer {
   val AmountOfPlayersPattern: Regex = "[2-4]".r
   val PlayerNamePattern: Regex = "name [A-Za-z]+".r
   val LayDownTilePattern: Regex = "(l [1-9][RBGY][01]|l 1[0123][RBGY][01])".r
-  val MoveTilePattern: Regex = "(m [1-9][RBGY][01] t [1-9][RBGY][01]|m 1[0123][RBGY][01] t [1-9][RBYG][01]|m 1[0-3][RBGY][01] t 1[0-3][RBGY][01]|m [1-9][RBGY][01] 1[0-3][RBYG][01])".r
+  val MoveTilePattern: Regex = "(m [1-9][RBGY][01] t [1-9][RBGY][01]|m 1[0123][RBGY][01] t [1-9][RBYG][01]|m 1[0-3][RBGY][01] t 1[0-3][RBGY][01]|m [1-9][RBGY][01] t 1[0-3][RBYG][01])".r
   val elements = 12
 
 
@@ -75,6 +75,7 @@ class Tui(contr: Controller) extends Observer {
 
       case ContState.PLAYER_REMOVED => println("\tNEWS:\tYou removed the player you inserted .")
       case ContState.UNDO_LAY_DOWN_TILE => println("\tNEWS:\tYou took the tile up.")
+      case ContState.TILE_NOT_ON_TABLE => println("\tNEWS:\tThis tile does not lay on the table, you cant move it.")
       case _ =>
     }
     true
