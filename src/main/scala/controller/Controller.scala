@@ -1,15 +1,17 @@
 package controller
 
-import model.ContState._
-import model.{ContState, _}
+import controller.ContState._
+import model._
 import util.{Observable, UndoManager}
 
 import scala.collection.SortedSet
 
 class Controller(var desk: Desk) extends Observable {
-  var stateM: state = MENU
+  var cState: state = MENU
   private val undoManager = new UndoManager
   var userPutTileDown = 0
+
+  /*userFinishedPlay fully tested*/
   def userFinishedPlay(): Unit = {
     if (userPutTileDown == 0) {
       undoManager.doStep(new TakeTileCommand(this))
@@ -20,76 +22,76 @@ class Controller(var desk: Desk) extends Observable {
       swState(ContState.P_TURN)
     }
   }
-  //TODO NEVER GONNA GIVE YOU UP
-  //TODO NEVER GONNA LET YOU DOWN
-  //TODO YOU JUST GOT RICK ROLLED BOI <3
+
+
+  /*moveTile fully tested*/
   def moveTile(tile1: String, tile2: String): Unit = {
     if (!desk.setsContains(regexToTile(tile1)) || !desk.setsContains(regexToTile(tile2))) {
       swState(TILE_NOT_ON_TABLE)
       swState(ContState.P_TURN)
-      return
+    } else {
+      undoManager.doStep(new MoveTileCommand(tile1, tile2, this))
     }
-    undoManager.doStep(new MoveTileCommand(tile1, tile2, this))
-  } /*t*/
+  }
 
+  /*layDownTile fully tested*/
   def layDownTile(tile: String): Unit = {
     if (!currentP.hasTile(regexToTile(tile))) {
       swState(P_DOES_NOT_OWN_TILE)
       swState(ContState.P_TURN)
-      return
+    } else {
+      undoManager.doStep(new LayDownCommand(tile, this))
     }
-    undoManager.doStep(new LayDownCommand(tile, this))
-  } /*t*/
+  }
 
-  private[controller] def regexToTile(regexString: String): Tile = {
-    val color = regexString.charAt(regexString.length - 2) match {
+  /*regexToTile fully tested*/
+  private[controller] def regexToTile(regex: String): Tile = {
+    val color = regex.charAt(regex.length - 2) match {
       case 'R' => Color.RED
       case 'B' => Color.BLUE
       case 'Y' => Color.YELLOW
       case 'G' => Color.GREEN
     }
-    Tile(Integer.parseInt(regexString.substring(0, regexString.length - 2)), color, Integer.parseInt(regexString.charAt(regexString.length - 1).toString))
-  } /*t*/
-
-
+    Tile(Integer.parseInt(regex.substring(0, regex.length - 2)), color, Integer.parseInt(regex.charAt(regex.length - 1).toString))
+  }
+  /*currentP fully tested*/
+  def currentP: Player = desk.currentP
+  def swState(c: ContState.Value): Unit = {
+    cState = c
+    notifyObservers()
+  }
+  /*previousP fully tested*/
   def previousP: Player = desk.previousP
-
-  def currentP: Player = desk.currentP /*t*/
-
-  def nextP: Player = desk.nextP /*t*/
-
+  /*nextP fully tested*/
+  def nextP: Player = desk.nextP
+  /*addPlayerAndInit fully tested*/
   def addPlayerAndInit(newName: String, max: Int): Unit = {
     if (!hasLessThan4Players) {
       swState(ENOUGH_PS)
-      swState(ContState.INSERTING_NAMES)
-      return
+    } else {
+      undoManager.doStep(new NameCommand(newName, max, this))
     }
-    undoManager.doStep(new NameCommand(newName, max, this))
-  } /*t*/
-
-  def swState(c: ContState.Value): Unit = {
-    stateM = c
-    notifyObservers()
   }
+  /*hasLessThan4Players fully tested*/
   def hasLessThan4Players: Boolean = desk.lessThan4P
 
+  /*createDesk fully tested*/
   def createDesk(amount: Int): Unit = {
-    val colorSet = Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
     var bagOfTiles: Set[Tile] = Set[Tile]()
-    for (number <- 1 to amount) {
-      for (color <- colorSet) {
-        for (ident <- 0 to 1) {
-          bagOfTiles += Tile(number, color, ident)
-        }
-      }
+    for (number <- 1 to amount;
+         color <- Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE);
+         ident <- 0 to 1) {
+      bagOfTiles += Tile(number, color, ident)
     }
     desk = Desk(Set[Player](), bagOfTiles, Set[SortedSet[Tile]]())
     swState(CREATED)
     swState(ContState.INSERTING_NAMES)
+  }
 
-  } /*t*/
+  /*switchToNextPlayer fully tested*/
   def switchToNextPlayer(): Unit = undoManager.doStep(new SwitchPlayerCommand(this))
-  /*t*/
+
+  /*nameInputFinished fully tested*/
   def nameInputFinished(): Unit = {
     if (desk.correctAmountOfPlayers) {
       undoManager.emptyStack
@@ -101,10 +103,13 @@ class Controller(var desk: Desk) extends Observable {
     }
   }
 
+  /*getTileSet fully tested*/
   def getTileSet: Set[SortedSet[Tile]] = desk.sets
 
+  /*getAmountOfPlayers fully tested*/
   def getAmountOfPlayers: Int = desk.amountOfPlayers
 
+  /*setsOnDeskAreCorrect fully tested*/
   def setsOnDeskAreCorrect: Boolean = desk.checkTable()
 
   def removeTileFromSet(tile: Tile): Unit = desk = desk.removeFromTable(tile)

@@ -1,5 +1,4 @@
-package model
-
+package controller
 
 object ContState extends Enumeration {
 

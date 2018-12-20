@@ -1,6 +1,6 @@
 package controller
 
-import model.ContState.{P_FINISHED, P_TURN}
+import controller.ContState.{P_FINISHED, P_TURN}
 import model._
 import util.Command
 

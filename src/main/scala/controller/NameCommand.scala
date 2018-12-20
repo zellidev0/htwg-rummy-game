@@ -1,6 +1,6 @@
 package controller
 
-import model.ContState.{INSERTED_NAME, PLAYER_REMOVED}
+import controller.ContState.{INSERTED_NAME, PLAYER_REMOVED}
 import model._
 import util.Command
 

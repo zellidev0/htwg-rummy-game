@@ -1,6 +1,6 @@
 package controller
 
-import model.ContState.{P_FINISHED, P_TURN}
+import controller.ContState.{P_FINISHED, P_TURN}
 import util.Command
 
 class FinishedCommand(userputTileDown: Int, controller: Controller) extends Command {

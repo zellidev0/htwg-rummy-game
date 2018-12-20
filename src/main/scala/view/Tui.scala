@@ -1,7 +1,6 @@
 package view
 
-import controller.Controller
-import model.ContState
+import controller.{ContState, Controller}
 import util.Observer
 
 import scala.util.matching.Regex
@@ -17,7 +16,7 @@ class Tui(contr: Controller) extends Observer {
 
 
   def processInputLine(input: String): Unit = {
-    contr.stateM match {
+    contr.cState match {
       case ContState.MENU => handleMenuInput(input)
       case ContState.INSERTING_NAMES => handleNameInput(input)
       case ContState.P_TURN => handleOnTurn(input)
@@ -60,19 +59,30 @@ class Tui(contr: Controller) extends Observer {
   }
 
   override def update: Boolean = {
-    contr.stateM match {
+    contr.cState match {
       case ContState.P_DOES_NOT_OWN_TILE => println("\tNEWS:\tYou dont have this tile on the board. Please select another one")
       case ContState.CREATED => println("\tNEWS:\tDesk created. Please type in 'name <name1>' where name1 is the first players name. Confirm with enter")
       case ContState.TABLE_NOT_CORRECT => println("\tNEWS:\tTable looks not correct, please move tiles to match the rules")
       case ContState.START => println("SSSSS  TTTTT    A    RRRR   TTTTT \nSS       T     A A   R   R    T   \nSSSSS    T    A   A  RRRR     T   \n   SS    T    AAAAA  RRR      T   \nSSSSS    T    A   A  R  RR    T   \n")
       case ContState.ENOUGH_PS => println("\tNEWS:\tThe Maximum amount of players is set. Type 'f' to finish inserting names")
-      case ContState.P_FINISHED => printPlayerFinished()
-      case ContState.P_TURN => printWhatUserCanDo(); printUserBoard(); printTable()
+      case ContState.P_FINISHED => println("\tNEWS:\tYou are finished. The next player has to type 'n' to continue.")
+      case ContState.P_TURN =>
+        printf(
+          "|---------------------------------------------------------------------------------------|\n" +
+            "| %50s it's your turn. Do your stuff.     |\n" +
+            "|---------------------------------------------------------------------------------------|\n" +
+            "| Type 'l <value> <FirstLetterOfColor> <num>' to put it on the table                    |\n" +
+            "| Type 'm <valueA> <FirstLetterOfColorA> <numA> l <valueB> <FirstLetterOfColorB> <numB> |\n" +
+            "|  to put A in where B is                                                               |\n" +
+            "| Type 'f' to finish (and take a tile automatically if you did nothing)                 |\n" +
+            "|---------------------------------------------------------------------------------------|\n\n",
+          contr.currentP.name)
+        printUserBoard()
+        printTable()
       case ContState.INSERTED_NAME => println("\tNEWS:\tPlayer " + contr.getAmountOfPlayers + " is added\n\tNEWS:\tType in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
       case ContState.NOT_ENOUGH_PS => println("\tNEWS:\tNot enough Players. Type <c> to create a desk and insert names")
       case ContState.MENU => println("\tNEWS:\tYou're finished. Great. Now type in 's' and enter to start.")
-      case ContState.P_WON => printPlayerWon()
-
+      case ContState.P_WON => printf("FFFFFF  I  NN   N  I  SSSSS  H   H  EEEEE  DDD\nF       I  N N  N  I  SS     H   H  E      D  D\nFFFFFF  I  N  N N  I  SSSSS  HHHHH  EEEEE  D   D\nF       I  N  N N  I     SS  H   H  E      D  D\nF       I  N   NN  I  SSSSS  H   H  EEEEE  DDD\n%s is the winner.", contr.currentP)
       case ContState.PLAYER_REMOVED => println("\tNEWS:\tYou removed the player you inserted .")
       case ContState.UNDO_LAY_DOWN_TILE => println("\tNEWS:\tYou took the tile up.")
       case ContState.TILE_NOT_ON_TABLE => println("\tNEWS:\tThis tile does not lay on the table, you cant move it.")
@@ -80,10 +90,6 @@ class Tui(contr: Controller) extends Observer {
     }
     true
   }
-
-  def printPlayerWon(): Unit = printf("FFFFFF  I  NN   N  I  SSSSS  H   H  EEEEE  DDD\nF       I  N N  N  I  SS     H   H  E      D  D\nFFFFFF  I  N  N N  I  SSSSS  HHHHH  EEEEE  D   D\nF       I  N  N N  I     SS  H   H  E      D  D\nF       I  N   NN  I  SSSSS  H   H  EEEEE  DDD\n%s is the winner.", contr.currentP)
-
-  def printPlayerFinished(): Unit = println("\tNEWS:\tYou are finished. The next player has to type 'n' to continue.");
 
   def printUserBoard(): Unit = {
     printf(
@@ -146,19 +152,6 @@ class Tui(contr: Controller) extends Observer {
   }
 
   def printWrongArgument(): Unit = println("\tNEWS:\tCould not identify your input. Are you sure it was correct'?")
-
-  def printWhatUserCanDo(): Unit = {
-    printf(
-      "|---------------------------------------------------------------------------------------|\n" +
-        "| %50s it's your turn. Do your stuff.     |\n" +
-        "|---------------------------------------------------------------------------------------|\n" +
-        "| Type 'l <value> <FirstLetterOfColor> <num>' to put it on the table                    |\n" +
-        "| Type 'm <valueA> <FirstLetterOfColorA> <numA> l <valueB> <FirstLetterOfColorB> <numB> |\n" +
-        "|  to put A in where B is                                                               |\n" +
-        "| Type 'f' to finish (and take a tile automatically if you did nothing)                 |\n" +
-        "|---------------------------------------------------------------------------------------|\n\n",
-      contr.currentP.name)
-  }
 
 
 }

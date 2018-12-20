@@ -8,12 +8,20 @@ import scala.util.Random
 case class Desk(players: Set[Player], bagOfTiles: Set[Tile], sets: Set[SortedSet[Tile]]) {
   val minSize = 3
 
-  def takeUpTile(p: Player, t: Tile): Desk = addToPlayer(p, t).removeFromTable(t)
+  def takeUpTile(p: Player, t: Tile): Desk = removeFromTable(t).addToPlayer(p, t)
   def removeFromTable(t: Tile): Desk = copy(sets = sets - sortedSet(t) + (sortedSet(t) - t))
-  def putDownTile(p: Player, t: Tile): Desk = addToTable(t).removeFromPlayer(p, t)
+  def putDownTile(p: Player, t: Tile): Desk = {
+    var desk = addToTable(t)
+    var desk2 = desk.removeFromPlayer(p, t)
+    return desk2
+  }
   /*t*/
   def addToTable(t: Tile): Desk = copy(sets = sets + (SortedSet[Tile]() + t))
-  def removeFromPlayer(p: Player, t: Tile): Desk = copy(players - p + (players.find(_ == p).get - t))
+  def removeFromPlayer(p: Player, t: Tile): Desk = {
+    var x = players - p
+    var y = x + (players.find(_ == p).get - t)
+    copy(players = y)
+  }
 
   def amountOfPlayers: Int = players.size
   /*t*/
@@ -52,7 +60,9 @@ case class Desk(players: Set[Player], bagOfTiles: Set[Tile], sets: Set[SortedSet
     true
   }
   /*t*/
-  def previousP: Player = if (currentP.number - 1 == 0) players.find(_.number == 0).get else if (currentP.number - 1 < 0) players.find(_.number == players.size - 1).get else players.find(_.number == currentP.number - 1).get
+  def previousP: Player = if (currentP.number - 1 < 0)
+    players.find(_.number == players.size - 1).get
+  else players.find(_.number == currentP.number - 1).get
   /*t*/
   def nextP: Player = if (currentP.number + 1 == players.size) players.find(_.number == 0).get else players.find(_.number == currentP.number + 1).get
   /*t*/

@@ -1,6 +1,6 @@
 package controller
 
-import model.ContState.P_TURN
+import controller.ContState.P_TURN
 import util.Command
 
 class SwitchPlayerCommand(controller: Controller) extends Command {
