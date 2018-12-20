@@ -1,6 +1,6 @@
 package model
 
-
+import model.component.component.component.{Color, Tile}
 import org.scalatest.{Matchers, WordSpec}
 
 class TileSpec extends WordSpec with Matchers {
@@ -9,9 +9,9 @@ class TileSpec extends WordSpec with Matchers {
     "created with value and color" should {
       val tile = Tile(1, Color.RED, 1)
       "have value 1 and color red and num 1" in {
-        tile.value should be(1)
-        tile.color should be(Color.RED)
-        tile.ident should be(1)
+        tile.getValue should be(1)
+        tile.getColor should be(Color.RED)
+        tile.getIdent should be(1)
         tile.identifier should be("1R1")
       }
     }

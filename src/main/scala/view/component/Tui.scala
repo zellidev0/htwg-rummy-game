@@ -1,21 +1,21 @@
-package view
+package view.component
 
-import controller.{ContState, Controller}
-import util.Observer
+import controller.ControllerInterface
+import controller.component.ContState
+import view.TuiInterface
 
 import scala.util.matching.Regex
 
-class Tui(contr: Controller) extends Observer {
+class Tui(contr: ControllerInterface) extends TuiInterface {
   contr.add(this)
 
-  val AmountOfPlayersPattern: Regex = "[2-4]".r
-  val PlayerNamePattern: Regex = "name [A-Za-z]+".r
-  val LayDownTilePattern: Regex = "(l [1-9][RBGY][01]|l 1[0123][RBGY][01])".r
-  val MoveTilePattern: Regex = "(m [1-9][RBGY][01] t [1-9][RBGY][01]|m 1[0123][RBGY][01] t [1-9][RBYG][01]|m 1[0-3][RBGY][01] t 1[0-3][RBGY][01]|m [1-9][RBGY][01] t 1[0-3][RBYG][01])".r
-  val elements = 12
+  private val PlayerNamePattern: Regex = "name [A-Za-z]+".r
+  private val LayDownTilePattern: Regex = "(l [1-9][RBGY][01]|l 1[0123][RBGY][01])".r
+  private val MoveTilePattern: Regex = "(m [1-9][RBGY][01] t [1-9][RBGY][01]|m 1[0123][RBGY][01] t [1-9][RBYG][01]|m 1[0-3][RBGY][01] t 1[0-3][RBGY][01]|m [1-9][RBGY][01] t 1[0-3][RBYG][01])".r
+  private val elements = 12
 
 
-  def processInputLine(input: String): Unit = {
+  override def processInputLine(input: String): Unit = {
     contr.cState match {
       case ContState.MENU => handleMenuInput(input)
       case ContState.INSERTING_NAMES => handleNameInput(input)
@@ -24,41 +24,41 @@ class Tui(contr: Controller) extends Observer {
     }
   }
 
-  def handleNameInput(name: String): Unit = {
+  private def handleNameInput(name: String): Unit = {
     name match {
       case "f" => contr.nameInputFinished()
-      case "z" => contr.undo
-      case "r" => contr.redo
+      case "z" => contr.undo()
+      case "r" => contr.redo()
       case PlayerNamePattern() => contr.addPlayerAndInit(name.substring(4).trim, elements)
       case _ => printWrongArgument()
     }
   }
 
-  def handleOnTurnFinished(input: String): Unit = input match {
+  private def handleOnTurnFinished(input: String): Unit = input match {
     case "n" => contr.switchToNextPlayer()
     case _ => printWrongArgument()
   }
 
-  def handleOnTurn(input: String): Unit = {
+  private def handleOnTurn(input: String): Unit = {
     input match {
       case LayDownTilePattern(c) => contr.layDownTile(c.split(" ").apply(1));
       case MoveTilePattern(c) => contr.moveTile(c.split(" t ").apply(0).split(" ").apply(1), c.split(" t ").apply(1));
       case "f" => contr.userFinishedPlay()
-      case "z" => contr.undo
-      case "r" => contr.redo
+      case "z" => contr.undo()
+      case "r" => contr.redo()
       case _ => printWrongArgument()
     }
   }
 
-  def handleMenuInput(input: String): Unit = {
+  private def handleMenuInput(input: String): Unit = {
     input match {
       case "q" =>
       case "c" => contr.createDesk(elements + 1);
       case _ => printWrongArgument()
     }
   }
-
-  override def update: Boolean = {
+  private def printWrongArgument(): Unit = println("\tNEWS:\tCould not identify your input. Are you sure it was correct'?")
+  override def update: Unit = {
     contr.cState match {
       case ContState.P_DOES_NOT_OWN_TILE => println("\tNEWS:\tYou dont have this tile on the board. Please select another one")
       case ContState.CREATED => println("\tNEWS:\tDesk created. Please type in 'name <name1>' where name1 is the first players name. Confirm with enter")
@@ -76,7 +76,7 @@ class Tui(contr: Controller) extends Observer {
             "|  to put A in where B is                                                               |\n" +
             "| Type 'f' to finish (and take a tile automatically if you did nothing)                 |\n" +
             "|---------------------------------------------------------------------------------------|\n\n",
-          contr.currentP.name)
+          contr.currentP.getName)
         printUserBoard()
         printTable()
       case ContState.INSERTED_NAME => println("\tNEWS:\tPlayer " + contr.getAmountOfPlayers + " is added\n\tNEWS:\tType in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
@@ -88,60 +88,57 @@ class Tui(contr: Controller) extends Observer {
       case ContState.TILE_NOT_ON_TABLE => println("\tNEWS:\tThis tile does not lay on the table, you cant move it.")
       case _ =>
     }
-    true
   }
-
-  def printUserBoard(): Unit = {
+  private def printUserBoard(): Unit = {
     printf(
       "|---------------------------------------------------------------------------------------|\n" +
         "| %20s thats on your board.                                             |\n" +
         "|---------------------------------------------------------------------------------------|\n",
-      contr.currentP.name)
-    for (_ <- contr.currentP.board.tiles) {
+      contr.currentP.getName)
+    for (_ <- contr.viewOfBoard) {
       print("____ ")
     }
     println()
-    for (tile <- contr.currentP.board.tiles) {
-      printf("|%2s| ", tile.value)
+    for (tile <- contr.viewOfBoard) {
+      printf("|%2s| ", tile.getIdent)
     }
     println()
-    for (tile <- contr.currentP.board.tiles) {
-      printf("|%s | ", tile.color.toString.charAt(0))
+    for (tile <- contr.viewOfBoard) {
+      printf("|%s | ", tile.getIdent.toString.charAt(0))
     }
     println()
-    for (tile <- contr.currentP.board.tiles) {
-      printf("|%s | ", tile.ident)
+    for (tile <- contr.viewOfBoard) {
+      printf("|%s | ", tile.getIdent)
     }
     println()
-    for (_ <- contr.currentP.board.tiles) {
+    for (_ <- contr.viewOfBoard) {
       print("\u203E\u203E\u203E\u203E ")
     }
     println()
 
 
   }
-
-  def printTable(): Unit = {
+  private def printTable(): Unit = {
     printf(
       "|---------------------------------------------------------------------------------------|\n" +
         "| %20s thats on the desk.                                               |\n" +
         "|---------------------------------------------------------------------------------------|\n\n",
-      contr.currentP.name)
+      contr.currentP.getName)
     for (sortedSet <- contr.getTileSet) {
       for (_ <- sortedSet) {
         print("____ ")
       }
       println()
       for (tile <- sortedSet) {
-        printf("|%2s| ", tile.value)
+        printf("|%2s| ", tile.getValue)
       }
       println()
       for (tile <- sortedSet) {
-        printf("|%s | ", tile.color.toString.charAt(0))
+        printf("|%s | ", tile.getColor.toString.charAt(0))
       }
       println()
       for (tile <- sortedSet) {
-        printf("|%s | ", tile.ident)
+        printf("|%s | ", tile.getIdent)
       }
       println()
       for (tile <- sortedSet) {
@@ -150,8 +147,6 @@ class Tui(contr: Controller) extends Observer {
       println()
     }
   }
-
-  def printWrongArgument(): Unit = println("\tNEWS:\tCould not identify your input. Are you sure it was correct'?")
 
 
 }

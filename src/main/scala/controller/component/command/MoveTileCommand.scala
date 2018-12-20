@@ -1,12 +1,14 @@
-package controller
+package controller.component.command
 
-import model._
+import controller.component.Controller
+import model.component.Desk
+import model.component.component.TileInterface
 import util.Command
 
 import scala.collection.SortedSet
 
 class MoveTileCommand(tile1: String, tile2: String, controller: Controller) extends Command {
-  var setWithTile: Option[Tile] = None
+  var setWithTile: Option[TileInterface] = None
 
 
   override def doStep: Unit = {
@@ -23,10 +25,8 @@ class MoveTileCommand(tile1: String, tile2: String, controller: Controller) exte
     setWithTile match {
       case Some(x) => controller.desk = controller.desk.moveTwoTilesOnDesk(controller.regexToTile(tile1), x)
       case None =>
-
-
         controller.removeTileFromSet(controller.regexToTile(tile1))
-        controller.desk = controller.desk.copy(sets = controller.desk.sets + SortedSet[Tile](controller.regexToTile(tile1)))
+        controller.desk = Desk(sets = controller.desk.sets + SortedSet[TileInterface](controller.regexToTile(tile1)), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
     }
     controller.notifyObservers()
   }

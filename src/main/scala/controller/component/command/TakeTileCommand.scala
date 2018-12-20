@@ -1,11 +1,12 @@
-package controller
+package controller.component.command
 
-import controller.ContState.{P_FINISHED, P_TURN}
-import model._
+import controller.component.ContState.{P_FINISHED, P_TURN}
+import controller.component.Controller
+import model.component.component.TileInterface
 import util.Command
 
 class TakeTileCommand(controller: Controller) extends Command {
-  private var randomTile: Tile = _
+  private var randomTile: TileInterface = _
 
 
   override def doStep: Unit = {

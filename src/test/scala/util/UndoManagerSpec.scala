@@ -8,7 +8,7 @@ class UndoManagerSpec extends WordSpec with Matchers {
     val undoManager = new UndoManager
 
     "have a do, undo and redo" in {
-      val command = new incrCommand
+      val command = new IncrementCommand
       command.state should be(0)
       undoManager.doStep(command)
       command.state should be(1)
@@ -19,7 +19,7 @@ class UndoManagerSpec extends WordSpec with Matchers {
     }
 
     "handle multiple undo steps correctly" in {
-      val command = new incrCommand
+      val command = new IncrementCommand
       command.state should be(0)
       undoManager.doStep(command)
       command.state should be(1)

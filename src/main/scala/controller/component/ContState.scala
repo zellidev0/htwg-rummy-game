@@ -1,4 +1,4 @@
-package controller
+package controller.component
 
 object ContState extends Enumeration {
 

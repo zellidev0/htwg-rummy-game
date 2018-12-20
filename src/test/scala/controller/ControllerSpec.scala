@@ -1,6 +1,9 @@
 package controller
 
-import model.{Tile, _}
+import controller.component.{ContState, Controller}
+import model.component.Desk
+import model.component.component.component._
+import model.component.component.{TileInterface, _}
 import org.scalatest.{Matchers, WordSpec}
 
 import scala.collection.SortedSet
@@ -10,35 +13,35 @@ class ControllerSpec extends WordSpec with Matchers {
 
   "A Controller" when {
     "user finishes play" should {
-      val player1 = Player("Name0", 0, Board(SortedSet[Tile](Tile(1, Color.RED, 0))), state = State.TURN)
-      val player2 = Player("Name1", 1, Board(SortedSet[Tile](Tile(2, Color.RED, 0))))
-      val player3 = Player("Name2", 2, Board(SortedSet[Tile]()))
-      val player4 = Player("Name3", 3, Board(SortedSet[Tile]()))
-      val players = Set[Player](player1, player2, player3, player4)
-      val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[Tile]]())
+      val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), state = State.TURN)
+      val player2 = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
+      val player3 = Player("Name2", 2, Board(SortedSet[TileInterface]()))
+      val player4 = Player("Name3", 3, Board(SortedSet[TileInterface]()))
+      val players = Set[PlayerInterface](player1, player2, player3, player4)
+      val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
       controller.userFinishedPlay()
       "userPutTileDown be 0 " in {
         controller.desk.players.size should be(4)
-        controller.desk.players.find(_.number == 0).get.board.amountOfTiles() should be(2)
+        controller.desk.players.find(_.getNumber == 0).get.getTiles.size should be(2)
       }
       controller.switchToNextPlayer()
       controller.userPutTileDown += 1
       controller.userFinishedPlay()
       "userPutTileDown be 1 and table is ok " in {
-        player1.board.amountOfTiles() should be(1)
+        player1.getTiles.size should be(1)
       }
       controller.layDownTile("2R0")
       controller.userFinishedPlay()
       "table be not correct " in {
-        player1.board.amountOfTiles() should be(1)
-        player2.board.amountOfTiles() should be(1)
+        player1.getTiles.size should be(1)
+        player2.getTiles.size should be(1)
         controller.desk.sets.size should be(1)
       }
     }
     "should move two correct and movable tiles" should {
-      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN), Player("Name2", 1, Board(SortedSet[Tile]())))
-      val desk = Desk(players, Set(), Set[SortedSet[Tile]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0))))
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN), Player("Name2", 1, Board(SortedSet[TileInterface]())))
+      val desk = Desk(players, Set(), Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0))))
       val controller = new Controller(desk)
       controller.moveTile("2R0", "1R0")
       "have only one set with the 2 tiles side by side" in {
@@ -52,8 +55,8 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "lay Down a tile the user really has" should {
-      val players = Set(Player("Name1", 0, Board(SortedSet[Tile](Tile(1, Color.RED, 0))), state = State.TURN), Player("Name2", 1, Board(SortedSet[Tile]())))
-      val desk = Desk(players, Set(), Set[SortedSet[Tile]]())
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), state = State.TURN), Player("Name2", 1, Board(SortedSet[TileInterface]())))
+      val desk = Desk(players, Set(), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
       controller.layDownTile("1R0")
       "should work (have only one set with one tile)" in {
@@ -63,13 +66,13 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.layDownTile("1R1")
       "should not work (have only one set with one tile)" in {
         controller.desk.sets.size should be(1)
-        controller.desk.sets.contains(SortedSet[Tile](Tile(1, Color.RED, 0))) should be(true)
-        controller.desk.sets.contains(SortedSet[Tile](Tile(1, Color.RED, 1))) should be(false)
+        controller.desk.sets.contains(SortedSet[TileInterface](Tile(1, Color.RED, 0))) should be(true)
+        controller.desk.sets.contains(SortedSet[TileInterface](Tile(1, Color.RED, 1))) should be(false)
       }
     }
     "get tile from regex" should {
-      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]())))
-      val desk = Desk(players, Set(), Set[SortedSet[Tile]]())
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]())))
+      val desk = Desk(players, Set(), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
       val tile0 = controller.regexToTile("1R0")
       val tile1 = controller.regexToTile("10R1")
@@ -91,8 +94,8 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "adding a player and have less than 4" should {
-      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN))
-      val desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[Tile]]())
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN))
+      val desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
       controller.createDesk(12) // must create or you cant init all players
       val amountOfPlayersBefore = controller.desk.players.size
@@ -118,7 +121,7 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "creates a desk" should {
-      val desk = Desk(Set[Player](), Set(), Set[SortedSet[Tile]]())
+      val desk = Desk(Set[PlayerInterface](), Set(), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
       controller.createDesk(13)
       "have 104 tiles" in {
@@ -126,45 +129,45 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "switching players" should {
-      val player0 = Player("Name0", 0, Board(SortedSet[Tile]()), state = State.TURN)
-      val player1 = Player("Name1", 1, Board(SortedSet[Tile]()))
-      val player2 = Player("Name2", 2, Board(SortedSet[Tile]()))
-      val player3 = Player("Name3", 3, Board(SortedSet[Tile]()))
-      val players = Set[Player](player0, player1, player2, player3)
-      val controller = new Controller(Desk(players, Set(), Set[SortedSet[Tile]]()))
+      val player0 = Player("Name0", 0, Board(SortedSet[TileInterface]()), state = State.TURN)
+      val player1 = Player("Name1", 1, Board(SortedSet[TileInterface]()))
+      val player2 = Player("Name2", 2, Board(SortedSet[TileInterface]()))
+      val player3 = Player("Name3", 3, Board(SortedSet[TileInterface]()))
+      val players = Set[PlayerInterface](player0, player1, player2, player3)
+      val controller = new Controller(Desk(players, Set(), Set[SortedSet[TileInterface]]()))
       "have the correct previous, current and next player" in {
-        controller.previousP.number should be(player3.number)
-        controller.currentP.number should be(player0.number)
-        controller.nextP.number should be(player1.number)
+        controller.previousP.getNumber should be(player3.getNumber)
+        controller.currentP.getNumber should be(player0.getNumber)
+        controller.nextP.getNumber should be(player1.getNumber)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player1" in {
-        controller.previousP.number should be(player0.number)
-        controller.currentP.number should be(player1.number)
-        controller.nextP.number should be(player2.number)
+        controller.previousP.getNumber should be(player0.getNumber)
+        controller.currentP.getNumber should be(player1.getNumber)
+        controller.nextP.getNumber should be(player2.getNumber)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player2" in {
-        controller.previousP.number should be(player1.number)
-        controller.currentP.number should be(player2.number)
-        controller.nextP.number should be(player3.number)
+        controller.previousP.getNumber should be(player1.getNumber)
+        controller.currentP.getNumber should be(player2.getNumber)
+        controller.nextP.getNumber should be(player3.getNumber)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player3" in {
-        controller.previousP.number should be(player2.number)
-        controller.currentP.number should be(player3.number)
-        controller.nextP.number should be(player0.number)
+        controller.previousP.getNumber should be(player2.getNumber)
+        controller.currentP.getNumber should be(player3.getNumber)
+        controller.nextP.getNumber should be(player0.getNumber)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player4" in {
-        controller.previousP.number should be(player3.number)
-        controller.currentP.number should be(player0.number)
-        controller.nextP.number should be(player1.number)
+        controller.previousP.getNumber should be(player3.getNumber)
+        controller.currentP.getNumber should be(player0.getNumber)
+        controller.nextP.getNumber should be(player1.getNumber)
       }
     }
     "name input finished" should {
-      val players = Set[Player]()
-      val desk = Desk(players, Set(), Set[SortedSet[Tile]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0))))
+      val players = Set[PlayerInterface]()
+      val desk = Desk(players, Set(), Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0))))
       val controller = new Controller(desk)
       controller.createDesk(12) // must create desk or you cant init players
       val oldState = controller.cState
@@ -182,8 +185,8 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "getting tile sets" should {
-      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN))
-      val sets = Set[SortedSet[Tile]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0)))
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN))
+      val sets = Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0)))
       val desk = Desk(players, Set(), sets)
       val controller = new Controller(desk)
       val oldState = controller.cState
@@ -192,8 +195,8 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "get amount of players" should {
-      val players = Set[Player]()
-      val sets = Set[SortedSet[Tile]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0)))
+      val players = Set[PlayerInterface]()
+      val sets = Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0)))
       val desk = Desk(players, Set(), sets)
       val controller = new Controller(desk)
       controller.createDesk(12)
@@ -222,39 +225,39 @@ class ControllerSpec extends WordSpec with Matchers {
     }
     "sets on desk are correct" should {
       val setOfCorrectStreets =
-        Set(SortedSet[Tile](Tile(1, Color.GREEN, 0), Tile(2, Color.GREEN, 1), Tile(3, Color.GREEN, 0), Tile(4, Color.GREEN, 0), Tile(5, Color.GREEN, 0)), //Street 4 GREEN
-          SortedSet[Tile](Tile(4, Color.RED, 0), Tile(5, Color.RED, 0), Tile(6, Color.RED, 0))) // Street 3 RED
+        Set(SortedSet[TileInterface](Tile(1, Color.GREEN, 0), Tile(2, Color.GREEN, 1), Tile(3, Color.GREEN, 0), Tile(4, Color.GREEN, 0), Tile(5, Color.GREEN, 0)), //Street 4 GREEN
+          SortedSet[TileInterface](Tile(4, Color.RED, 0), Tile(5, Color.RED, 0), Tile(6, Color.RED, 0))) // Street 3 RED
       val setOfCorrectPairs =
-        Set(SortedSet[Tile](Tile(2, Color.GREEN, 0), Tile(2, Color.YELLOW, 0), Tile(2, Color.BLUE, 0)), // Pair 3 different
-          SortedSet[Tile](Tile(8, Color.RED, 0), Tile(8, Color.BLUE, 0), Tile(8, Color.YELLOW, 0), Tile(8, Color.GREEN, 0))) // Pair 4 different
+        Set(SortedSet[TileInterface](Tile(2, Color.GREEN, 0), Tile(2, Color.YELLOW, 0), Tile(2, Color.BLUE, 0)), // Pair 3 different
+          SortedSet[TileInterface](Tile(8, Color.RED, 0), Tile(8, Color.BLUE, 0), Tile(8, Color.YELLOW, 0), Tile(8, Color.GREEN, 0))) // Pair 4 different
       val setOfWrongPairs =
-        Set(SortedSet[Tile](Tile(10, Color.GREEN, 0), Tile(10, Color.GREEN, 1), Tile(10, Color.BLUE, 0)), // Pair of 3 where 2 same
-          SortedSet[Tile](Tile(13, Color.YELLOW, 0), Tile(13, Color.GREEN, 0))) // Pair of 2
+        Set(SortedSet[TileInterface](Tile(10, Color.GREEN, 0), Tile(10, Color.GREEN, 1), Tile(10, Color.BLUE, 0)), // Pair of 3 where 2 same
+          SortedSet[TileInterface](Tile(13, Color.YELLOW, 0), Tile(13, Color.GREEN, 0))) // Pair of 2
       val setOfWrongStreets =
-        Set(SortedSet[Tile](Tile(9, Color.BLUE, 1), Tile(11, Color.BLUE, 1), Tile(12, Color.BLUE, 1), Tile(13, Color.BLUE, 0)), // Street with missing one
-          SortedSet[Tile](Tile(7, Color.RED, 0), Tile(8, Color.RED, 1))) // street with only 2
-      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN), Player("Name2", 1, Board(SortedSet[Tile]())))
-      val desk = Desk(players, Set[Tile](), setOfCorrectStreets)
-      var controller = new Controller(Desk(Set[Player](), Set(), setOfCorrectStreets))
+        Set(SortedSet[TileInterface](Tile(9, Color.BLUE, 1), Tile(11, Color.BLUE, 1), Tile(12, Color.BLUE, 1), Tile(13, Color.BLUE, 0)), // Street with missing one
+          SortedSet[TileInterface](Tile(7, Color.RED, 0), Tile(8, Color.RED, 1))) // street with only 2
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN), Player("Name2", 1, Board(SortedSet[TileInterface]())))
+      val desk = Desk(players, Set[TileInterface](), setOfCorrectStreets)
+      var controller = new Controller(Desk(Set[PlayerInterface](), Set(), setOfCorrectStreets))
       "be true when setOfCorrectStreets" in {
         controller.setsOnDeskAreCorrect should be(true)
       }
       "be true when setOfCorrectPairs" in {
-        controller = new Controller(Desk(Set[Player](), Set(), setOfCorrectPairs))
+        controller = new Controller(Desk(Set[PlayerInterface](), Set(), setOfCorrectPairs))
         controller.setsOnDeskAreCorrect should be(true)
       }
       "be true when setOfWrongStreets" in {
-        controller = new Controller(Desk(Set[Player](), Set(), setOfWrongStreets))
+        controller = new Controller(Desk(Set[PlayerInterface](), Set(), setOfWrongStreets))
         controller.setsOnDeskAreCorrect should be(false)
       }
       "be true when setOfWrongPairs" in {
-        controller = new Controller(Desk(Set[Player](), Set(), setOfWrongPairs))
+        controller = new Controller(Desk(Set[PlayerInterface](), Set(), setOfWrongPairs))
         controller.setsOnDeskAreCorrect should be(false)
       }
     }
     "removing tile from table" should {
-      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN), Player("Name2", 1, Board(SortedSet[Tile]())))
-      val desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]](SortedSet(Tile(1, Color.RED, 0))))
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN), Player("Name2", 1, Board(SortedSet[TileInterface]())))
+      val desk = Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]](SortedSet(Tile(1, Color.RED, 0))))
       val controller = new Controller(desk)
       controller.removeTileFromSet(Tile(1, Color.RED, 0))
       "should have one less " in {
@@ -263,30 +266,30 @@ class ControllerSpec extends WordSpec with Matchers {
     }
     "calling undo redo when laying down" should {
       val tile1 = Tile(1, Color.RED, 0)
-      val player1 = Player("Name1", 0, Board(SortedSet[Tile](tile1)), state = State.TURN)
-      val players = Set(player1)
-      val desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]]())
+      val player1 = Player("Name1", 0, Board(SortedSet[TileInterface](tile1)), state = State.TURN)
+      val players = Set[PlayerInterface](player1)
+      val desk = Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
       controller.layDownTile("1R0")
       "undo" in {
-        controller.desk.currentP.board.contains(tile1) should be(false)
+        controller.desk.currentP.hasTile(tile1) should be(false)
         controller.desk.sets.contains(SortedSet(tile1)) should be(true)
         controller.undo
-        controller.desk.currentP.board.contains(tile1) should be(true)
+        controller.desk.currentP.hasTile(tile1) should be(true)
         controller.desk.sets.contains(SortedSet(tile1)) should be(false)
         controller.redo
       }
       "redo" in {
-        controller.desk.currentP.board.contains(tile1) should be(false)
+        controller.desk.currentP.hasTile(tile1) should be(false)
         controller.desk.sets.contains(SortedSet(tile1)) should be(true)
       }
     }
     "calling undo redo when moving tile" should {
       val tile1 = Tile(1, Color.RED, 0)
       val tile2 = Tile(2, Color.RED, 0)
-      val player1 = Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN)
-      val players = Set(player1)
-      val desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]](SortedSet[Tile](tile1), SortedSet[Tile](tile2)))
+      val player1 = Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN)
+      val players = Set[PlayerInterface](player1)
+      val desk = Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]](SortedSet[TileInterface](tile1), SortedSet[TileInterface](tile2)))
       val controller = new Controller(desk)
       controller.moveTile("1R0", "2R0")
       "undo" in {
@@ -303,7 +306,7 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "calling undo redo when name inserting" should {
-      val desk = Desk(Set[Player](), Set[Tile](), Set[SortedSet[Tile]]())
+      val desk = Desk(Set[PlayerInterface](), Set[TileInterface](), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
       controller.createDesk(12)
       controller.addPlayerAndInit("Name0", 12)
@@ -318,12 +321,12 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "calling undo redo when user finishes play" should {
-      val player1 = Player("Name0", 0, Board(SortedSet[Tile](Tile(1, Color.RED, 0))), state = State.TURN)
-      val player2 = Player("Name1", 1, Board(SortedSet[Tile](Tile(2, Color.RED, 0))))
-      val player3 = Player("Name2", 2, Board(SortedSet[Tile]()))
-      val player4 = Player("Name3", 3, Board(SortedSet[Tile]()))
-      val players = Set[Player](player1, player2, player3, player4)
-      val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[Tile]]())
+      val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), state = State.TURN)
+      val player2 = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
+      val player3 = Player("Name2", 2, Board(SortedSet[TileInterface]()))
+      val player4 = Player("Name3", 3, Board(SortedSet[TileInterface]()))
+      val players = Set[PlayerInterface](player1, player2, player3, player4)
+      val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
       controller.userPutTileDown = 1
       controller.userFinishedPlay()
@@ -340,43 +343,52 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "calling undo redo when switching player" should {
-      val player1 = Player("Name0", 0, Board(SortedSet[Tile](Tile(1, Color.RED, 0))), state = State.TURN)
-      val player2 = Player("Name1", 1, Board(SortedSet[Tile](Tile(2, Color.RED, 0))))
-      val player3 = Player("Name2", 2, Board(SortedSet[Tile]()))
-      val player4 = Player("Name3", 3, Board(SortedSet[Tile]()))
-      val players = Set[Player](player1, player2, player3, player4)
-      val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[Tile]]())
+      val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), state = State.TURN)
+      val player2 = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
+      val player3 = Player("Name2", 2, Board(SortedSet[TileInterface]()))
+      val player4 = Player("Name3", 3, Board(SortedSet[TileInterface]()))
+      val players = Set[PlayerInterface](player1, player2, player3, player4)
+      val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
       controller.switchToNextPlayer()
       "userPutTileDown be 1" in {
-        controller.currentP.number should be(1)
+        controller.currentP.getNumber should be(1)
         controller.undo
       }
       "undo" in {
-        controller.currentP.number should be(0)
+        controller.currentP.getNumber should be(0)
         controller.redo
       }
       "redo" in {
-        controller.currentP.number should be(1)
+        controller.currentP.getNumber should be(1)
       }
     }
     "calling undo redo when taking a tile" should {
-      val player1 = Player("Name0", 0, Board(SortedSet[Tile]()), state = State.TURN)
-      val players = Set[Player](player1)
-      val desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[Tile]]())
+      val player1 = Player("Name0", 0, Board(SortedSet[TileInterface]()), state = State.TURN)
+      val players = Set[PlayerInterface](player1)
+      val desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
       controller.userPutTileDown = 0
       controller.userFinishedPlay()
       "userPutTileDown be 1" in {
-        controller.currentP.board.amountOfTiles() should be(1)
+        controller.currentP.getTiles.size should be(1)
         controller.undo
       }
       "undo" in {
-        controller.currentP.board.amountOfTiles() should be(0)
+        controller.currentP.getTiles.size should be(0)
         controller.redo
       }
       "redo" in {
-        controller.currentP.board.amountOfTiles() should be(1)
+        controller.currentP.getTiles.size should be(1)
+      }
+    }
+    "accessing view of board" should {
+      val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(3, Color.BLUE, 0))), state = State.TURN)
+      val players = Set[PlayerInterface](player1)
+      val desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
+      val controller = new Controller(desk)
+      "return this view" in {
+        controller.viewOfBoard should be(SortedSet[TileInterface](Tile(3, Color.BLUE, 0)))
       }
     }
   }

@@ -1,6 +1,7 @@
-package controller
+package controller.component.command
 
-import controller.ContState.{P_FINISHED, P_TURN}
+import controller.component.ContState.{P_FINISHED, P_TURN}
+import controller.component.Controller
 import util.Command
 
 class FinishedCommand(userputTileDown: Int, controller: Controller) extends Command {

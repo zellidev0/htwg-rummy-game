@@ -1,11 +1,12 @@
-import controller.Controller
-import model._
-import view.Tui
+import controller.component.Controller
+import model.component.Desk
+import model.component.component.PlayerInterface
+import view.component.Tui
 
 object Rummy {
 
 
-  val controller = new Controller(Desk(Set[Player](), Set(), Set()))
+  val controller = new Controller(Desk(Set[PlayerInterface](), Set(), Set()))
   val tui = new Tui(controller)
 
   def main(args: Array[String]): Unit = {

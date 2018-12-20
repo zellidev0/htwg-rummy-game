@@ -1,8 +1,5 @@
 package util
 
-trait Observer {
-  def update: Boolean
-}
 
 class Observable {
   var subscribers: Vector[Observer] = Vector()

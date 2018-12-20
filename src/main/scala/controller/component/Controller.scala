@@ -1,18 +1,22 @@
-package controller
+package controller.component
 
-import controller.ContState._
-import model._
-import util.{Observable, UndoManager}
+import controller.ControllerInterface
+import controller.component.ContState._
+import controller.component.command._
+import model.component.component.component.{Color, Tile}
+import model.component.component.{PlayerInterface, TileInterface}
+import model.{component, _}
+import util.UndoManager
 
 import scala.collection.SortedSet
 
-class Controller(var desk: Desk) extends Observable {
+class Controller(var desk: DeskInterface) extends ControllerInterface {
   var cState: Value = MENU
   private val undoManager = new UndoManager
   var userPutTileDown = 0
 
   /*userFinishedPlay fully tested*/
-  def userFinishedPlay(): Unit = {
+  override def userFinishedPlay(): Unit = {
     if (userPutTileDown == 0) {
       undoManager.doStep(new TakeTileCommand(this))
     } else if (desk.checkTable()) {
@@ -22,25 +26,17 @@ class Controller(var desk: Desk) extends Observable {
       swState(ContState.P_TURN)
     }
   }
-
-
+  override def swState(c: ContState.Value): Unit = {
+    cState = c
+    notifyObservers()
+  }
   /*moveTile fully tested*/
-  def moveTile(tile1: String, tile2: String): Unit = {
+  override def moveTile(tile1: String, tile2: String): Unit = {
     if (!desk.setsContains(regexToTile(tile1)) || !desk.setsContains(regexToTile(tile2))) {
       swState(TILE_NOT_ON_TABLE)
       swState(ContState.P_TURN)
     } else {
       undoManager.doStep(new MoveTileCommand(tile1, tile2, this))
-    }
-  }
-
-  /*layDownTile fully tested*/
-  def layDownTile(tile: String): Unit = {
-    if (!currentP.hasTile(regexToTile(tile))) {
-      swState(P_DOES_NOT_OWN_TILE)
-      swState(ContState.P_TURN)
-    } else {
-      undoManager.doStep(new LayDownCommand(tile, this))
     }
   }
 
@@ -54,45 +50,53 @@ class Controller(var desk: Desk) extends Observable {
     }
     Tile(Integer.parseInt(regex.substring(0, regex.length - 2)), color, Integer.parseInt(regex.charAt(regex.length - 1).toString))
   }
-  /*currentP fully tested*/
-  def currentP: Player = desk.currentP
-  def swState(c: ContState.Value): Unit = {
-    cState = c
-    notifyObservers()
+  /*layDownTile fully tested*/
+  override def layDownTile(tile: String): Unit = {
+    if (!currentP.hasTile(regexToTile(tile))) {
+      swState(P_DOES_NOT_OWN_TILE)
+      swState(ContState.P_TURN)
+    } else {
+      undoManager.doStep(new LayDownCommand(tile, this))
+    }
   }
+  /*currentP fully tested*/
+  override def currentP: PlayerInterface = desk.currentP
   /*previousP fully tested*/
-  def previousP: Player = desk.previousP
+  override def previousP: PlayerInterface = desk.previousP
+
   /*nextP fully tested*/
-  def nextP: Player = desk.nextP
+  override def nextP: PlayerInterface = desk.nextP
+
   /*addPlayerAndInit fully tested*/
-  def addPlayerAndInit(newName: String, max: Int): Unit = {
+  override def addPlayerAndInit(newName: String, max: Int): Unit = {
     if (!hasLessThan4Players) {
       swState(ENOUGH_PS)
     } else {
       undoManager.doStep(new NameCommand(newName, max, this))
     }
   }
+
   /*hasLessThan4Players fully tested*/
-  def hasLessThan4Players: Boolean = desk.lessThan4P
+  override def hasLessThan4Players: Boolean = desk.lessThan4P
 
   /*createDesk fully tested*/
-  def createDesk(amount: Int): Unit = {
-    var bagOfTiles: Set[Tile] = Set[Tile]()
+  override def createDesk(amount: Int): Unit = {
+    var bagOfTiles: Set[TileInterface] = Set[TileInterface]()
     for (number <- 1 to amount;
          color <- Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE);
          ident <- 0 to 1) {
       bagOfTiles += Tile(number, color, ident)
     }
-    desk = Desk(Set[Player](), bagOfTiles, Set[SortedSet[Tile]]())
+    desk = component.Desk(Set[PlayerInterface](), bagOfTiles, Set[SortedSet[TileInterface]]())
     swState(CREATED)
     swState(ContState.INSERTING_NAMES)
   }
 
   /*switchToNextPlayer fully tested*/
-  def switchToNextPlayer(): Unit = undoManager.doStep(new SwitchPlayerCommand(this))
+  override def switchToNextPlayer(): Unit = undoManager.doStep(new SwitchPlayerCommand(this))
 
   /*nameInputFinished fully tested*/
-  def nameInputFinished(): Unit = {
+  override def nameInputFinished(): Unit = {
     if (desk.correctAmountOfPlayers) {
       undoManager.emptyStack
       swState(START)
@@ -104,24 +108,27 @@ class Controller(var desk: Desk) extends Observable {
   }
 
   /*getTileSet fully tested*/
-  def getTileSet: Set[SortedSet[Tile]] = desk.sets
+  override def getTileSet: Set[SortedSet[TileInterface]] = desk.viewOfSet
 
   /*getAmountOfPlayers fully tested*/
-  def getAmountOfPlayers: Int = desk.amountOfPlayers
+  override def getAmountOfPlayers: Int = desk.amountOfPlayers
 
   /*setsOnDeskAreCorrect fully tested*/
-  def setsOnDeskAreCorrect: Boolean = desk.checkTable()
+  override def setsOnDeskAreCorrect: Boolean = desk.checkTable()
 
-  def removeTileFromSet(tile: Tile): Unit = desk = desk.removeFromTable(tile)
+  override def removeTileFromSet(tile: TileInterface): Unit = desk = desk.removeFromTable(tile)
 
-  def undo: Unit = {
+  override def undo: Unit = {
     undoManager.undoStep
     notifyObservers()
   }
 
-  def redo: Unit = {
+  override def redo: Unit = {
     undoManager.redoStep
     notifyObservers()
   }
 
+  override def viewOfBoard: SortedSet[TileInterface] = desk.viewOfBoard
+
 }
+

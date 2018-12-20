@@ -1,6 +1,6 @@
-package controller
+package controller.component.command
 
-import model._
+import controller.component.{ContState, Controller}
 import util.Command
 
 class LayDownCommand(tile: String, controller: Controller) extends Command {
