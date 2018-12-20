@@ -1,5 +1,7 @@
 package controller.component
 
+import com.google.inject.name.Names
+import com.google.inject.{Guice, Inject}
 import controller.ControllerInterface
 import controller.component.ContState._
 import controller.component.command._
@@ -10,10 +12,13 @@ import util.UndoManager
 
 import scala.collection.SortedSet
 
-class Controller(var desk: DeskInterface) extends ControllerInterface {
+
+class Controller @Inject()(var desk: DeskInterface) extends ControllerInterface {
+
   var cState: Value = MENU
   private val undoManager = new UndoManager
   var userPutTileDown = 0
+  val injector = Guice.createInjector(new RummyModule)
 
   /*userFinishedPlay fully tested*/
   override def userFinishedPlay(): Unit = {
@@ -129,6 +134,8 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   }
 
   override def viewOfBoard: SortedSet[TileInterface] = desk.viewOfBoard
+
+  override def init(): Unit = desk = injector.instance[DeskInterface](Names.named("Default"))
 
 }
 

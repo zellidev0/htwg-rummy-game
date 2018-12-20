@@ -2,6 +2,7 @@ package controller
 
 import controller.component.ContState
 import controller.component.ContState.Value
+import model.DeskInterface
 import model.component.component.{PlayerInterface, TileInterface}
 import util.Observable
 
@@ -9,6 +10,7 @@ import scala.collection.SortedSet
 
 trait ControllerInterface extends Observable {
 
+  var desk: DeskInterface
   var cState: Value
   var userPutTileDown: Int
 
@@ -31,6 +33,7 @@ trait ControllerInterface extends Observable {
   def undo(): Unit
   def redo(): Unit
   def viewOfBoard: SortedSet[TileInterface]
+  def init(): Unit
 
 
 }

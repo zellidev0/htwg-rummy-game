@@ -1,5 +1,7 @@
 package model.component
 
+import com.google.inject.Inject
+import com.google.inject.name.Named
 import model._
 import model.component.component._
 import model.component.component.component.{Color, State}
@@ -7,7 +9,7 @@ import model.component.component.component.{Color, State}
 import scala.collection.SortedSet
 import scala.util.Random
 
-case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], sets: Set[SortedSet[TileInterface]]) extends DeskInterface {
+case class Desk @Inject()(@Named("Default") players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], sets: Set[SortedSet[TileInterface]]) extends DeskInterface {
   val minSize = 3
 
   /*takeUpTile fully tested*/
