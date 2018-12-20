@@ -7,7 +7,7 @@ import util.{Observable, UndoManager}
 import scala.collection.SortedSet
 
 class Controller(var desk: Desk) extends Observable {
-  var cState: state = MENU
+  var cState: Value = MENU
   private val undoManager = new UndoManager
   var userPutTileDown = 0
 

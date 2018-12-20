@@ -34,6 +34,14 @@ class DeskSpec extends WordSpec with Matchers {
         desk.correctAmountOfPlayers should be(false)
       }
     }
+    "created with 2 and removes one player" should {
+      var desk = Desk(Set(Player("Name1", 0, Board(SortedSet[Tile]()), State.TURN), Player("Name2", 1, Board(SortedSet[Tile]()))),
+        Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[Tile]]())
+      desk = desk.removePlayer(desk.nextP)
+      "have only one player left" in {
+        desk.amountOfPlayers should be(1)
+      }
+    }
     "created with empty players" should {
       var desk = Desk(Set[Player](), Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[Tile]]())
       "have size 0" in {
@@ -104,6 +112,7 @@ class DeskSpec extends WordSpec with Matchers {
       "have status Wait (current)" in {
         desk = desk.switchToNextPlayer(player1, player2)
         desk.players.exists(p => p.number == player1.number && p.state == State.WAIT) should be(true)
+        desk.previousP.number should be(player1.number)
       }
       "have status TURN (next)" in {
         desk.players.exists(p => p.number == player2.number && p.state == State.TURN) should be(true)
@@ -205,7 +214,35 @@ class DeskSpec extends WordSpec with Matchers {
       "have 4 tiles in Set on Deks" in {
         desk.sortedSet(tile).size should be(4)
       }
-
+    }
+    "taking up a tile" should {
+      val tile = Tile(4, Color.BLUE, 0)
+      val tile2 = Tile(3, Color.BLUE, 0)
+      val players = Set(Player("Name1", 0, Board(SortedSet[Tile](tile)), state = State.TURN))
+      var desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]](SortedSet(tile2), SortedSet()))
+      desk = desk.takeUpTile(desk.currentP, tile2)
+      "have 4 tiles in Set on Deks" in {
+        desk.sets.head.isEmpty should be(true)
+      }
+    }
+    "adding to bag" should {
+      val tile = Tile(4, Color.BLUE, 0)
+      val players = Set(Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN))
+      var desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]]())
+      desk = desk.addToBag(tile)
+      "have 4 tiles in Set on Deks" in {
+        desk.bagOfTiles.size should be(1)
+      }
+    }
+    "taking a tile from player to bag" should {
+      val tile = Tile(4, Color.BLUE, 0)
+      val players = Set(Player("Name1", 0, Board(SortedSet[Tile](tile)), state = State.TURN))
+      var desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]]())
+      desk = desk.takeTileFromPlayerToBag(desk.currentP, tile)
+      "have one less on players board and one more in bag" in {
+        desk.bagOfTiles.size should be(1)
+        desk.players.head.board.amountOfTiles() should be(0)
+      }
     }
   }
 }

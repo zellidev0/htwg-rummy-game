@@ -261,7 +261,7 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.desk.sets.contains(SortedSet(Tile(1, Color.RED, 0))) should be(false)
       }
     }
-    "calling undo redo" should {
+    "calling undo redo when laying down" should {
       val tile1 = Tile(1, Color.RED, 0)
       val player1 = Player("Name1", 0, Board(SortedSet[Tile](tile1)), state = State.TURN)
       val players = Set(player1)
@@ -269,16 +269,114 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.layDownTile("1R0")
       "undo" in {
-        player1.board.contains(tile1) should be(true)
-        controller.desk.sets.contains(SortedSet(tile1)) should be(false)
-        controller.undo
-        player1.board.contains(tile1) should be(false)
+        controller.desk.currentP.board.contains(tile1) should be(false)
         controller.desk.sets.contains(SortedSet(tile1)) should be(true)
+        controller.undo
+        controller.desk.currentP.board.contains(tile1) should be(true)
+        controller.desk.sets.contains(SortedSet(tile1)) should be(false)
         controller.redo
       }
       "redo" in {
-        player1.board.contains(tile1) should be(true)
-        controller.desk.sets.contains(SortedSet(tile1)) should be(false)
+        controller.desk.currentP.board.contains(tile1) should be(false)
+        controller.desk.sets.contains(SortedSet(tile1)) should be(true)
+      }
+    }
+    "calling undo redo when moving tile" should {
+      val tile1 = Tile(1, Color.RED, 0)
+      val tile2 = Tile(2, Color.RED, 0)
+      val player1 = Player("Name1", 0, Board(SortedSet[Tile]()), state = State.TURN)
+      val players = Set(player1)
+      val desk = Desk(players, Set[Tile](), Set[SortedSet[Tile]](SortedSet[Tile](tile1), SortedSet[Tile](tile2)))
+      val controller = new Controller(desk)
+      controller.moveTile("1R0", "2R0")
+      "undo" in {
+        controller.desk.sets.size should be(1)
+        controller.desk.sets.contains(SortedSet(tile1, tile2)) should be(true)
+        controller.undo
+        controller.desk.sets.size should be(2)
+        controller.desk.sets.contains(SortedSet(tile1, tile2)) should be(false)
+        controller.redo
+      }
+      "redo" in {
+        controller.desk.sets.size should be(1)
+        controller.desk.sets.contains(SortedSet(tile1, tile2)) should be(true)
+      }
+    }
+    "calling undo redo when name inserting" should {
+      val desk = Desk(Set[Player](), Set[Tile](), Set[SortedSet[Tile]]())
+      val controller = new Controller(desk)
+      controller.createDesk(12)
+      controller.addPlayerAndInit("Name0", 12)
+      "undo" in {
+        controller.desk.amountOfPlayers should be(1)
+        controller.undo
+        controller.desk.amountOfPlayers should be(0)
+        controller.redo
+      }
+      "redo" in {
+        controller.desk.amountOfPlayers should be(1)
+      }
+    }
+    "calling undo redo when user finishes play" should {
+      val player1 = Player("Name0", 0, Board(SortedSet[Tile](Tile(1, Color.RED, 0))), state = State.TURN)
+      val player2 = Player("Name1", 1, Board(SortedSet[Tile](Tile(2, Color.RED, 0))))
+      val player3 = Player("Name2", 2, Board(SortedSet[Tile]()))
+      val player4 = Player("Name3", 3, Board(SortedSet[Tile]()))
+      val players = Set[Player](player1, player2, player3, player4)
+      val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[Tile]]())
+      val controller = new Controller(desk)
+      controller.userPutTileDown = 1
+      controller.userFinishedPlay()
+      "userPutTileDown be 1" in {
+        controller.userPutTileDown should be(0)
+        controller.undo
+      }
+      "undo" in {
+        controller.userPutTileDown should be(1)
+        controller.redo
+      }
+      "redo" in {
+        controller.userPutTileDown should be(0)
+      }
+    }
+    "calling undo redo when switching player" should {
+      val player1 = Player("Name0", 0, Board(SortedSet[Tile](Tile(1, Color.RED, 0))), state = State.TURN)
+      val player2 = Player("Name1", 1, Board(SortedSet[Tile](Tile(2, Color.RED, 0))))
+      val player3 = Player("Name2", 2, Board(SortedSet[Tile]()))
+      val player4 = Player("Name3", 3, Board(SortedSet[Tile]()))
+      val players = Set[Player](player1, player2, player3, player4)
+      val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[Tile]]())
+      val controller = new Controller(desk)
+      controller.switchToNextPlayer()
+      "userPutTileDown be 1" in {
+        controller.currentP.number should be(1)
+        controller.undo
+      }
+      "undo" in {
+        controller.currentP.number should be(0)
+        controller.redo
+      }
+      "redo" in {
+        controller.currentP.number should be(1)
+      }
+    }
+    "calling undo redo when taking a tile" should {
+      val player1 = Player("Name0", 0, Board(SortedSet[Tile]()), state = State.TURN)
+      val players = Set[Player](player1)
+      val desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[Tile]]())
+      val controller = new Controller(desk)
+      controller.userPutTileDown = 0
+      controller.userFinishedPlay()
+      "userPutTileDown be 1" in {
+        controller.currentP.board.amountOfTiles() should be(1)
+        controller.undo
+      }
+      "undo" in {
+        controller.currentP.board.amountOfTiles() should be(0)
+        controller.redo
+      }
+      "redo" in {
+        controller.currentP.board.amountOfTiles() should be(1)
       }
     }
   }

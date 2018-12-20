@@ -39,10 +39,23 @@ class PlayerSpec() extends WordSpec with Matchers {
       }
     }
     "its status is changed" should {
-      val player1 = Player("Name1", 1, Board(SortedSet[Tile]()))
-      val player = player1.copy(state = State.TURN)
+      var player1 = Player("Name1", 1, Board(SortedSet[Tile]()), State.TURN)
+      player1 = player1.changeState(State.WAIT)
       "the new status be turn " in {
-        player.state should be(State.TURN)
+        player1.state should be(State.WAIT)
+      }
+    }
+    "its board is empty" should {
+      val player1 = Player("Name1", 1, Board(SortedSet[Tile]()), State.TURN)
+      "the new status be turn " in {
+        player1.won() should be(true)
+      }
+    }
+    "has tile" should {
+      val tile = Tile(1, Color.RED, 0)
+      val player1 = Player("Name1", 1, Board(SortedSet[Tile](tile)), State.TURN)
+      "have the tile" in {
+        player1.hasTile(tile) should be(true)
       }
     }
   }
