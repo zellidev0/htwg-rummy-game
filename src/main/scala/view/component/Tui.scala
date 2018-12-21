@@ -53,7 +53,7 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
   private def handleMenuInput(input: String): Unit = {
     input match {
       case "q" =>
-      case "c" => contr.createDesk(elements + 1);
+      case "c" => contr.createDesk(elements + 1)
       case _ => printWrongArgument()
     }
   }

@@ -5,6 +5,7 @@ import controller.component.ContState._
 import controller.component.command._
 import model.component.component.component.{Color, Tile}
 import model.component.component.{PlayerInterface, TileInterface}
+import model.fileIO.xml.FileIO
 import model.{component, _}
 import util.UndoManager
 
@@ -101,6 +102,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
       undoManager.emptyStack
       swState(START)
       swState(P_TURN)
+      new FileIO().saveString(desk)
     } else {
       swState(NOT_ENOUGH_PS)
       swState(ContState.INSERTING_NAMES)
