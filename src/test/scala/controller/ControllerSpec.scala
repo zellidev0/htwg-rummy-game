@@ -70,29 +70,6 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.desk.sets.contains(SortedSet[TileInterface](Tile(1, Color.RED, 1))) should be(false)
       }
     }
-    "get tile from regex" should {
-      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]())))
-      val desk = Desk(players, Set(), Set[SortedSet[TileInterface]]())
-      val controller = new Controller(desk)
-      val tile0 = controller.regexToTile("1R0")
-      val tile1 = controller.regexToTile("10R1")
-      val tile2 = controller.regexToTile("2B0")
-      val tile3 = controller.regexToTile("11B1")
-      val tile4 = controller.regexToTile("3Y0")
-      val tile5 = controller.regexToTile("12Y1")
-      val tile6 = controller.regexToTile("4G0")
-      val tile7 = controller.regexToTile("13G1")
-      "get the tile" in {
-        tile0 should be(Tile(1, Color.RED, 0))
-        tile1 should be(Tile(10, Color.RED, 1))
-        tile2 should be(Tile(2, Color.BLUE, 0))
-        tile3 should be(Tile(11, Color.BLUE, 1))
-        tile4 should be(Tile(3, Color.YELLOW, 0))
-        tile5 should be(Tile(12, Color.YELLOW, 1))
-        tile6 should be(Tile(4, Color.GREEN, 0))
-        tile7 should be(Tile(13, Color.GREEN, 1))
-      }
-    }
     "adding a player and have less than 4" should {
       val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN))
       val desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[TileInterface]]())

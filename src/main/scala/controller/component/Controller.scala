@@ -8,6 +8,7 @@ import model.component.component.{PlayerInterface, TileInterface}
 import model.fileIO.xml.FileIO
 import model.{component, _}
 import util.UndoManager
+import util.UtilMethods.regexToTile
 
 import scala.collection.SortedSet
 
@@ -41,16 +42,6 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     }
   }
 
-  /*regexToTile fully tested*/
-  private[controller] def regexToTile(regex: String): Tile = {
-    val color = regex.charAt(regex.length - 2) match {
-      case 'R' => Color.RED
-      case 'B' => Color.BLUE
-      case 'Y' => Color.YELLOW
-      case 'G' => Color.GREEN
-    }
-    Tile(Integer.parseInt(regex.substring(0, regex.length - 2)), color, Integer.parseInt(regex.charAt(regex.length - 1).toString))
-  }
   /*layDownTile fully tested*/
   override def layDownTile(tile: String): Unit = {
     if (!currentP.hasTile(regexToTile(tile))) {
@@ -103,6 +94,8 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
       swState(START)
       swState(P_TURN)
       new FileIO().saveString(desk)
+      var d2 = new FileIO().load
+      print(d2)
     } else {
       swState(NOT_ENOUGH_PS)
       swState(ContState.INSERTING_NAMES)

@@ -49,8 +49,7 @@ class FileIO extends FileIOInterface {
           for {
             tile <- desk.bagOfTiles
           } yield {
-            Json.obj(Json.toJson(tile)
-            )
+            Json.toJson(4)
           }
         )
       )
