@@ -12,7 +12,7 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
   private val PlayerNamePattern: Regex = "name [A-Za-z]+".r
   private val LayDownTilePattern: Regex = "(l [1-9][RBGY][01]|l 1[0123][RBGY][01])".r
   private val MoveTilePattern: Regex = "(m [1-9][RBGY][01] t [1-9][RBGY][01]|m 1[0123][RBGY][01] t [1-9][RBYG][01]|m 1[0-3][RBGY][01] t 1[0-3][RBGY][01]|m [1-9][RBGY][01] t 1[0-3][RBYG][01])".r
-  private val elements = 12
+  val elements = 12
 
 
   override def processInputLine(input: String): Unit = {
@@ -36,6 +36,7 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
 
   private def handleOnTurnFinished(input: String): Unit = input match {
     case "n" => contr.switchToNextPlayer()
+    case "s" => contr.storeFile
     case _ => printWrongArgument()
   }
 
@@ -54,6 +55,7 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
     input match {
       case "q" =>
       case "c" => contr.createDesk(elements + 1)
+      case "l" => contr.loadFile
       case _ => printWrongArgument()
     }
   }
@@ -65,7 +67,7 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
       case ContState.TABLE_NOT_CORRECT => println("\tNEWS:\tTable looks not correct, please move tiles to match the rules")
       case ContState.START => println("SSSSS  TTTTT    A    RRRR   TTTTT \nSS       T     A A   R   R    T   \nSSSSS    T    A   A  RRRR     T   \n   SS    T    AAAAA  RRR      T   \nSSSSS    T    A   A  R  RR    T   \n")
       case ContState.ENOUGH_PS => println("\tNEWS:\tThe Maximum amount of players is set. Type 'f' to finish inserting names")
-      case ContState.P_FINISHED => println("\tNEWS:\tYou are finished. The next player has to type 'n' to continue.")
+      case ContState.P_FINISHED => println("\tNEWS:\tYou are finished. The next player has to type 'n' to continue,\nor type s to store the current game.")
       case ContState.P_TURN =>
         printf(
           "|---------------------------------------------------------------------------------------|\n" +
@@ -86,6 +88,9 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
       case ContState.PLAYER_REMOVED => println("\tNEWS:\tYou removed the player you inserted .")
       case ContState.UNDO_LAY_DOWN_TILE => println("\tNEWS:\tYou took the tile up.")
       case ContState.TILE_NOT_ON_TABLE => println("\tNEWS:\tThis tile does not lay on the table, you cant move it.")
+      case ContState.LOAD_FILE => println("\tNEWS:\tYou loaded a previous game. You can start now.")
+      case ContState.STORE_FILE => println("\tNEWS:\tYou stored a game. Go on.")
+      case ContState.COULD_NOT_LOAD_FILE => println("\tNEWS:\tNo previous game found. A new desk was created.")
       case _ =>
     }
   }
@@ -100,11 +105,11 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
     }
     println()
     for (tile <- contr.viewOfBoard) {
-      printf("|%2s| ", tile.getIdent)
+      printf("|%2s| ", tile.getValue)
     }
     println()
     for (tile <- contr.viewOfBoard) {
-      printf("|%s | ", tile.getIdent.toString.charAt(0))
+      printf("|%s | ", tile.getColor.toString.charAt(0))
     }
     println()
     for (tile <- contr.viewOfBoard) {

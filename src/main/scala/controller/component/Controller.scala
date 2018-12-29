@@ -1,5 +1,7 @@
 package controller.component
 
+import java.nio.file.{Files, Paths}
+
 import controller.ControllerInterface
 import controller.component.ContState._
 import controller.component.command._
@@ -15,6 +17,7 @@ import scala.collection.SortedSet
 class Controller(var desk: DeskInterface) extends ControllerInterface {
   var cState: Value = MENU
   private val undoManager = new UndoManager
+  private val fileIO = new FileIO
   var userPutTileDown = 0
 
   /*userFinishedPlay fully tested*/
@@ -93,9 +96,6 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
       undoManager.emptyStack
       swState(START)
       swState(P_TURN)
-      new FileIO().saveString(desk)
-      var d2 = new FileIO().load
-      print(d2)
     } else {
       swState(NOT_ENOUGH_PS)
       swState(ContState.INSERTING_NAMES)
@@ -125,5 +125,25 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   override def viewOfBoard: SortedSet[TileInterface] = desk.viewOfBoard
 
+  override def storeFile: Unit = {
+    fileIO.save(desk)
+    val oldState = cState
+    swState(STORE_FILE)
+    swState(oldState)
+  }
+
+  override def loadFile: Unit = {
+    if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml"))) {
+      desk = fileIO.load
+      swState(LOAD_FILE)
+      swState(START)
+      swState(P_TURN)
+    } else {
+      swState(COULD_NOT_LOAD_FILE)
+      createDesk(12)
+    }
+
+
+  }
 }
 

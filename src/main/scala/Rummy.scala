@@ -10,7 +10,7 @@ object Rummy {
   val tui = new Tui(controller)
 
   def main(args: Array[String]): Unit = {
-    println("Type <c>")
+    println("Type <c> to create a new desk or <l> to load a previous game")
     var input: String = ""
     if (args.length > 0) input = args(0)
     if (!input.isEmpty) tui.processInputLine(input)

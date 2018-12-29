@@ -31,6 +31,9 @@ trait ControllerInterface extends Observable {
   def undo(): Unit
   def redo(): Unit
   def viewOfBoard: SortedSet[TileInterface]
+  def storeFile: Unit
+  def loadFile: Unit
+
 
 
 }
