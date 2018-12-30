@@ -17,7 +17,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
   }
 
   title = "Rummy"
-  size = new Dimension(2000, 2000)
+  size = new Dimension(1000, 1000)
   menuBar = new MenuBar {
     contents += new Menu("Menu") {
       contents += new MenuItem(Action("Quit game") {
@@ -34,7 +34,10 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
   var oneIsSelected: Option[TileInterface] = None
   var buttonPanel = new GridPanel(1, 6)
   var deskPanel = new ScrollPane()
-  var userBoard = new GridPanel(4, 10)
+  var userBoard: ScrollPane = new ScrollPane() {
+    contents = new GridPanel(2, 12)
+
+  }
   contents = new GridPanel(4, 1) {
     hGap = 3
     vGap = 3
@@ -105,7 +108,9 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
         }
       }
     }
-    userBoard = new GridPanel(4, 10)
+    userBoard = new ScrollPane() {
+      contents = new GridPanel(2, 12)
+    }
     contents = new GridPanel(4, 1) {
       contents += scrollContainerNews
       contents += deskPanel
@@ -192,9 +197,11 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
     }
   }
   def printUserBoard(): Unit = {
-    userBoard = new GridPanel(4, 10) {
-      for (tile <- contr.viewOfBoard) {
-        contents += tileAsViewForBoard(tile)
+    userBoard = new ScrollPane() {
+      contents = new GridPanel(2, 12) {
+        for (tile <- contr.viewOfBoard) {
+          contents += tileAsViewForBoard(tile)
+        }
       }
     }
     contents = new GridPanel(4, 1) {
