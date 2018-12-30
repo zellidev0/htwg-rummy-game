@@ -186,7 +186,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       case ContState.INSERTED_NAME => newsTestView.text += "NEWS:Player " + contr.getAmountOfPlayers + " is added\n"
       case ContState.NOT_ENOUGH_PS => newsTestView.text += "NEWS:Not enough Players Please insert another name\n"
       case ContState.MENU => newsTestView.text += "NEWS:You're finished. Great.\n"
-      case ContState.P_WON => printf("The winner is %s\n", contr.currentP);
+      case ContState.P_WON => printf("The winner is %s\n", contr.currentP); System.exit(0)
       case ContState.PLAYER_REMOVED => newsTestView.text += "NEWS:You removed the last inserted player.\n"
       case ContState.UNDO_LAY_DOWN_TILE => newsTestView.text += "NEWS:You took the tile up.\n"
       case ContState.CANT_MOVE_THIS_TILE => newsTestView.text += "NEWS:You cant move this tile.\n"

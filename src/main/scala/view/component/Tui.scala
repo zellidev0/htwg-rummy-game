@@ -77,7 +77,9 @@ class Tui(contr: ControllerInterface) extends UIInterface {
       case ContState.INSERTED_NAME => println("\tNEWS:\tPlayer " + contr.getAmountOfPlayers + " is added\n\tNEWS:\tType in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
       case ContState.NOT_ENOUGH_PS => println("\tNEWS:\tNot enough Players. Type <c> to create a desk and insert names")
       case ContState.MENU => println("\tNEWS:\tYou're finished. Great. Now type in 's' and enter to start.")
-      case ContState.P_WON => printf("FFFFFF  I  NN   N  I  SSSSS  H   H  EEEEE  DDD\nF       I  N N  N  I  SS     H   H  E      D  D\nFFFFFF  I  N  N N  I  SSSSS  HHHHH  EEEEE  D   D\nF       I  N  N N  I     SS  H   H  E      D  D\nF       I  N   NN  I  SSSSS  H   H  EEEEE  DDD\n%s is the winner.", contr.currentP)
+      case ContState.P_WON =>
+        printf("FFFFFF  I  NN   N  I  SSSSS  H   H  EEEEE  DDD\nF       I  N N  N  I  SS     H   H  E      D  D\nFFFFFF  I  N  N N  I  SSSSS  HHHHH  EEEEE  D   D\nF       I  N  N N  I     SS  H   H  E      D  D\nF       I  N   NN  I  SSSSS  H   H  EEEEE  DDD\n\n\n%s is the winner.\n", contr.currentP.getName)
+        System.exit(0)
       case ContState.PLAYER_REMOVED => println("\tNEWS:\tYou removed the player you inserted .")
       case ContState.UNDO_LAY_DOWN_TILE => println("\tNEWS:\tYou took the tile up.")
       case ContState.CANT_MOVE_THIS_TILE => println("\tNEWS:\tYou cant move this tile.")

@@ -25,6 +25,11 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     if (userPutTileDown == 0) {
       undoManager.doStep(new TakeTileCommand(this))
     } else if (desk.checkTable()) {
+      if (desk.currentPlayerWon()) {
+        swState(P_WON)
+        swState(MENU)
+        return
+      }
       undoManager.doStep(new FinishedCommand(userPutTileDown, this))
     } else {
       swState(TABLE_NOT_CORRECT)
