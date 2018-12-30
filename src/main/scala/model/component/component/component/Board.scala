@@ -12,7 +12,7 @@ case class Board(tiles: SortedSet[TileInterface]) extends BoardInterface {
   override def -(tile: TileInterface): BoardInterface = copy(tiles.filterNot(t => tile.identifier == t.identifier))
   override def contains(tile: TileInterface): Boolean = {
     var x = tiles.contains(tile)
-    x
+    x //TODO sometimes when laying down this return false even though it should clearly not
   }
   override def getTiles(): SortedSet[TileInterface] = tiles
 }

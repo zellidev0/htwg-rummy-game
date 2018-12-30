@@ -27,8 +27,9 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
         val curS = cState
         swState(BAG_IS_EMPTY)
         swState(curS)
+      } else {
+        undoManager.doStep(new TakeTileCommand(this))
       }
-      undoManager.doStep(new TakeTileCommand(this))
     } else if (desk.checkTable()) {
       if (desk.currentPlayerWon()) {
         swState(P_WON)
@@ -123,26 +124,26 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   override def removeTileFromSet(tile: TileInterface): Unit = desk = desk.removeFromTable(tile)
 
-  override def undo: Unit = {
+  override def undo(): Unit = {
     undoManager.undoStep
     notifyObservers()
   }
 
-  override def redo: Unit = {
+  override def redo(): Unit = {
     undoManager.redoStep
     notifyObservers()
   }
 
   override def viewOfBoard: SortedSet[TileInterface] = desk.viewOfBoard
 
-  override def storeFile: Unit = {
+  override def storeFile(): Unit = {
     fileIO.save(desk)
     val oldState = cState
     swState(STORE_FILE)
     swState(oldState)
   }
 
-  override def loadFile: Unit = {
+  override def loadFile(): Unit = {
     if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml"))) {
       desk = fileIO.load
       swState(LOAD_FILE)
