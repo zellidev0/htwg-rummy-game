@@ -86,6 +86,7 @@ class Tui(contr: ControllerInterface) extends UIInterface {
       case ContState.LOAD_FILE => println("\tNEWS:\tYou loaded a previous game. You can start now.")
       case ContState.STORE_FILE => println("\tNEWS:\tYou stored a game. Go on.")
       case ContState.COULD_NOT_LOAD_FILE => println("\tNEWS:\tNo previous game found. A new desk was created.")
+      case ContState.BAG_IS_EMPTY => println("\tNEWS:\tNo more tiles in the bag. You must lay a tile down")
       case _ =>
     }
   }

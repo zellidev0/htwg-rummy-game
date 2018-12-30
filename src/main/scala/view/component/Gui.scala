@@ -193,6 +193,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       case ContState.LOAD_FILE => newsTestView.text += "NEWS:You loaded a previous game. You can start now.\n"
       case ContState.STORE_FILE => newsTestView.text += "NEWS:You stored a game. Go on.\n"
       case ContState.COULD_NOT_LOAD_FILE => newsTestView.text += "NEWS:No previous game found. A new desk was created.\n"
+      case ContState.BAG_IS_EMPTY => newsTestView.text += "NEWS:No more tiles in the bag. You must lay a tile down\n"
       case _ =>
     }
   }

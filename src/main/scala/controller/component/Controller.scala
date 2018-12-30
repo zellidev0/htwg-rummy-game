@@ -23,6 +23,11 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   /*userFinishedPlay fully tested*/
   override def userFinishedPlay(): Unit = {
     if (userPutTileDown == 0) {
+      if (desk.bagOfTiles.isEmpty) {
+        val curS = cState
+        swState(BAG_IS_EMPTY)
+        swState(curS)
+      }
       undoManager.doStep(new TakeTileCommand(this))
     } else if (desk.checkTable()) {
       if (desk.currentPlayerWon()) {
