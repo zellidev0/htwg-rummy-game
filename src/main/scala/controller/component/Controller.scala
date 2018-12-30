@@ -25,6 +25,11 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     if (userPutTileDown == 0) {
       undoManager.doStep(new TakeTileCommand(this))
     } else if (desk.checkTable()) {
+      if (desk.currentPlayerWon()) {
+        swState(P_WON)
+        swState(MENU)
+        return
+      }
       undoManager.doStep(new FinishedCommand(userPutTileDown, this))
     } else {
       swState(TABLE_NOT_CORRECT)
@@ -37,8 +42,8 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   }
   /*moveTile fully tested*/
   override def moveTile(tile1: String, tile2: String): Unit = {
-    if (!desk.setsContains(regexToTile(tile1)) || !desk.setsContains(regexToTile(tile2))) {
-      swState(TILE_NOT_ON_TABLE)
+    if (!desk.setsContains(regexToTile(tile1)) || !desk.setsContains(regexToTile(tile2)) || desk.sets.find(s => s.contains(regexToTile(tile1))).get.contains(regexToTile(tile2))) {
+      swState(CANT_MOVE_THIS_TILE)
       swState(ContState.P_TURN)
     } else {
       undoManager.doStep(new MoveTileCommand(tile1, tile2, this))

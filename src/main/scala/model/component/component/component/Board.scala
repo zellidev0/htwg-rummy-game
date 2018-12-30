@@ -10,6 +10,9 @@ case class Board(tiles: SortedSet[TileInterface]) extends BoardInterface {
   override def amountOfTiles(): Int = tiles.size
   override def +(tile: TileInterface): BoardInterface = copy(tiles + tile)
   override def -(tile: TileInterface): BoardInterface = copy(tiles.filterNot(t => tile.identifier == t.identifier))
-  override def contains(tile: TileInterface): Boolean = tiles contains tile
+  override def contains(tile: TileInterface): Boolean = {
+    var x = tiles contains tile
+    x
+  }
   override def getTiles(): SortedSet[TileInterface] = tiles
 }
