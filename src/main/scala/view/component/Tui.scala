@@ -74,7 +74,7 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
             "| %50s it's your turn. Do your stuff.     |\n" +
             "|---------------------------------------------------------------------------------------|\n" +
             "| Type 'l <value> <FirstLetterOfColor> <num>' to put it on the table                    |\n" +
-            "| Type 'm <valueA> <FirstLetterOfColorA> <numA> l <valueB> <FirstLetterOfColorB> <numB> |\n" +
+            "| Type 'm <valueA> <FirstLetterOfColorA> <numA> t <valueB> <FirstLetterOfColorB> <numB> |\n" +
             "|  to put A in where B is                                                               |\n" +
             "| Type 'f' to finish (and take a tile automatically if you did nothing)                 |\n" +
             "|---------------------------------------------------------------------------------------|\n\n",
