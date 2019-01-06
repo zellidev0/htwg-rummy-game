@@ -8,4 +8,12 @@ case class Tile(private val value: Int, private val color: Color.Value, private 
   override def getValue: Int = value
   override def getColor: Color.Value = color
   override def getIdent: Int = ident
+  override def equals(obj: Any): Boolean = {
+    if (obj.isInstanceOf[TileInterface]) {
+      if (obj.asInstanceOf[Tile].identifier == this.identifier) {
+        return true
+      }
+    }
+    false
+  }
 }

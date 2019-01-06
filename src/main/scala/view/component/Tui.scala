@@ -2,20 +2,13 @@ package view.component
 
 import controller.ControllerInterface
 import controller.component.ContState
-import view.TuiInterface
+import view.UIInterface
 
-import scala.util.matching.Regex
-
-class Tui(contr: ControllerInterface) extends TuiInterface {
+class Tui(contr: ControllerInterface) extends UIInterface {
   contr.add(this)
 
-  private val PlayerNamePattern: Regex = "name [A-Za-z]+".r
-  private val LayDownTilePattern: Regex = "(l [1-9][RBGY][01]|l 1[0123][RBGY][01])".r
-  private val MoveTilePattern: Regex = "(m [1-9][RBGY][01] t [1-9][RBGY][01]|m 1[0123][RBGY][01] t [1-9][RBYG][01]|m 1[0-3][RBGY][01] t 1[0-3][RBGY][01]|m [1-9][RBGY][01] t 1[0-3][RBYG][01])".r
-  val elements = 12
 
-
-  override def processInputLine(input: String): Unit = {
+  override def processInput(input: String): Unit = {
     contr.cState match {
       case ContState.MENU => handleMenuInput(input)
       case ContState.INSERTING_NAMES => handleNameInput(input)
@@ -24,7 +17,7 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
     }
   }
 
-  private def handleNameInput(name: String): Unit = {
+  override def handleNameInput(name: String): Unit = {
     name match {
       case "f" => contr.nameInputFinished()
       case "z" => contr.undo()
@@ -34,13 +27,13 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
     }
   }
 
-  private def handleOnTurnFinished(input: String): Unit = input match {
+  override def handleOnTurnFinished(input: String): Unit = input match {
     case "n" => contr.switchToNextPlayer()
     case "s" => contr.storeFile
     case _ => printWrongArgument()
   }
 
-  private def handleOnTurn(input: String): Unit = {
+  override def handleOnTurn(input: String): Unit = {
     input match {
       case LayDownTilePattern(c) => contr.layDownTile(c.split(" ").apply(1));
       case MoveTilePattern(c) => contr.moveTile(c.split(" t ").apply(0).split(" ").apply(1), c.split(" t ").apply(1));
@@ -51,7 +44,7 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
     }
   }
 
-  private def handleMenuInput(input: String): Unit = {
+  override def handleMenuInput(input: String): Unit = {
     input match {
       case "q" =>
       case "c" => contr.createDesk(elements + 1)
@@ -89,10 +82,11 @@ class Tui(contr: ControllerInterface) extends TuiInterface {
         System.exit(0)
       case ContState.PLAYER_REMOVED => println("\tNEWS:\tYou removed the player you inserted .")
       case ContState.UNDO_LAY_DOWN_TILE => println("\tNEWS:\tYou took the tile up.")
-      case ContState.TILE_NOT_ON_TABLE => println("\tNEWS:\tThis tile does not lay on the table, you cant move it.")
+      case ContState.CANT_MOVE_THIS_TILE => println("\tNEWS:\tYou cant move this tile.")
       case ContState.LOAD_FILE => println("\tNEWS:\tYou loaded a previous game. You can start now.")
       case ContState.STORE_FILE => println("\tNEWS:\tYou stored a game. Go on.")
       case ContState.COULD_NOT_LOAD_FILE => println("\tNEWS:\tNo previous game found. A new desk was created.")
+      case ContState.BAG_IS_EMPTY => println("\tNEWS:\tNo more tiles in the bag. You must lay a tile down")
       case _ =>
     }
   }

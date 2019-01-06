@@ -64,21 +64,6 @@ class FileIO extends FileIOInterface {
     pw.close()
   }
 
-  //  def gridToXml(grid: GridInterface) = {
-  //    <grid size={grid.size.toString}>
-  //      {for {
-  //      row <- 0 until grid.size
-  //      col <- 0 until grid.size
-  //    } yield cellToXml(grid, row, col)}
-  //    </grid>
-  //  }
-  //
-  //  def cellToXml(grid: GridInterface, row: Int, col: Int) = {
-  //    <cell row={row.toString} col={col.toString} given={grid.cell(row, col).given.toString} isHighlighted={grid.isHighlighted(row, col).toString} showCandidates={grid.cell(row, col).showCandidates.toString}>
-  //      {grid.cell(row, col).value}
-  //    </cell>
-  //  }
-
 
   private def deskToXml(desk: DeskInterface) = {
     <desk amountOfPlayers={desk.amountOfPlayers.toString}>
