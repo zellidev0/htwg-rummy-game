@@ -2,7 +2,7 @@ package model.fileIO.xml
 
 import model.DeskInterface
 import model.component.Desk
-import model.component.component.component.{Board, Player}
+import model.component.component.component.{Board, Player, State}
 import model.component.component.{BoardInterface, PlayerInterface, TileInterface}
 import model.fileIO.FileIOInterface
 import util.UtilMethods
@@ -28,8 +28,7 @@ class FileIO extends FileIOInterface {
         for (tile <- player \\ "board" \\ "tile") {
           board = board + UtilMethods.regexToTile((tile \ "@identifier").text.toString)
         }
-
-        players = players.+(Player(playerName, playerNumber, board, UtilMethods.stringToState(playerState)))
+        players = players.+(Player(playerName, playerNumber, board, State.stringToState(playerState)))
       }
 
 

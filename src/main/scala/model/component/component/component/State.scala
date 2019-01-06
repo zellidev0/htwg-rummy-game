@@ -2,6 +2,12 @@ package model.component.component.component
 
 object State extends Enumeration {
   type state = Value
-  var LOST, WON, WAIT, TURN = Value
-
+  var WON, WAIT, TURN = Value
+  def stringToState(str: String): State.Value = {
+    str match {
+      case "WAIT" => State.WAIT
+      case "WON" => State.WON
+      case "TURN" => State.TURN
+    }
+  }
 }

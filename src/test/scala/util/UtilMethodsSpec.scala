@@ -1,6 +1,6 @@
 package util
 
-import model.component.component.component.{Color, State, Tile}
+import model.component.component.component.{Color, Tile}
 import org.scalatest.{Matchers, WordSpec}
 
 class UtilMethodsSpec extends WordSpec with Matchers {
@@ -27,29 +27,4 @@ class UtilMethodsSpec extends WordSpec with Matchers {
       }
     }
   }
-
-  //  def stringToState(str: String): State.Value = {
-  //    str match {
-  //      case "WAIT" => State.WAIT
-  //      case "WON" => State.WON
-  //      case "TURN" => State.TURN
-  //      case "LOST" => State.LOST
-  //    }
-  //  }
-
-  "A state " when {
-    "formatting" should {
-      val state0 = UtilMethods.stringToState("WAIT")
-      val state1 = UtilMethods.stringToState("WON")
-      val state2 = UtilMethods.stringToState("TURN")
-      val state3 = UtilMethods.stringToState("LOST")
-      "get the tile" in {
-        state0 should be(State.WAIT)
-        state1 should be(State.WON)
-        state2 should be(State.TURN)
-        state3 should be(State.LOST)
-      }
-    }
-  }
-
 }

@@ -42,7 +42,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   /*moveTile fully tested*/
   override def moveTile(tile1: String, tile2: String): Unit = {
     if (!desk.setsContains(regexToTile(tile1)) || !desk.setsContains(regexToTile(tile2))) {
-      swState(TILE_NOT_ON_TABLE)
+      swState(CANT_MOVE_THIS_TILE)
       swState(ContState.P_TURN)
     } else {
       undoManager.doStep(new MoveTileCommand(tile1, tile2, this))
@@ -137,7 +137,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   }
 
   override def loadFile: Unit = {
-    if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml"))) {
+    if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.json"))) {
       desk = fileIO.load
       swState(LOAD_FILE)
       swState(START)
