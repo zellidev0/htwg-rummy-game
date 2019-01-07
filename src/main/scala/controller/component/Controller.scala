@@ -7,10 +7,9 @@ import controller.component.ContState._
 import controller.component.command._
 import model.component.component.component.{Color, Tile}
 import model.component.component.{PlayerInterface, TileInterface}
-import model.fileIO.json.FileIO
+import model.fileIO.xml.FileIO
 import model.{component, _}
 import util.UndoManager
-import util.UtilMethods.regexToTile
 
 import scala.collection.SortedSet
 
@@ -23,7 +22,12 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   /*userFinishedPlay fully tested*/
   override def userFinishedPlay(): Unit = {
     if (userPutTileDown == 0) {
-      undoManager.doStep(new TakeTileCommand(this))
+      if (desk.bagOfTiles.isEmpty) {
+        swState(BAG_IS_EMPTY)
+        swState(ContState.MENU)
+      } else {
+        undoManager.doStep(new TakeTileCommand(this))
+      }
     } else if (desk.checkTable()) {
       if (desk.currentPlayerWon()) {
         swState(P_WON)
@@ -41,7 +45,8 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   }
   /*moveTile fully tested*/
   override def moveTile(tile1: String, tile2: String): Unit = {
-    if (!desk.setsContains(regexToTile(tile1)) || !desk.setsContains(regexToTile(tile2))) {
+    val t = Tile(-1, Color.RED, -1)
+    if (!desk.setsContains(t.stringToTile(tile1)) || !desk.setsContains(t.stringToTile(tile2))) {
       swState(CANT_MOVE_THIS_TILE)
       swState(ContState.P_TURN)
     } else {
@@ -51,7 +56,8 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   /*layDownTile fully tested*/
   override def layDownTile(tile: String): Unit = {
-    if (!currentP.hasTile(regexToTile(tile))) {
+    val t = Tile(-1, Color.RED, -1)
+    if (!currentP.hasTile(t.stringToTile(tile))) {
       swState(P_DOES_NOT_OWN_TILE)
       swState(ContState.P_TURN)
     } else {

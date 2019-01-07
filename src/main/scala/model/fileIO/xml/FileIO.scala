@@ -2,10 +2,9 @@ package model.fileIO.xml
 
 import model.DeskInterface
 import model.component.Desk
-import model.component.component.component.{Board, Player, State}
+import model.component.component.component._
 import model.component.component.{BoardInterface, PlayerInterface, TileInterface}
 import model.fileIO.FileIOInterface
-import util.UtilMethods
 
 import scala.collection.SortedSet
 import scala.xml.PrettyPrinter
@@ -14,6 +13,7 @@ class FileIO extends FileIOInterface {
 
   override def load: DeskInterface = {
     val file = scala.xml.XML.loadFile("/home/julian/Documents/se/rummy/desk.xml")
+    val t = Tile(-1, Color.RED, -1)
     val amountOfPlayersAttr = (file \\ "desk" \ "@amountOfPlayers")
     val amountOfPlayers = amountOfPlayersAttr.text.toInt
     var players = Set[PlayerInterface]()
@@ -26,7 +26,7 @@ class FileIO extends FileIOInterface {
         val playerState: String = (player \ "@state").text.toString
         var board: BoardInterface = Board(SortedSet[TileInterface]())
         for (tile <- player \\ "board" \\ "tile") {
-          board = board + UtilMethods.regexToTile((tile \ "@identifier").text.toString)
+          board = board + t.stringToTile((tile \ "@identifier").text.toString)
         }
         players = players.+(Player(playerName, playerNumber, board, State.stringToState(playerState)))
       }
@@ -34,7 +34,7 @@ class FileIO extends FileIOInterface {
 
       for (tileNodes <- file \\ "desk" \\ "bagOfTiles") {
         for (tile <- tileNodes \\ "tile") {
-          bagOfTiles = bagOfTiles + UtilMethods.regexToTile((tile \ "@identifier").text.toString.trim)
+          bagOfTiles = bagOfTiles + t.stringToTile((tile \ "@identifier").text.toString.trim)
         }
       }
 
@@ -42,7 +42,7 @@ class FileIO extends FileIOInterface {
         for (set <- ssetsNodes \\ "sortedSet") {
           var sorted = SortedSet[TileInterface]()
           for (tile <- set \\ "tile") {
-            sorted = sorted + UtilMethods.regexToTile((tile \ "@identifier").text.toString.trim)
+            sorted = sorted + t.stringToTile((tile \ "@identifier").text.toString.trim)
           }
           ssets = ssets + sorted
         }
@@ -56,7 +56,7 @@ class FileIO extends FileIOInterface {
 
   private def saveString(desk: DeskInterface): Unit = {
     import java.io._
-    val pw = new PrintWriter(new File("desk.xml"))
+    val pw = new PrintWriter(new File("/home/julian/Documents/se/rummy/desk.xml"))
     val prettyPrinter = new PrettyPrinter(120, 4)
     val xml = prettyPrinter.format(deskToXml(desk))
     pw.write(xml)

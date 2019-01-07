@@ -33,16 +33,16 @@ class FileIO extends FileIOInterface {
     for (i <- 0 until bagSize) {
       bagOfTiles = bagOfTiles + Tile((json \\ "value") (i).as[Int], Color.colorFromString((json \\ "color") (i).as[String]), (json \\ "ident") (i).as[Int])
     }
-    var set = Set[SortedSet[TileInterface]]()
-    var y = (json \ "desk" \ "setsSize").get.toString.toInt
-    for (i <- 0 until y) {
-      var x = (json \\ "setSize") (i).as[Int]
-      var sortedSet = SortedSet[TileInterface]()
-      for (j <- 0 until (json \\ "setSize") (i).as[Int]) {
-        sortedSet = sortedSet + Tile((json \\ "value") (j).as[Int], Color.colorFromString((json \\ "color") (j).as[String]), (json \\ "ident") (j).as[Int])
-      }
-      set = set + sortedSet
-    }
+    //    var set = Set[SortedSet[TileInterface]]()
+    //    var y = (json \ "desk" \ "setsSize").get.toString.toInt
+    //    for (i <- 0 until y) {
+    //      var x = (json \\ "setSize") (i).as[Int]
+    //      var sortedSet = SortedSet[TileInterface]()
+    //      for (j <- 0 until (json \\ "setSize") (i).as[Int]) {
+    //        sortedSet = sortedSet + Tile((json \\ "value") (j).as[Int], Color.colorFromString((json \\ "color") (j).as[String]), (json \\ "ident") (j).as[Int])
+    //      }
+    //      set = set + sortedSet
+    //    }
 
 
     desk = Desk(players, bagOfTiles, ssets)

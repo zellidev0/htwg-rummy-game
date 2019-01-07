@@ -2,7 +2,7 @@ package controller
 
 import java.nio.file.{Files, Paths}
 
-import controller.component.ContState.MENU
+import controller.component.ContState.{MENU, P_WON}
 import controller.component.{ContState, Controller}
 import model.component.Desk
 import model.component.component.component._
@@ -51,7 +51,7 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.userPutTileDown = 1
       controller.userFinishedPlay()
       "user should win " in {
-        controller.cState should be(MENU)
+        controller.cState should be(P_WON)
       }
     }
     "user finished play and bag is empty" should {
@@ -395,14 +395,13 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.viewOfBoard should be(SortedSet[TileInterface](Tile(3, Color.BLUE, 0)))
       }
     }
-    "reading a file a file" should {
+    "reading a file" should {
       //ATTENTION, will fail if file desk.xml exists. please remove file before running test
       val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))), state = State.TURN)
       val player2 = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))), state = State.TURN)
       val players = Set[PlayerInterface](player1, player2)
       val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]](SortedSet(Tile(10, Color.BLUE, 0), Tile(10, Color.RED, 0), Tile(10, Color.GREEN, 0))))
       val controller = new Controller(desk)
-      controller.loadFile()
       "be no file" in {
         Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml")) should be(false)
       }

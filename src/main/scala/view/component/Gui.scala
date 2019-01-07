@@ -272,7 +272,4 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       }
     }
   }
-  def printNews() = {
-  }
-
 }
