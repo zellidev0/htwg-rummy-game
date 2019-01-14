@@ -393,7 +393,7 @@ class ControllerSpec extends WordSpec with Matchers {
       val desk = deskBaseImpl.Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]](SortedSet(Tile(10, Color.BLUE, 0), Tile(10, Color.RED, 0), Tile(10, Color.GREEN, 0))))
       val controller = new Controller(desk)
       "be no file" in {
-        Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml")) should be(false)
+        Files.exists(Paths.get("/home/julian/Documents/se/rummy/test.xml")) should be(false)
       }
 
     }

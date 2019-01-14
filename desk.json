@@ -1,139 +1,69 @@
 {
-  "desk": {
-    "amountOfPlayers": 2,
-    "bagSize": 6,
-    "setsSize": 3,
-    "bag": [
-      {
-        "value": 11,
-        "color": "GREEN",
-        "ident": 1
-      },
-      {
-        "value": 10,
-        "color": "BLUE",
-        "ident": 0
-      },
-      {
-        "value": 5,
-        "color": "YELLOW",
-        "ident": 1
-      },
-      {
-        "value": 1,
-        "color": "GREEN",
-        "ident": 0
-      },
-      {
-        "value": 5,
-        "color": "YELLOW",
-        "ident": 0
-      },
-      {
-        "value": 4,
-        "color": "RED",
-        "ident": 0
-      }
-    ],
-    "players": [
-      {
-        "name": "player1",
-        "number": 1,
-        "state": "WAIT",
-        "tilesOnBoard": 1,
-        "board": [
-          {
-            "value": 3,
-            "color": "BLUE",
-            "ident": 0
-          }
-        ]
-      },
-      {
-        "name": "player2",
-        "number": 0,
-        "state": "TURN",
-        "tilesOnBoard": 2,
-        "board": [
-          {
-            "value": 10,
-            "color": "YELLOW",
-            "ident": 1
-          },
-          {
-            "value": 11,
-            "color": "YELLOW",
-            "ident": 1
-          }
-        ]
-      }
-    ],
-    "sets": [
-      {
-        "setSize": 3,
-        "struct": [
-          {
-            "value": 10,
-            "color": "RED",
-            "ident": 1
-          },
-          {
-            "value": 10,
-            "color": "BLUE",
-            "ident": 1
-          },
-          {
-            "value": 10,
-            "color": "GREEN",
-            "ident": 0
-          }
-        ]
-      },
-      {
-        "setSize": 4,
-        "struct": [
-          {
-            "value": 1,
-            "color": "RED",
-            "ident": 0
-          },
-          {
-            "value": 2,
-            "color": "BLUE",
-            "ident": 1
-          },
-          {
-            "value": 3,
-            "color": "RED",
-            "ident": 0
-          },
-          {
-            "value": 4,
-            "color": "YELLOW",
-            "ident": 1
-          }
-        ]
-      },
-      {
-        "setSize": 3,
-        "struct": [
-          {
-            "value": 12,
-            "color": "GREEN",
-            "ident": 1
-          },
-          {
-            "value": 12,
-            "color": "RED",
-            "ident": 1
-          },
-          {
-            "value": 12,
-            "color": "YELLOW",
-            "ident": 1
-          }
-        ]
-      }
-    ]
+  "desk" : {
+    "amountOfPlayers" : 2,
+    "bagSize" : 2,
+    "setsSize" : 1,
+    "bag" : [ {
+      "value" : 3,
+      "color" : "BLUE",
+      "ident" : 0
+    }, {
+      "value" : 5,
+      "color" : "RED",
+      "ident" : 0
+    } ],
+    "players" : [ {
+      "name" : "Name0",
+      "number" : 0,
+      "state" : "TURN",
+      "tilesOnBoard" : 3,
+      "board" : [ {
+        "value" : 1,
+        "color" : "RED",
+        "ident" : 1
+      }, {
+        "value" : 1,
+        "color" : "RED",
+        "ident" : 0
+      }, {
+        "value" : 2,
+        "color" : "RED",
+        "ident" : 0
+      } ]
+    }, {
+      "name" : "Name1",
+      "number" : 1,
+      "state" : "TURN",
+      "tilesOnBoard" : 3,
+      "board" : [ {
+        "value" : 1,
+        "color" : "RED",
+        "ident" : 1
+      }, {
+        "value" : 1,
+        "color" : "RED",
+        "ident" : 0
+      }, {
+        "value" : 2,
+        "color" : "RED",
+        "ident" : 0
+      } ]
+    } ],
+    "sets" : [ {
+      "setSize" : 3,
+      "struct" : [ {
+        "value" : 10,
+        "color" : "GREEN",
+        "ident" : 0
+      }, {
+        "value" : 10,
+        "color" : "RED",
+        "ident" : 0
+      }, {
+        "value" : 10,
+        "color" : "BLUE",
+        "ident" : 0
+      } ]
+    } ]
   }
 }

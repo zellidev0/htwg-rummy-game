@@ -41,9 +41,12 @@ class FileIO @Inject() extends FileIOInterface {
     var ssets = Set[SortedSet[TileInterface]]()
     for (i <- 0 until (json \ "desk" \ "setsSize").get.toString.toInt) {
       var sortedSet = SortedSet[TileInterface]()
-      //      for (i <- 0 until (json \\ "setSize") (i).as[Int]) {
-      //        sortedSet = sortedSet + Tile((json \\ "value") (i).as[Int], Color.colorFromString((json \\ "color") (i).as[String]), (json \\ "ident") (i).as[Int])
-      //      }
+      for (j <- 0 until ((json \ "desk" \ "sets") (i) \ "setSize").as[Int]) {
+        val value = (((json \ "desk" \  "sets") (i) \ "struct") (j) \ "value").as[Int]
+        val color = (((json \ "desk" \  "sets") (i) \ "struct") (j) \ "color").as[String]
+        val ident = (((json \ "desk" \  "sets") (i) \ "struct") (j) \ "ident").as[Int]
+        sortedSet = sortedSet + Tile(value, Color.colorFromString(color), ident)
+      }
       ssets = ssets + sortedSet
     }
 
