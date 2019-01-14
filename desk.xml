@@ -1,0 +1,126 @@
+<desk amountOfPlayers="2">
+    <players>
+        <player name="Insert Name here" number="1" state="WAIT">
+            <board>
+                <tile identifier="10G1"></tile>
+                <tile identifier="13Y1"></tile>
+                <tile identifier="3R1"></tile>
+                <tile identifier="6B0"></tile>
+                <tile identifier="6R1"></tile>
+                <tile identifier="5G1"></tile>
+                <tile identifier="11G0"></tile>
+                <tile identifier="9B0"></tile>
+                <tile identifier="4R0"></tile>
+                <tile identifier="11R0"></tile>
+                <tile identifier="5Y0"></tile>
+                <tile identifier="12Y1"></tile>
+                <tile identifier="9Y1"></tile>
+                <tile identifier="1Y1"></tile>
+                <tile identifier="10R0"></tile>
+                <tile identifier="12B1"></tile>
+                <tile identifier="7Y0"></tile>
+            </board>
+        </player>
+        <player name="Insert Name here" number="0" state="TURN">
+            <board>
+                <tile identifier="12Y0"></tile>
+                <tile identifier="10R1"></tile>
+                <tile identifier="4B1"></tile>
+                <tile identifier="13G0"></tile>
+                <tile identifier="13R1"></tile>
+                <tile identifier="10Y0"></tile>
+                <tile identifier="8R1"></tile>
+                <tile identifier="6R0"></tile>
+                <tile identifier="7B1"></tile>
+                <tile identifier="12G1"></tile>
+                <tile identifier="13R0"></tile>
+                <tile identifier="10B0"></tile>
+                <tile identifier="2B1"></tile>
+                <tile identifier="2G0"></tile>
+            </board>
+        </player>
+    </players>
+    <bagOfTiles>
+        <tile identifier="12G0"></tile>
+        <tile identifier="9Y0"></tile>
+        <tile identifier="2R0"></tile>
+        <tile identifier="1R0"></tile>
+        <tile identifier="11R1"></tile>
+        <tile identifier="3Y0"></tile>
+        <tile identifier="12B0"></tile>
+        <tile identifier="9G1"></tile>
+        <tile identifier="10G0"></tile>
+        <tile identifier="11B0"></tile>
+        <tile identifier="8B0"></tile>
+        <tile identifier="4G0"></tile>
+        <tile identifier="1B1"></tile>
+        <tile identifier="6G0"></tile>
+        <tile identifier="1Y0"></tile>
+        <tile identifier="4Y1"></tile>
+        <tile identifier="1B0"></tile>
+        <tile identifier="6G1"></tile>
+        <tile identifier="3B1"></tile>
+        <tile identifier="9B1"></tile>
+        <tile identifier="7G0"></tile>
+        <tile identifier="1G0"></tile>
+        <tile identifier="6B1"></tile>
+        <tile identifier="9R0"></tile>
+        <tile identifier="11Y1"></tile>
+        <tile identifier="2Y0"></tile>
+        <tile identifier="8Y1"></tile>
+        <tile identifier="2R1"></tile>
+        <tile identifier="2G1"></tile>
+        <tile identifier="5R1"></tile>
+        <tile identifier="3B0"></tile>
+        <tile identifier="7G1"></tile>
+        <tile identifier="4G1"></tile>
+        <tile identifier="5R0"></tile>
+        <tile identifier="10Y1"></tile>
+        <tile identifier="8Y0"></tile>
+        <tile identifier="7Y1"></tile>
+        <tile identifier="9R1"></tile>
+        <tile identifier="12R0"></tile>
+        <tile identifier="4R1"></tile>
+        <tile identifier="2Y1"></tile>
+        <tile identifier="4B0"></tile>
+        <tile identifier="8G0"></tile>
+        <tile identifier="5B0"></tile>
+        <tile identifier="7R0"></tile>
+        <tile identifier="8B1"></tile>
+        <tile identifier="1G1"></tile>
+        <tile identifier="3G0"></tile>
+        <tile identifier="7B0"></tile>
+        <tile identifier="8G1"></tile>
+        <tile identifier="11Y0"></tile>
+        <tile identifier="6Y1"></tile>
+        <tile identifier="12R1"></tile>
+        <tile identifier="7R1"></tile>
+        <tile identifier="10B1"></tile>
+        <tile identifier="6Y0"></tile>
+        <tile identifier="2B0"></tile>
+        <tile identifier="11G1"></tile>
+        <tile identifier="1R1"></tile>
+        <tile identifier="11B1"></tile>
+        <tile identifier="8R0"></tile>
+        <tile identifier="4Y0"></tile>
+        <tile identifier="13B0"></tile>
+        <tile identifier="9G0"></tile>
+    </bagOfTiles>
+    <sets>
+        <sortedSet>
+            <tile identifier="13G1"></tile>
+            <tile identifier="13B1"></tile>
+            <tile identifier="13Y0"></tile>
+        </sortedSet>
+        <sortedSet>
+            <tile identifier="3G1"></tile>
+            <tile identifier="3Y1"></tile>
+            <tile identifier="3R0"></tile>
+        </sortedSet>
+        <sortedSet>
+            <tile identifier="5B1"></tile>
+            <tile identifier="5G0"></tile>
+            <tile identifier="5Y1"></tile>
+        </sortedSet>
+    </sets>
+</desk>
