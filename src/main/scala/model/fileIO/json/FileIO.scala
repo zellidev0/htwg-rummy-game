@@ -16,33 +16,31 @@ class FileIO extends FileIOInterface {
   override def load: DeskInterface = {
     var desk: DeskInterface = null
     val json: JsValue = Json.parse(Source.fromFile("desk.json").getLines.mkString)
-    val bagSize = (json \ "desk" \ "bagSize").get.toString.toInt
     var players = Set[PlayerInterface]()
     var bagOfTiles = Set[TileInterface]()
-    var ssets = Set[SortedSet[TileInterface]]()
     for (i <- 0 until (json \ "desk" \ "amountOfPlayers").get.toString.toInt) {
-      val playerName = (json \\ "name") (i).as[String]
-      val playerNumber = (json \\ "number") (i).as[Int]
-      val playerState = (json \\ "state") (i).as[String]
+      val name = ((json \ "desk" \ "players") (i) \ "name").as[String]
+      val number = ((json \ "desk" \ "players") (i) \ "number").as[Int]
+      val state = ((json \ "desk" \ "players") (i) \ "state").as[String]
       var board: BoardInterface = Board(SortedSet[TileInterface]())
-      for (i <- 0 until (json \\ "tilesOnBoard") (i).as[Int]) {
-        board = board + Tile((json \\ "value") (i).as[Int], Color.colorFromString((json \\ "color") (i).as[String]), (json \\ "ident") (i).as[Int])
+      for (j <- 0 until ((json \ "desk" \ "players") (i) \ "tilesOnBoard").as[Int]) {
+        val z = (((json \ "desk" \ "players") (i) \ "board") (j) \ "value").as[Int]
+        //        board = board + Tile(z.as[Int], Color.colorFromString(z.as[String]), z.as[Int])
+        board = board
       }
-      players = players + Player(playerName, playerNumber, board, State.stringToState(playerState))
+      players = players + Player(name, number, board, State.stringToState(state))
     }
-    for (i <- 0 until bagSize) {
-      bagOfTiles = bagOfTiles + Tile((json \\ "value") (i).as[Int], Color.colorFromString((json \\ "color") (i).as[String]), (json \\ "ident") (i).as[Int])
+    for (i <- 0 until (json \ "desk" \ "bagSize").get.toString.toInt) {
+      bagOfTiles = bagOfTiles + Tile(((json \ "desk" \ "bag") (i) \ "value").as[Int], Color.colorFromString(((json \ "desk" \ "bag") (i) \ "color").as[String]), ((json \ "desk" \ "bag") (i) \ "ident").as[Int])
     }
-    //    var set = Set[SortedSet[TileInterface]]()
-    //    var y = (json \ "desk" \ "setsSize").get.toString.toInt
-    //    for (i <- 0 until y) {
-    //      var x = (json \\ "setSize") (i).as[Int]
-    //      var sortedSet = SortedSet[TileInterface]()
-    //      for (j <- 0 until (json \\ "setSize") (i).as[Int]) {
-    //        sortedSet = sortedSet + Tile((json \\ "value") (j).as[Int], Color.colorFromString((json \\ "color") (j).as[String]), (json \\ "ident") (j).as[Int])
-    //      }
-    //      set = set + sortedSet
-    //    }
+    var ssets = Set[SortedSet[TileInterface]]()
+    for (i <- 0 until (json \ "desk" \ "setsSize").get.toString.toInt) {
+      var sortedSet = SortedSet[TileInterface]()
+      //      for (i <- 0 until (json \\ "setSize") (i).as[Int]) {
+      //        sortedSet = sortedSet + Tile((json \\ "value") (i).as[Int], Color.colorFromString((json \\ "color") (i).as[String]), (json \\ "ident") (i).as[Int])
+      //      }
+      ssets = ssets + sortedSet
+    }
 
 
     desk = Desk(players, bagOfTiles, ssets)
@@ -106,13 +104,15 @@ class FileIO extends FileIOInterface {
           for {
             set <- desk.sets
           } yield {
-            Json.toJson(
-              "setSize" -> JsNumber(set.size),
-              for {
-                tile <- set
-              } yield {
-                Json.toJson(tile)
-              }
+            Json.obj(
+              "setSize" -> set.size,
+              "struct" -> Json.toJson(
+                for {
+                  tile <- set
+                } yield {
+                  Json.toJson(tile)
+                }
+              )
             )
           }
         )

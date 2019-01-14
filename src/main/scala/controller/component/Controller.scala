@@ -7,7 +7,7 @@ import controller.component.ContState._
 import controller.component.command._
 import model.component.component.component.{Color, Tile}
 import model.component.component.{PlayerInterface, TileInterface}
-import model.fileIO.xml.FileIO
+import model.fileIO.json.FileIO
 import model.{component, _}
 import util.UndoManager
 
