@@ -1,5 +1,7 @@
 package controller.component
 
+import java.nio.file.{Files, Paths}
+
 import com.google.inject.name.Names
 import com.google.inject.{Guice, Inject}
 import controller.ControllerInterface
@@ -7,6 +9,7 @@ import controller.component.ContState._
 import controller.component.command._
 import model.component.component.component.{Color, Tile}
 import model.component.component.{PlayerInterface, TileInterface}
+import model.fileIO.json.FileIO
 import model.{component, _}
 import util.UndoManager
 
@@ -17,14 +20,24 @@ class Controller @Inject()(var desk: DeskInterface) extends ControllerInterface 
 
   var cState: Value = MENU
   private val undoManager = new UndoManager
+  private val fileIO = new FileIO
   var userPutTileDown = 0
   val injector = Guice.createInjector(new RummyModule)
 
   /*userFinishedPlay fully tested*/
   override def userFinishedPlay(): Unit = {
     if (userPutTileDown == 0) {
-      undoManager.doStep(new TakeTileCommand(this))
+      if (desk.bagOfTiles.isEmpty) {
+        swState(BAG_IS_EMPTY)
+        swState(ContState.MENU)
+      } else {
+        undoManager.doStep(new TakeTileCommand(this))
+      }
     } else if (desk.checkTable()) {
+      if (desk.currentPlayerWon()) {
+        swState(P_WON)
+        return
+      }
       undoManager.doStep(new FinishedCommand(userPutTileDown, this))
     } else {
       swState(TABLE_NOT_CORRECT)
@@ -37,8 +50,9 @@ class Controller @Inject()(var desk: DeskInterface) extends ControllerInterface 
   }
   /*moveTile fully tested*/
   override def moveTile(tile1: String, tile2: String): Unit = {
-    if (!desk.setsContains(regexToTile(tile1)) || !desk.setsContains(regexToTile(tile2))) {
-      swState(TILE_NOT_ON_TABLE)
+    val t = Tile(-1, Color.RED, -1)
+    if (!desk.setsContains(t.stringToTile(tile1)) || !desk.setsContains(t.stringToTile(tile2))) {
+      swState(CANT_MOVE_THIS_TILE)
       swState(ContState.P_TURN)
     } else {
       undoManager.doStep(new MoveTileCommand(tile1, tile2, this))
@@ -57,7 +71,8 @@ class Controller @Inject()(var desk: DeskInterface) extends ControllerInterface 
   }
   /*layDownTile fully tested*/
   override def layDownTile(tile: String): Unit = {
-    if (!currentP.hasTile(regexToTile(tile))) {
+    val t = Tile(-1, Color.RED, -1)
+    if (!currentP.hasTile(t.stringToTile(tile))) {
       swState(P_DOES_NOT_OWN_TILE)
       swState(ContState.P_TURN)
     } else {
@@ -135,7 +150,25 @@ class Controller @Inject()(var desk: DeskInterface) extends ControllerInterface 
 
   override def viewOfBoard: SortedSet[TileInterface] = desk.viewOfBoard
 
-  override def init(): Unit = desk = injector.instance[DeskInterface](Names.named("Default"))
+  override def storeFile: Unit = {
+    fileIO.save(desk)
+    val oldState = cState
+    swState(STORE_FILE)
+    swState(oldState)
+  }
 
+  override def loadFile: Unit = {
+    if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.json"))) {
+      desk = fileIO.load
+      swState(LOAD_FILE)
+      swState(START)
+      swState(P_TURN)
+    } else {
+      swState(COULD_NOT_LOAD_FILE)
+      createDesk(12)
+    }
+
+
+  }
 }
 

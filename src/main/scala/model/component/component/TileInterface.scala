@@ -11,5 +11,6 @@ trait TileInterface extends Ordered[TileInterface] {
   def getColor: Color.Value
   def getIdent: Int
   def identifier: String = getValue.toString + getColor.toString.charAt(0) + getIdent
+  def stringToTile(string: String): TileInterface
 
 }

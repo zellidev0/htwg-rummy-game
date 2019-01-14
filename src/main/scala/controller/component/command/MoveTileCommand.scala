@@ -3,6 +3,7 @@ package controller.component.command
 import controller.component.Controller
 import model.component.Desk
 import model.component.component.TileInterface
+import model.component.component.component.{Color, Tile}
 import util.Command
 
 import scala.collection.SortedSet
@@ -12,27 +13,30 @@ class MoveTileCommand(tile1: String, tile2: String, controller: Controller) exte
 
 
   override def doStep: Unit = {
-    setWithTile = Option(controller.desk.sets.find(s => s.contains(controller.regexToTile(tile1))).get.head)
+    val t = Tile(-1, Color.RED, -1)
+    setWithTile = Option(controller.desk.sets.find(s => s.contains(t.stringToTile(tile1))).get.head)
     if (setWithTile.get.identifier == tile1) {
       setWithTile = None
     }
-    controller.desk = controller.desk.moveTwoTilesOnDesk(controller.regexToTile(tile1), controller.regexToTile(tile2))
+    controller.desk = controller.desk.moveTwoTilesOnDesk(t.stringToTile(tile1), t.stringToTile(tile2))
     controller.notifyObservers()
   }
 
 
   override def undoStep: Unit = {
+    val t = Tile(-1, Color.RED, -1)
     setWithTile match {
-      case Some(x) => controller.desk = controller.desk.moveTwoTilesOnDesk(controller.regexToTile(tile1), x)
+      case Some(x) => controller.desk = controller.desk.moveTwoTilesOnDesk(t.stringToTile(tile1), x)
       case None =>
-        controller.removeTileFromSet(controller.regexToTile(tile1))
-        controller.desk = Desk(sets = controller.desk.sets + SortedSet[TileInterface](controller.regexToTile(tile1)), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
+        controller.removeTileFromSet(t.stringToTile(tile1))
+        controller.desk = Desk(sets = controller.desk.sets + SortedSet[TileInterface](t.stringToTile(tile1)), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
     }
     controller.notifyObservers()
   }
 
   override def redoStep: Unit = {
-    controller.desk = controller.desk.moveTwoTilesOnDesk(controller.regexToTile(tile1), controller.regexToTile(tile2))
+    val t = Tile(-1, Color.RED, -1)
+    controller.desk = controller.desk.moveTwoTilesOnDesk(t.stringToTile(tile1), t.stringToTile(tile2))
     controller.notifyObservers()
   }
 }

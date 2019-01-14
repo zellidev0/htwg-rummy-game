@@ -1,5 +1,8 @@
 package controller
 
+import java.nio.file.{Files, Paths}
+
+import controller.component.ContState.{MENU, P_WON}
 import controller.component.{ContState, Controller}
 import model.component.Desk
 import model.component.component.component._
@@ -39,6 +42,30 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.desk.sets.size should be(1)
       }
     }
+    "usr finishes play and wins" should {
+      val player1 = Player("Name0", 0, Board(SortedSet[TileInterface]()), state = State.TURN)
+      val player2 = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
+      val players = Set[PlayerInterface](player1, player2)
+      val desk = Desk(players, Set(), Set[SortedSet[TileInterface]]())
+      val controller = new Controller(desk)
+      controller.userPutTileDown = 1
+      controller.userFinishedPlay()
+      "user should win " in {
+        controller.cState should be(P_WON)
+      }
+    }
+    "user finished play and bag is empty" should {
+      val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))), state = State.TURN)
+      val player2 = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
+      val players = Set[PlayerInterface](player1, player2)
+      val desk = Desk(players, Set(), Set[SortedSet[TileInterface]]())
+      val controller = new Controller(desk)
+      controller.userFinishedPlay()
+      "bag be empty " in {
+        controller.desk.bagOfTiles.isEmpty should be(true)
+        controller.cState should be(MENU)
+      }
+    }
     "should move two correct and movable tiles" should {
       val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN), Player("Name2", 1, Board(SortedSet[TileInterface]())))
       val desk = Desk(players, Set(), Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0))))
@@ -68,29 +95,6 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.desk.sets.size should be(1)
         controller.desk.sets.contains(SortedSet[TileInterface](Tile(1, Color.RED, 0))) should be(true)
         controller.desk.sets.contains(SortedSet[TileInterface](Tile(1, Color.RED, 1))) should be(false)
-      }
-    }
-    "get tile from regex" should {
-      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]())))
-      val desk = Desk(players, Set(), Set[SortedSet[TileInterface]]())
-      val controller = new Controller(desk)
-      val tile0 = controller.regexToTile("1R0")
-      val tile1 = controller.regexToTile("10R1")
-      val tile2 = controller.regexToTile("2B0")
-      val tile3 = controller.regexToTile("11B1")
-      val tile4 = controller.regexToTile("3Y0")
-      val tile5 = controller.regexToTile("12Y1")
-      val tile6 = controller.regexToTile("4G0")
-      val tile7 = controller.regexToTile("13G1")
-      "get the tile" in {
-        tile0 should be(Tile(1, Color.RED, 0))
-        tile1 should be(Tile(10, Color.RED, 1))
-        tile2 should be(Tile(2, Color.BLUE, 0))
-        tile3 should be(Tile(11, Color.BLUE, 1))
-        tile4 should be(Tile(3, Color.YELLOW, 0))
-        tile5 should be(Tile(12, Color.YELLOW, 1))
-        tile6 should be(Tile(4, Color.GREEN, 0))
-        tile7 should be(Tile(13, Color.GREEN, 1))
       }
     }
     "adding a player and have less than 4" should {
@@ -390,6 +394,35 @@ class ControllerSpec extends WordSpec with Matchers {
       "return this view" in {
         controller.viewOfBoard should be(SortedSet[TileInterface](Tile(3, Color.BLUE, 0)))
       }
+    }
+    "reading a file" should {
+      //ATTENTION, will fail if file desk.xml exists. please remove file before running test
+      val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))), state = State.TURN)
+      val player2 = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))), state = State.TURN)
+      val players = Set[PlayerInterface](player1, player2)
+      val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]](SortedSet(Tile(10, Color.BLUE, 0), Tile(10, Color.RED, 0), Tile(10, Color.GREEN, 0))))
+      val controller = new Controller(desk)
+      "be no file" in {
+        Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml")) should be(false)
+      }
+
+    }
+    "storing a file" should {
+      //ATTENTION, will fail if file desk.xml exists. please remove file before running test
+      val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))), state = State.TURN)
+      val player2 = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))), state = State.TURN)
+      val players = Set[PlayerInterface](player1, player2)
+      val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]](SortedSet(Tile(10, Color.BLUE, 0), Tile(10, Color.RED, 0), Tile(10, Color.GREEN, 0))))
+      val controller = new Controller(desk)
+      "be no file" in {
+        Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml")) should be(false)
+        controller.storeFile()
+        controller.loadFile()
+      }
+      "be a file now" in {
+        Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml")) should be(true)
+      }
+
     }
   }
 }
