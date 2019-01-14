@@ -2,20 +2,24 @@ package de.htwg.se.rummy
 
 import com.google.inject.{Guice, Injector}
 import de.htwg.se.rummy.controller.ControllerInterface
-import de.htwg.se.rummy.view.component.Tui
+import de.htwg.se.rummy.controller.component.Controller
+import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{Desk, PlayerInterface, TileInterface}
+import de.htwg.se.rummy.view.component.{Gui, Tui}
+
+import scala.collection.SortedSet
 
 object Rummy {
 
   val injector: Injector = Guice.createInjector(new RummyModule)
-  val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
-  //  val defalutPlayer: Set[PlayerInterface] = Set[PlayerInterface]()
-  //  val defalutBag: Set[TileInterface] = Set[TileInterface]()
-  //  val defalutSet: Set[SortedSet[TileInterface]] = Set[SortedSet[TileInterface]]()
-  //
-  //  val desk = deskBaseImpl.Desk(defalutPlayer, defalutBag, defalutSet)
-  //  val controller: ControllerInterface = new Controller(desk)
+  //  val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
+  val defalutPlayer: Set[PlayerInterface] = Set[PlayerInterface]()
+  val defalutBag: Set[TileInterface] = Set[TileInterface]()
+  val defalutSet: Set[SortedSet[TileInterface]] = Set[SortedSet[TileInterface]]()
+
+  val desk = Desk(defalutPlayer, defalutBag, defalutSet)
+  val controller: ControllerInterface = new Controller(desk)
   val tui = new Tui(controller)
-  //    val gui = new Gui(controller)
+  val gui = new Gui(controller)
 
 
   def main(args: Array[String]): Unit = {

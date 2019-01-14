@@ -13,7 +13,6 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Color, Tile}
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{PlayerInterface, TileInterface}
 import de.htwg.se.rummy.model.fileIO.FileIOInterface
 import de.htwg.se.rummy.util.UndoManager
-import javax.inject.Inject
 import net.codingwell.scalaguice.InjectorExtensions._
 
 //import de.htwg.se.rummy.model.fileIO.json.FileIO
@@ -21,7 +20,7 @@ import net.codingwell.scalaguice.InjectorExtensions._
 import scala.collection.SortedSet
 
 
-class Controller @Inject()(var desk: DeskInterface) extends ControllerInterface {
+class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   var cState = MENU
   private val undoManager = new UndoManager
