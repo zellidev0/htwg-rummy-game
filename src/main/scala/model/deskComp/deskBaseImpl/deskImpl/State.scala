@@ -1,4 +1,4 @@
-package model.component.component.component
+package model.deskComp.deskBaseImpl.deskImpl
 
 object State extends Enumeration {
   type state = Value

@@ -71,14 +71,14 @@ class Tui(contr: ControllerInterface) extends UIInterface {
             "|  to put A in where B is                                                               |\n" +
             "| Type 'f' to finish (and take a tile automatically if you did nothing)                 |\n" +
             "|---------------------------------------------------------------------------------------|\n\n",
-          contr.currentP.getName)
+          contr.currentP.name)
         printUserBoard()
         printTable()
       case ContState.INSERTED_NAME => println("\tNEWS:\tPlayer " + contr.getAmountOfPlayers + " is added\n\tNEWS:\tType in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
       case ContState.NOT_ENOUGH_PS => println("\tNEWS:\tNot enough Players. Type <c> to create a desk and insert names")
       case ContState.MENU => println("\tNEWS:\tYou're finished. Great. Now type in 's' and enter to start.")
       case ContState.P_WON =>
-        printf("FFFFFF  I  NN   N  I  SSSSS  H   H  EEEEE  DDD\nF       I  N N  N  I  SS     H   H  E      D  D\nFFFFFF  I  N  N N  I  SSSSS  HHHHH  EEEEE  D   D\nF       I  N  N N  I     SS  H   H  E      D  D\nF       I  N   NN  I  SSSSS  H   H  EEEEE  DDD\n\n\n%s is the winner.\n", contr.currentP.getName)
+        printf("FFFFFF  I  NN   N  I  SSSSS  H   H  EEEEE  DDD\nF       I  N N  N  I  SS     H   H  E      D  D\nFFFFFF  I  N  N N  I  SSSSS  HHHHH  EEEEE  D   D\nF       I  N  N N  I     SS  H   H  E      D  D\nF       I  N   NN  I  SSSSS  H   H  EEEEE  DDD\n\n\n%s is the winner.\n", contr.currentP.name)
         System.exit(0)
       case ContState.PLAYER_REMOVED => println("\tNEWS:\tYou removed the player you inserted .")
       case ContState.UNDO_LAY_DOWN_TILE => println("\tNEWS:\tYou took the tile up.")
@@ -95,21 +95,21 @@ class Tui(contr: ControllerInterface) extends UIInterface {
       "|---------------------------------------------------------------------------------------|\n" +
         "| %20s thats on your board.                                             |\n" +
         "|---------------------------------------------------------------------------------------|\n",
-      contr.currentP.getName)
+      contr.currentP.name)
     for (_ <- contr.viewOfBoard) {
       print("____ ")
     }
     println()
     for (tile <- contr.viewOfBoard) {
-      printf("|%2s| ", tile.getValue)
+      printf("|%2s| ", tile.value)
     }
     println()
     for (tile <- contr.viewOfBoard) {
-      printf("|%s | ", tile.getColor.toString.charAt(0))
+      printf("|%s | ", tile.color.toString.charAt(0))
     }
     println()
     for (tile <- contr.viewOfBoard) {
-      printf("|%s | ", tile.getIdent)
+      printf("|%s | ", tile.ident)
     }
     println()
     for (_ <- contr.viewOfBoard) {
@@ -124,22 +124,22 @@ class Tui(contr: ControllerInterface) extends UIInterface {
       "|---------------------------------------------------------------------------------------|\n" +
         "| %20s thats on the desk.                                               |\n" +
         "|---------------------------------------------------------------------------------------|\n\n",
-      contr.currentP.getName)
+      contr.currentP.name)
     for (sortedSet <- contr.getTileSet) {
       for (_ <- sortedSet) {
         print("____ ")
       }
       println()
       for (tile <- sortedSet) {
-        printf("|%2s| ", tile.getValue)
+        printf("|%2s| ", tile.value)
       }
       println()
       for (tile <- sortedSet) {
-        printf("|%s | ", tile.getColor.toString.charAt(0))
+        printf("|%s | ", tile.color.toString.charAt(0))
       }
       println()
       for (tile <- sortedSet) {
-        printf("|%s | ", tile.getIdent)
+        printf("|%s | ", tile.ident)
       }
       println()
       for (tile <- sortedSet) {

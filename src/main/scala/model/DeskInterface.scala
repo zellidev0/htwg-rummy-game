@@ -1,7 +1,7 @@
 package model
 
-import model.component.Desk
-import model.component.component.{PlayerInterface, TileInterface}
+import model.deskComp.Desk
+import model.deskComp.deskBaseImpl.{PlayerInterface, TileInterface}
 
 import scala.collection.SortedSet
 

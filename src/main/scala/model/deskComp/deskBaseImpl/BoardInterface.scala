@@ -1,9 +1,10 @@
-package model.component.component
+package model.deskComp.deskBaseImpl
 
 import scala.collection.SortedSet
 
 
 trait BoardInterface {
+  val tiles: SortedSet[TileInterface]
 
   def isEmpty: Boolean
 
@@ -14,7 +15,5 @@ trait BoardInterface {
   def -(tile: TileInterface): BoardInterface
 
   def contains(tile: TileInterface): Boolean
-
-  def getTiles(): SortedSet[TileInterface]
 
 }

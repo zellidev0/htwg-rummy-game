@@ -1,7 +1,7 @@
 package controller.component.command
 
 import controller.component.{ContState, Controller}
-import model.component.component.component.{Color, Tile}
+import model.deskComp.deskBaseImpl.deskImpl.{Color, Tile}
 import util.Command
 
 class LayDownCommand(tile: String, controller: Controller) extends Command {

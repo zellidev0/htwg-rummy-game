@@ -4,9 +4,9 @@ import java.nio.file.{Files, Paths}
 
 import controller.component.ContState.{MENU, P_WON}
 import controller.component.{ContState, Controller}
-import model.component.Desk
-import model.component.component.component._
-import model.component.component.{TileInterface, _}
+import model.deskComp.Desk
+import model.deskComp.deskBaseImpl.deskImpl._
+import model.deskComp.deskBaseImpl.{TileInterface, _}
 import org.scalatest.{Matchers, WordSpec}
 
 import scala.collection.SortedSet
@@ -26,19 +26,19 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.userFinishedPlay()
       "userPutTileDown be 0 " in {
         controller.desk.players.size should be(4)
-        controller.desk.players.find(_.getNumber == 0).get.getTiles.size should be(2)
+        controller.desk.players.find(_.number == 0).get.tiles.size should be(2)
       }
       controller.switchToNextPlayer()
       controller.userPutTileDown += 1
       controller.userFinishedPlay()
       "userPutTileDown be 1 and table is ok " in {
-        player1.getTiles.size should be(1)
+        player1.tiles.size should be(1)
       }
       controller.layDownTile("2R0")
       controller.userFinishedPlay()
       "table be not correct " in {
-        player1.getTiles.size should be(1)
-        player2.getTiles.size should be(1)
+        player1.tiles.size should be(1)
+        player2.tiles.size should be(1)
         controller.desk.sets.size should be(1)
       }
     }
@@ -140,33 +140,33 @@ class ControllerSpec extends WordSpec with Matchers {
       val players = Set[PlayerInterface](player0, player1, player2, player3)
       val controller = new Controller(Desk(players, Set(), Set[SortedSet[TileInterface]]()))
       "have the correct previous, current and next player" in {
-        controller.previousP.getNumber should be(player3.getNumber)
-        controller.currentP.getNumber should be(player0.getNumber)
-        controller.nextP.getNumber should be(player1.getNumber)
+        controller.previousP.number should be(player3.number)
+        controller.currentP.number should be(player0.number)
+        controller.nextP.number should be(player1.number)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player1" in {
-        controller.previousP.getNumber should be(player0.getNumber)
-        controller.currentP.getNumber should be(player1.getNumber)
-        controller.nextP.getNumber should be(player2.getNumber)
+        controller.previousP.number should be(player0.number)
+        controller.currentP.number should be(player1.number)
+        controller.nextP.number should be(player2.number)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player2" in {
-        controller.previousP.getNumber should be(player1.getNumber)
-        controller.currentP.getNumber should be(player2.getNumber)
-        controller.nextP.getNumber should be(player3.getNumber)
+        controller.previousP.number should be(player1.number)
+        controller.currentP.number should be(player2.number)
+        controller.nextP.number should be(player3.number)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player3" in {
-        controller.previousP.getNumber should be(player2.getNumber)
-        controller.currentP.getNumber should be(player3.getNumber)
-        controller.nextP.getNumber should be(player0.getNumber)
+        controller.previousP.number should be(player2.number)
+        controller.currentP.number should be(player3.number)
+        controller.nextP.number should be(player0.number)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player4" in {
-        controller.previousP.getNumber should be(player3.getNumber)
-        controller.currentP.getNumber should be(player0.getNumber)
-        controller.nextP.getNumber should be(player1.getNumber)
+        controller.previousP.number should be(player3.number)
+        controller.currentP.number should be(player0.number)
+        controller.nextP.number should be(player1.number)
       }
     }
     "name input finished" should {
@@ -186,16 +186,6 @@ class ControllerSpec extends WordSpec with Matchers {
       "when having correct amount of players" in {
         oldState should be(ContState.INSERTING_NAMES)
         controller.cState should be(ContState.P_TURN)
-      }
-    }
-    "getting tile sets" should {
-      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN))
-      val sets = Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0)))
-      val desk = Desk(players, Set(), sets)
-      val controller = new Controller(desk)
-      val oldState = controller.cState
-      "be sets" in {
-        controller.getTileSet should be(sets)
       }
     }
     "get amount of players" should {
@@ -356,15 +346,15 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.switchToNextPlayer()
       "userPutTileDown be 1" in {
-        controller.currentP.getNumber should be(1)
+        controller.currentP.number should be(1)
         controller.undo
       }
       "undo" in {
-        controller.currentP.getNumber should be(0)
+        controller.currentP.number should be(0)
         controller.redo
       }
       "redo" in {
-        controller.currentP.getNumber should be(1)
+        controller.currentP.number should be(1)
       }
     }
     "calling undo redo when taking a tile" should {
@@ -375,15 +365,15 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.userPutTileDown = 0
       controller.userFinishedPlay()
       "userPutTileDown be 1" in {
-        controller.currentP.getTiles.size should be(1)
+        controller.currentP.tiles.size should be(1)
         controller.undo
       }
       "undo" in {
-        controller.currentP.getTiles.size should be(0)
+        controller.currentP.tiles.size should be(0)
         controller.redo
       }
       "redo" in {
-        controller.currentP.getTiles.size should be(1)
+        controller.currentP.tiles.size should be(1)
       }
     }
     "accessing view of board" should {

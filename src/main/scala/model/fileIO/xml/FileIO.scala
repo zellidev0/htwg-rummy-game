@@ -1,9 +1,9 @@
 package model.fileIO.xml
 
 import model.DeskInterface
-import model.component.Desk
-import model.component.component.component._
-import model.component.component.{BoardInterface, PlayerInterface, TileInterface}
+import model.deskComp.Desk
+import model.deskComp.deskBaseImpl.deskImpl._
+import model.deskComp.deskBaseImpl.{BoardInterface, PlayerInterface, TileInterface}
 import model.fileIO.FileIOInterface
 
 import scala.collection.SortedSet
@@ -86,10 +86,10 @@ class FileIO extends FileIOInterface {
 
 
   private def playerToXml(player: PlayerInterface) = {
-    <player name={player.getName.toString}
-            number={player.getNumber.toString}
-            state={player.getState.toString}>
-      {boardToXml(player.getTiles)}
+    <player name={player.name.toString}
+            number={player.number.toString}
+            state={player.state.toString}>
+      {boardToXml(player.tiles)}
     </player>
   }
 

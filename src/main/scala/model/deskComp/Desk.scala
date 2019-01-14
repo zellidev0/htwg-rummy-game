@@ -1,15 +1,14 @@
-package model.component
+package model.deskComp
 
 import com.google.inject.Inject
-import com.google.inject.name.Named
 import model._
-import model.component.component._
-import model.component.component.component.{Color, State}
+import model.deskComp.deskBaseImpl._
+import model.deskComp.deskBaseImpl.deskImpl.{Color, State}
 
 import scala.collection.SortedSet
 import scala.util.Random
 
-case class Desk @Inject()(@Named("Default") players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], sets: Set[SortedSet[TileInterface]]) extends DeskInterface {
+case class Desk @Inject()(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], sets: Set[SortedSet[TileInterface]]) extends DeskInterface {
   val minSize = 3
 
   /*takeUpTile fully tested*/
@@ -34,10 +33,10 @@ case class Desk @Inject()(@Named("Default") players: Set[PlayerInterface], bagOf
     var first = x.apply(0)
     for (i <- x.indices) {
       if (i != x.length - 1) {
-        if (first.getValue != x.apply(i + 1).getValue - 1 || first.getColor != x.apply(i + 1).getColor) return false
+        if (first.value != x.apply(i + 1).value - 1 || first.color != x.apply(i + 1).color) return false
         first = x.apply(i + 1)
       } else {
-        if (first.getValue != x.apply(i - 1).getValue + 1 || first.getColor != x.apply(i - 1).getColor) return false
+        if (first.value != x.apply(i - 1).value + 1 || first.color != x.apply(i - 1).color) return false
       }
     }
     true
@@ -49,15 +48,15 @@ case class Desk @Inject()(@Named("Default") players: Set[PlayerInterface], bagOf
     }
     var setOfValues = Set[Int]()
     var setOfColors = Set[Color.Value]()
-    set.foreach(t => setOfValues += t.getValue)
-    set.foreach(t => setOfColors += t.getColor)
+    set.foreach(t => setOfValues += t.value)
+    set.foreach(t => setOfColors += t.color)
     if (setOfValues.size != 1 || setOfColors.size != set.size) return false
     true
   }
   /*previousP fully tested*/
-  override def previousP: PlayerInterface = if (currentP.getNumber - 1 < 0) players.find(_.getNumber == players.size - 1).get else players.find(_.getNumber == currentP.getNumber - 1).get
+  override def previousP: PlayerInterface = if (currentP.number - 1 < 0) players.find(_.number == players.size - 1).get else players.find(_.number == currentP.number - 1).get
   /*nextP fully tested*/
-  override def nextP: PlayerInterface = if (currentP.getNumber + 1 == players.size) players.find(_.getNumber == 0).get else players.find(_.getNumber == currentP.getNumber + 1).get
+  override def nextP: PlayerInterface = if (currentP.number + 1 == players.size) players.find(_.number == 0).get else players.find(_.number == currentP.number + 1).get
   /*moveTwoTilesOnDesk fully tested*/
   override def moveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk = if (setsContains(t1) && setsContains(t2)) copy(sets = (sets - sets.find(_.contains(t1)).get + (sets.find(_.contains(t1)).get - t1) - sets.find(_.contains(t2)).get + (sets.find(_.contains(t2)).get + t1)).filter(_.nonEmpty)) else this
   /*setsContains fully tested*/
@@ -71,7 +70,7 @@ case class Desk @Inject()(@Named("Default") players: Set[PlayerInterface], bagOf
     copy(players = newPlayers - next + newPlayers.find(_ == next).get.changeState(State.TURN))
   }
   /*removePlayer fully tested*/
-  override def removePlayer(p: PlayerInterface): Desk = copy(players - players.find(_.getNumber == p.getNumber).get)
+  override def removePlayer(p: PlayerInterface): Desk = copy(players - players.find(_.number == p.number).get)
   /*takeTileFromBagToPlayer fully tested*/
   override def takeTileFromBagToPlayer(p: PlayerInterface, t: TileInterface): Desk = addToPlayer(p, t).removeFromBag(t)
   /*removeFromBag fully tested*/
@@ -92,8 +91,8 @@ case class Desk @Inject()(@Named("Default") players: Set[PlayerInterface], bagOf
   private[model] def moreThan1P: Boolean = players.size >= 2
   /*currentPlayerWon fully tested*/
   override def currentPlayerWon(): Boolean = currentP.won()
-  override def viewOfBoard: SortedSet[TileInterface] = currentP.getTiles
+  override def viewOfBoard: SortedSet[TileInterface] = currentP.tiles
   /*currentP fully tested*/
-  override def currentP: PlayerInterface = players.find(_.getState == State.TURN).get
+  override def currentP: PlayerInterface = players.find(_.state == State.TURN).get
   override def viewOfSet: Set[SortedSet[TileInterface]] = sets
 }

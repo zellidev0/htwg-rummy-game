@@ -1,6 +1,6 @@
 package model
 
-import model.component.component.component.Color
+import model.deskComp.deskBaseImpl.deskImpl.Color
 import org.scalatest.{Matchers, WordSpec}
 
 class ColorSpec extends WordSpec with Matchers {

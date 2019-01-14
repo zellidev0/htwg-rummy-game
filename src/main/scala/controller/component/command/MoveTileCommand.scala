@@ -1,9 +1,9 @@
 package controller.component.command
 
 import controller.component.Controller
-import model.component.Desk
-import model.component.component.TileInterface
-import model.component.component.component.{Color, Tile}
+import model.deskComp.Desk
+import model.deskComp.deskBaseImpl.TileInterface
+import model.deskComp.deskBaseImpl.deskImpl.{Color, Tile}
 import util.Command
 
 import scala.collection.SortedSet

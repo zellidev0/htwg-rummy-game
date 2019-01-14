@@ -1,10 +1,10 @@
 import com.google.inject.AbstractModule
-import com.google.inject.name.Names
 import controller.ControllerInterface
 import controller.component.Controller
 import model.DeskInterface
-import model.component.Desk
-import model.component.component.{PlayerInterface, TileInterface}
+import model.deskComp.Desk
+import model.deskComp.deskBaseImpl.{PlayerInterface, TileInterface}
+import model.fileIO.FileIOInterface
 import net.codingwell.scalaguice.ScalaModule
 
 import scala.collection.SortedSet
@@ -16,9 +16,14 @@ class RummyModule extends AbstractModule with ScalaModule {
   val defalutSet: Set[SortedSet[TileInterface]] = Set[SortedSet[TileInterface]]()
 
   def configure() = {
-    bindConstant().annotatedWith(Names.named("Default"))
     bind[DeskInterface].to[Desk]
     bind[ControllerInterface].to[Controller]
+    //    bind[TileInterface].to[Tile]
+    //    bind[BoardInterface].to[Board]
+    //    bind[PlayerInterface].to[Player]
+    bind[FileIOInterface].to[model.fileIO.xml.FileIO]
+    //    ScalaMultibinder.newSetBinder[Set[PlayerInterface]](binder).addBinding.to[Player]
+
 
   }
 

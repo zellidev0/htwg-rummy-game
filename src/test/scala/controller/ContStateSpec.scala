@@ -1,6 +1,6 @@
 package controller
 
-import model.component.component.component.State
+import model.deskComp.deskBaseImpl.deskImpl.State
 import org.scalatest.{Matchers, WordSpec}
 
 class ContStateSpec extends WordSpec with Matchers {

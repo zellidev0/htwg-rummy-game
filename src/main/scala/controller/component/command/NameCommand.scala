@@ -2,8 +2,8 @@ package controller.component.command
 
 import controller.component.ContState.{INSERTED_NAME, PLAYER_REMOVED}
 import controller.component.{ContState, Controller}
-import model.component.component.TileInterface
-import model.component.component.component.{Board, Player, State}
+import model.deskComp.deskBaseImpl.TileInterface
+import model.deskComp.deskBaseImpl.deskImpl.{Board, Player, State}
 import util.Command
 
 import scala.collection.SortedSet
@@ -18,7 +18,7 @@ class NameCommand(newName: String, max: Int, controller: Controller) extends Com
   override def doStep: Unit = {
     controller.desk = controller.desk.addPlayer(Player(newName, controller.desk.amountOfPlayers, Board(SortedSet[TileInterface]()), if (controller.desk.players.nonEmpty) State.WAIT else State.TURN))
     for (_ <- 1 to max) {
-      controller.desk = controller.desk.takeTileFromBagToPlayer(controller.desk.players.find(_.getNumber == controller.desk.amountOfPlayers - 1).get, controller.desk.randomTileInBag)
+      controller.desk = controller.desk.takeTileFromBagToPlayer(controller.desk.players.find(_.number == controller.desk.amountOfPlayers - 1).get, controller.desk.randomTileInBag)
     }
     controller.swState(INSERTED_NAME)
     controller.swState(ContState.INSERTING_NAMES)

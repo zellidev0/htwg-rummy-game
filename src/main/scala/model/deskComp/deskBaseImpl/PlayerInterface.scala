@@ -1,19 +1,22 @@
-package model.component.component
+package model.deskComp.deskBaseImpl
 
-import model.component.component.component.State
+import model.deskComp.deskBaseImpl.deskImpl.State
+import model.deskComp.deskBaseImpl.deskImpl.State.state
 
 import scala.collection.SortedSet
 
+
 trait PlayerInterface {
+
+  val name: String
+  val number: Int
+  val board: BoardInterface
+  val state: state
 
   def won(): Boolean
   def -(tile: TileInterface): PlayerInterface
   def +(tile: TileInterface): PlayerInterface
   def changeState(newState: State.Value): PlayerInterface
-  override def toString: String
   def hasTile(tile: TileInterface): Boolean
-  def getNumber: Int
-  def getState: State.Value
-  def getName: String
-  def getTiles: SortedSet[TileInterface]
+  def tiles: SortedSet[TileInterface]
 }

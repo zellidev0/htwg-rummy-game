@@ -2,15 +2,14 @@ package controller.component
 
 import java.nio.file.{Files, Paths}
 
-import com.google.inject.name.Names
-import com.google.inject.{Guice, Inject}
+import com.google.inject.Inject
 import controller.ControllerInterface
 import controller.component.ContState._
 import controller.component.command._
-import model.component.component.component.{Color, Tile}
-import model.component.component.{PlayerInterface, TileInterface}
+import model.deskComp.deskBaseImpl.deskImpl.{Color, Tile}
+import model.deskComp.deskBaseImpl.{PlayerInterface, TileInterface}
 import model.fileIO.json.FileIO
-import model.{component, _}
+import model.{deskComp, _}
 import util.UndoManager
 
 import scala.collection.SortedSet
@@ -22,7 +21,7 @@ class Controller @Inject()(var desk: DeskInterface) extends ControllerInterface 
   private val undoManager = new UndoManager
   private val fileIO = new FileIO
   var userPutTileDown = 0
-  val injector = Guice.createInjector(new RummyModule)
+  //  val injector = Guice.createInjector(new RummyModule)
 
   /*userFinishedPlay fully tested*/
   override def userFinishedPlay(): Unit = {
@@ -107,7 +106,7 @@ class Controller @Inject()(var desk: DeskInterface) extends ControllerInterface 
          ident <- 0 to 1) {
       bagOfTiles += Tile(number, color, ident)
     }
-    desk = component.Desk(Set[PlayerInterface](), bagOfTiles, Set[SortedSet[TileInterface]]())
+    desk = deskComp.Desk(Set[PlayerInterface](), bagOfTiles, Set[SortedSet[TileInterface]]())
     swState(CREATED)
     swState(ContState.INSERTING_NAMES)
   }

@@ -1,10 +1,11 @@
-package model.component.component.component
+package model.deskComp.deskBaseImpl.deskImpl
 
-import model.component.component.{BoardInterface, TileInterface}
+import com.google.inject.Inject
+import model.deskComp.deskBaseImpl.{BoardInterface, TileInterface}
 
 import scala.collection.SortedSet
 
-case class Board(tiles: SortedSet[TileInterface]) extends BoardInterface {
+case class Board @Inject()(tiles: SortedSet[TileInterface]) extends BoardInterface {
 
   override def isEmpty: Boolean = tiles.isEmpty
   override def amountOfTiles(): Int = tiles.size
@@ -14,5 +15,4 @@ case class Board(tiles: SortedSet[TileInterface]) extends BoardInterface {
     var x = tiles.contains(tile)
     x //TODO sometimes when laying down this return false even though it should clearly not
   }
-  override def getTiles(): SortedSet[TileInterface] = tiles
 }

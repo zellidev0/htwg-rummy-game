@@ -2,9 +2,9 @@ package model.fileIO.json
 
 
 import model.DeskInterface
-import model.component.Desk
-import model.component.component.component._
-import model.component.component.{BoardInterface, PlayerInterface, TileInterface}
+import model.deskComp.Desk
+import model.deskComp.deskBaseImpl.deskImpl._
+import model.deskComp.deskBaseImpl.{BoardInterface, PlayerInterface, TileInterface}
 import model.fileIO.FileIOInterface
 import play.api.libs.json._
 
@@ -57,22 +57,22 @@ class FileIO extends FileIOInterface {
 
   implicit val tileWrites = new Writes[TileInterface] {
     def writes(tile: TileInterface) = Json.obj(
-      "value" -> tile.getValue,
-      "color" -> tile.getColor.toString,
-      "ident" -> tile.getIdent
+      "value" -> tile.value,
+      "color" -> tile.color.toString,
+      "ident" -> tile.ident
     )
   }
 
 
   implicit val playerWrites = new Writes[PlayerInterface] {
     def writes(player: PlayerInterface) = Json.obj(
-      "name" -> player.getName,
-      "number" -> player.getNumber,
-      "state" -> player.getState,
-      "tilesOnBoard" -> player.getTiles.size,
+      "name" -> player.name,
+      "number" -> player.number,
+      "state" -> player.state,
+      "tilesOnBoard" -> player.tiles.size,
       "board" -> Json.toJson(
         for {
-          tile <- player.getTiles
+          tile <- player.tiles
         } yield {
           Json.toJson(tile)
         }

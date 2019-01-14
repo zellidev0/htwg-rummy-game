@@ -1,4 +1,4 @@
-package model.component.component.component
+package model.deskComp.deskBaseImpl.deskImpl
 
 object Color extends Enumeration {
   val RED, BLUE, YELLOW, GREEN = Value

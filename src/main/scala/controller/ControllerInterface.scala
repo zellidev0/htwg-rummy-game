@@ -3,7 +3,7 @@ package controller
 import controller.component.ContState
 import controller.component.ContState.Value
 import model.DeskInterface
-import model.component.component.{PlayerInterface, TileInterface}
+import model.deskComp.deskBaseImpl.{PlayerInterface, TileInterface}
 import util.Observable
 
 import scala.collection.SortedSet
@@ -35,8 +35,6 @@ trait ControllerInterface extends Observable {
   def viewOfBoard: SortedSet[TileInterface]
   def storeFile(): Unit
   def loadFile(): Unit
-
-  def init(): Unit
 
 
 }

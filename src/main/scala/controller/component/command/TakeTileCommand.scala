@@ -2,7 +2,7 @@ package controller.component.command
 
 import controller.component.ContState.{P_FINISHED, P_TURN}
 import controller.component.Controller
-import model.component.component.TileInterface
+import model.deskComp.deskBaseImpl.TileInterface
 import util.Command
 
 class TakeTileCommand(controller: Controller) extends Command {

@@ -4,7 +4,7 @@ import java.awt.Dimension
 
 import controller.ControllerInterface
 import controller.component.ContState
-import model.component.component.TileInterface
+import model.deskComp.deskBaseImpl.TileInterface
 import view.UIInterface
 
 import scala.swing.event.ButtonClicked
@@ -179,7 +179,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       case ContState.START => newsTestView.text += "Start. Player 1 begins\n"
       case ContState.ENOUGH_PS => newsTestView.text += "NEWS:The Maximum amount of players is set.Please click the finish button\n"
       case ContState.P_FINISHED => newsTestView.text += "NEWS:You are finished. The next player has to click the button\n"; handleOnTurnFinished()
-      case ContState.P_TURN => newsTestView.text += "NEWS:It's " + contr.currentP.getName + "'s turn\n"
+      case ContState.P_TURN => newsTestView.text += "NEWS:It's " + contr.currentP.name + "'s turn\n"
         handleOnTurn()
         printUserBoard()
         printTable()
@@ -214,10 +214,10 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
   }
   def tileAsViewForBoard(tile: TileInterface): GridPanel = {
     new GridPanel(3, 1) {
-      val value = new TextField(tile.getValue.toString)
+      val value = new TextField(tile.value.toString)
       value.editable = false
       contents += value
-      val color = new TextField(tile.getColor.toString)
+      val color = new TextField(tile.color.toString)
       color.editable = false
       contents += color
       contents += new Button() {
@@ -248,10 +248,10 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
   }
   def tileAsViewForDesk(tile: TileInterface): GridPanel = {
     new GridPanel(3, 1) {
-      val value = new TextField(tile.getValue.toString)
+      val value = new TextField(tile.value.toString)
       value.editable = false
       contents += value
-      val color = new TextField(tile.getColor.toString)
+      val color = new TextField(tile.color.toString)
       color.editable = false
       contents += color
       contents += new Button() {
