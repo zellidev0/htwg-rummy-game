@@ -9,7 +9,11 @@ class Tui(contr: ControllerInterface) extends UIInterface {
 
 
   override def processInput(input: String): Unit = {
-    contr.cState match {
+    input match {
+      case "q" => System.exit(0)
+      case _ =>
+    }
+      contr.cState match {
       case ContState.MENU => handleMenuInput(input)
       case ContState.INSERTING_NAMES => handleNameInput(input)
       case ContState.P_TURN => handleOnTurn(input)
@@ -29,7 +33,7 @@ class Tui(contr: ControllerInterface) extends UIInterface {
 
   override def handleOnTurnFinished(input: String): Unit = input match {
     case "n" => contr.switchToNextPlayer()
-    case "s" => contr.storeFile
+    case "s" => contr.storeFile()
     case _ => printWrongArgument()
   }
 
@@ -46,7 +50,6 @@ class Tui(contr: ControllerInterface) extends UIInterface {
 
   override def handleMenuInput(input: String): Unit = {
     input match {
-      case "q" =>
       case "c" => contr.createDesk(elements + 1)
       case "l" => contr.loadFile
       case _ => printWrongArgument()

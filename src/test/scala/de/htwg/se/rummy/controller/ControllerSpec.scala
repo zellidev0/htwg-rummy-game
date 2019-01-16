@@ -132,6 +132,16 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.desk.bagOfTiles.size should be(13 * 4 * 2)
       }
     }
+    "getting tile sets" should {
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN))
+      val sets = Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0)))
+      val desk = Desk(players, Set(), sets)
+      val controller = new Controller(desk)
+      val oldState = controller.cState
+      "be sets" in {
+        controller.getTileSet should be(sets)
+      }
+    }
     "switching players" should {
       val player0 = Player("Name0", 0, Board(SortedSet[TileInterface]()), state = State.TURN)
       val player1 = Player("Name1", 1, Board(SortedSet[TileInterface]()))
@@ -405,12 +415,24 @@ class ControllerSpec extends WordSpec with Matchers {
       val desk = deskBaseImpl.Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]](SortedSet(Tile(10, Color.BLUE, 0), Tile(10, Color.RED, 0), Tile(10, Color.GREEN, 0))))
       val controller = new Controller(desk)
       "be no file" in {
-        Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml")) should be(false)
+        var exists = false
+        if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml"))) {
+          exists = true
+        } else if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.json"))) {
+          exists = true
+        }
+        exists should be(false)
         controller.storeFile()
         controller.loadFile()
       }
       "be a file now" in {
-        Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml")) should be(true)
+        var exists = false
+        if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml"))) {
+          exists = true
+        } else if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.json"))) {
+          exists = true
+        }
+        exists should be(true)
       }
 
     }

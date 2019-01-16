@@ -2,7 +2,6 @@ package de.htwg.se.rummy.model.deskComp.deskBaseImpl
 
 import de.htwg.se.rummy.model.DeskInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Color, State}
-
 import scala.collection.SortedSet
 import scala.util.Random
 

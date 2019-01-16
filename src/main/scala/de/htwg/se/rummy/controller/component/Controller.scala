@@ -1,7 +1,6 @@
 package de.htwg.se.rummy.controller.component
 
 import java.nio.file.{Files, Paths}
-
 import com.google.inject.Guice
 import de.htwg.se.rummy.RummyModule
 import de.htwg.se.rummy.controller.ControllerInterface
@@ -14,11 +13,7 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{PlayerInterface, TileInterf
 import de.htwg.se.rummy.model.fileIO.FileIOInterface
 import de.htwg.se.rummy.util.UndoManager
 import net.codingwell.scalaguice.InjectorExtensions._
-
-//import de.htwg.se.rummy.model.fileIO.json.FileIO
-
 import scala.collection.SortedSet
-
 
 class Controller(var desk: DeskInterface) extends ControllerInterface {
 
@@ -65,16 +60,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     }
   }
 
-  /*regexToTile fully tested*/
-  private[controller] def regexToTile(regex: String): Tile = {
-    val color = regex.charAt(regex.length - 2) match {
-      case 'R' => Color.RED
-      case 'B' => Color.BLUE
-      case 'Y' => Color.YELLOW
-      case 'G' => Color.GREEN
-    }
-    Tile(Integer.parseInt(regex.substring(0, regex.length - 2)), color, Integer.parseInt(regex.charAt(regex.length - 1).toString))
-  }
+
   /*layDownTile fully tested*/
   override def layDownTile(tile: String): Unit = {
     val t = Tile(-1, Color.RED, -1)

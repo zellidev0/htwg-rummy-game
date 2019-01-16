@@ -13,10 +13,9 @@ class RummyModule extends AbstractModule with ScalaModule {
     //    bind[TileInterface].to[Tile]
     //    bind[BoardInterface].to[Board]
     //    bind[PlayerInterface].to[Player]
-    bind[FileIOInterface].to[model.fileIO.json.FileIO]
+    bind[FileIOInterface].to[model.fileIO.xml.FileIO]
     //    bind(new TypeLiteral[Set[PlayerInterface]] {}).to(classOf[Player])
-
-
   }
-
 }
+
+
