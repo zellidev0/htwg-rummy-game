@@ -20,7 +20,6 @@ class TakeTileCommand(controller: Controller) extends Command {
   override def undoStep: Unit = {
     controller.desk = controller.desk.takeTileFromPlayerToBag(controller.currentP, randomTile)
     controller.swState(P_TURN)
-
   }
 
   override def redoStep: Unit = {
