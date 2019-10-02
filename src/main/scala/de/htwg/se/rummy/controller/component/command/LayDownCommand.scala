@@ -1,6 +1,6 @@
 package de.htwg.se.rummy.controller.component.command
 
-import de.htwg.se.rummy.controller.component.ContState._
+import de.htwg.se.rummy.controller.component.ControllerState._
 import de.htwg.se.rummy.controller.component.Controller
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Color, Tile}
 import de.htwg.se.rummy.util.Command

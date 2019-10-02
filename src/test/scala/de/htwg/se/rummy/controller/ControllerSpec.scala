@@ -2,7 +2,7 @@ package de.htwg.se.rummy.controller
 
 import java.nio.file.{Files, Paths}
 
-import de.htwg.se.rummy.controller.component.ContState._
+import de.htwg.se.rummy.controller.component.ControllerState._
 import de.htwg.se.rummy.controller.component.Controller
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Player, State, _}
@@ -39,7 +39,7 @@ class ControllerSpec extends WordSpec with Matchers {
       "table be not correct " in {
         player1.tiles.size should be(1)
         player2.tiles.size should be(1)
-        controller.desk.sets.size should be(1)
+        controller.desk.board.size should be(1)
       }
     }
     "usr finishes play and wins" should {
@@ -51,7 +51,7 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.userPutTileDown = 1
       controller.userFinishedPlay()
       "user should win " in {
-        controller.cState should be(P_WON)
+        controller.controllerState should be(P_WON)
       }
     }
     "user finished play and bag is empty" should {
@@ -63,7 +63,7 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.userFinishedPlay()
       "bag be empty " in {
         controller.desk.bagOfTiles.isEmpty should be(true)
-        controller.cState should be(MENU)
+        controller.controllerState should be(MENU)
       }
     }
     "should move two correct and movable tiles" should {
@@ -72,13 +72,13 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.moveTile("2R0", "1R0")
       "have only one set with the 2 tiles side by side" in {
-        controller.desk.sets.size should be(1)
-        controller.desk.sets.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
+        controller.desk.board.size should be(1)
+        controller.desk.board.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
       }
       controller.moveTile("2R1", "1R0")
       "have change nothing" in {
-        controller.desk.sets.size should be(1)
-        controller.desk.sets.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
+        controller.desk.board.size should be(1)
+        controller.desk.board.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
       }
     }
     "lay Down a tile the user really has" should {
@@ -87,14 +87,14 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.layDownTile("1R0")
       "should work (have only one set with one tile)" in {
-        controller.desk.sets.size should be(1)
-        controller.desk.sets.contains(SortedSet(Tile(1, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
+        controller.desk.board.size should be(1)
+        controller.desk.board.contains(SortedSet(Tile(1, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
       }
       controller.layDownTile("1R1")
       "should not work (have only one set with one tile)" in {
-        controller.desk.sets.size should be(1)
-        controller.desk.sets.contains(SortedSet[TileInterface](Tile(1, Color.RED, 0))) should be(true)
-        controller.desk.sets.contains(SortedSet[TileInterface](Tile(1, Color.RED, 1))) should be(false)
+        controller.desk.board.size should be(1)
+        controller.desk.board.contains(SortedSet[TileInterface](Tile(1, Color.RED, 0))) should be(true)
+        controller.desk.board.contains(SortedSet[TileInterface](Tile(1, Color.RED, 1))) should be(false)
       }
     }
     "adding a player and have less than 4" should {
@@ -137,7 +137,7 @@ class ControllerSpec extends WordSpec with Matchers {
       val sets = Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0)))
       val desk = Desk(players, Set(), sets)
       val controller = new Controller(desk)
-      val oldState = controller.cState
+      val oldState = controller.controllerState
       "be sets" in {
         controller.getTileSet should be(sets)
       }
@@ -184,18 +184,18 @@ class ControllerSpec extends WordSpec with Matchers {
       val desk = deskBaseImpl.Desk(players, Set(), Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0))))
       val controller = new Controller(desk)
       controller.createDesk(12) // must create desk or you cant init players
-      val oldState = controller.cState
+      val oldState = controller.controllerState
       controller.addPlayerAndInit("Name1", 12)
       controller.nameInputFinished()
       "when having not correct amount of players" in {
         oldState should be(INSERTING_NAMES)
-        controller.cState should be(INSERTING_NAMES)
+        controller.controllerState should be(INSERTING_NAMES)
         controller.addPlayerAndInit("Name2", 12)
         controller.nameInputFinished()
       }
       "when having correct amount of players" in {
         oldState should be(INSERTING_NAMES)
-        controller.cState should be(P_TURN)
+        controller.controllerState should be(P_TURN)
       }
     }
     "get amount of players" should {
@@ -205,7 +205,7 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.createDesk(12)
       controller.addPlayerAndInit("Name0", 12)
-      val oldState = controller.cState
+      val oldState = controller.controllerState
       "be 1" in {
         controller.getAmountOfPlayers should be(1)
         controller.addPlayerAndInit("Name1", 12)
@@ -223,7 +223,7 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.addPlayerAndInit("Name4", 12)
       }
       "be also 4" in {
-        controller.cState should be(ENOUGH_PS)
+        controller.controllerState should be(ENOUGH_PS)
         controller.addPlayerAndInit("Name5", 12)
       }
     }
@@ -265,7 +265,7 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.removeTileFromSet(Tile(1, Color.RED, 0))
       "should have one less " in {
-        controller.desk.sets.contains(SortedSet(Tile(1, Color.RED, 0))) should be(false)
+        controller.desk.board.contains(SortedSet(Tile(1, Color.RED, 0))) should be(false)
       }
     }
     "calling undo redo when laying down" should {
@@ -276,16 +276,16 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.layDownTile("1R0")
       "undo" in {
-        controller.desk.currentP.hasTile(tile1) should be(false)
-        controller.desk.sets.contains(SortedSet(tile1)) should be(true)
+        controller.desk.getCurrentPlayer.hasTile(tile1) should be(false)
+        controller.desk.board.contains(SortedSet(tile1)) should be(true)
         controller.undo
-        controller.desk.currentP.hasTile(tile1) should be(true)
-        controller.desk.sets.contains(SortedSet(tile1)) should be(false)
+        controller.desk.getCurrentPlayer.hasTile(tile1) should be(true)
+        controller.desk.board.contains(SortedSet(tile1)) should be(false)
         controller.redo
       }
       "redo" in {
-        controller.desk.currentP.hasTile(tile1) should be(false)
-        controller.desk.sets.contains(SortedSet(tile1)) should be(true)
+        controller.desk.getCurrentPlayer.hasTile(tile1) should be(false)
+        controller.desk.board.contains(SortedSet(tile1)) should be(true)
       }
     }
     "calling undo redo when moving tile" should {
@@ -297,16 +297,16 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.moveTile("1R0", "2R0")
       "undo" in {
-        controller.desk.sets.size should be(1)
-        controller.desk.sets.contains(SortedSet(tile1, tile2)) should be(true)
+        controller.desk.board.size should be(1)
+        controller.desk.board.contains(SortedSet(tile1, tile2)) should be(true)
         controller.undo
-        controller.desk.sets.size should be(2)
-        controller.desk.sets.contains(SortedSet(tile1, tile2)) should be(false)
+        controller.desk.board.size should be(2)
+        controller.desk.board.contains(SortedSet(tile1, tile2)) should be(false)
         controller.redo
       }
       "redo" in {
-        controller.desk.sets.size should be(1)
-        controller.desk.sets.contains(SortedSet(tile1, tile2)) should be(true)
+        controller.desk.board.size should be(1)
+        controller.desk.board.contains(SortedSet(tile1, tile2)) should be(true)
       }
     }
     "calling undo redo when name inserting" should {

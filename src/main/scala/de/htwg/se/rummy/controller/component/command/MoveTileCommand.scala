@@ -14,7 +14,7 @@ class MoveTileCommand(tile1: String, tile2: String, controller: Controller) exte
 
   override def doStep: Unit = {
     val t = Tile(-1, Color.RED, -1)
-    setWithTile = Option(controller.desk.sets.find(s => s.contains(t.stringToTile(tile1))).get.head)
+    setWithTile = Option(controller.desk.board.find(s => s.contains(t.stringToTile(tile1))).get.head)
     if (setWithTile.get.identifier == tile1) {
       setWithTile = None
     }
@@ -29,7 +29,7 @@ class MoveTileCommand(tile1: String, tile2: String, controller: Controller) exte
       case Some(x) => controller.desk = controller.desk.moveTwoTilesOnDesk(t.stringToTile(tile1), x)
       case None =>
         controller.removeTileFromSet(t.stringToTile(tile1))
-        controller.desk = Desk(sets = controller.desk.sets + SortedSet[TileInterface](t.stringToTile(tile1)), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
+        controller.desk = Desk(board = controller.desk.board + SortedSet[TileInterface](t.stringToTile(tile1)), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
     }
     controller.notifyObservers()
   }

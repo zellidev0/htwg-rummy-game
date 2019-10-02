@@ -12,12 +12,10 @@ lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
+.attach*
+.DS_Store
 
 # Scala-IDE specific
 .scala_dependencies
 .worksheet
 
-
-
-./attach_pid944
-./attach_pid26168

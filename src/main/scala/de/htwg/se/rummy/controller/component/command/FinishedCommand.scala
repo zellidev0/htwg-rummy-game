@@ -1,13 +1,13 @@
 package de.htwg.se.rummy.controller.component.command
 
-import de.htwg.se.rummy.controller.component.ContState._
+import de.htwg.se.rummy.controller.component.ControllerState._
 import de.htwg.se.rummy.controller.component.Controller
 import de.htwg.se.rummy.util.Command
 
-class FinishedCommand(userputTileDown: Int, controller: Controller) extends Command {
+class FinishedCommand(userPutTileDown: Int, controller: Controller) extends Command {
 
   override def undoStep: Unit = {
-    controller.userPutTileDown = userputTileDown
+    controller.userPutTileDown = userPutTileDown
     controller.swState(P_TURN)
   }
   override def redoStep: Unit = doStep

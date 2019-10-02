@@ -79,7 +79,7 @@ class FileIO @Inject() extends FileIOInterface {
       </bagOfTiles>
       <sets>
         {for {
-        sset <- desk.sets
+        sset <- desk.board
       } yield setToXml(sset)}
       </sets>
     </desk>

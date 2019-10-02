@@ -19,5 +19,6 @@ case class Player @Inject()(name: String, number: Int, board: BoardInterface, st
   override def toString: String = "Player " + number + ": " + number + " with state: " + state.toString + " boardsize: " + board.amountOfTiles()
 
   override def hasTile(tile: TileInterface): Boolean = board.contains(tile)
+
   override def tiles: SortedSet[TileInterface] = board.tiles
 }

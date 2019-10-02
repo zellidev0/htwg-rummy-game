@@ -10,7 +10,9 @@ trait TileInterface extends Ordered[TileInterface] {
   val ident: Int
 
   override def compare(that: TileInterface): Int
+
   def identifier: String = value.toString + color.toString.charAt(0) + ident
+
   def stringToTile(string: String): TileInterface
 
 }

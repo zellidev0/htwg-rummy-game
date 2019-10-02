@@ -1,6 +1,6 @@
 package de.htwg.se.rummy.controller
 
-import de.htwg.se.rummy.controller.component.ContState
+import de.htwg.se.rummy.controller.component.ControllerState
 import de.htwg.se.rummy.model.DeskInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{PlayerInterface, TileInterface}
 import de.htwg.se.rummy.util.Observable
@@ -10,14 +10,14 @@ import scala.collection.SortedSet
 trait ControllerInterface extends Observable {
 
   var desk: DeskInterface
-  var cState: ContState.Value
+  var controllerState: ControllerState.Value
   var userPutTileDown: Int
 
   def userFinishedPlay(): Unit
   def moveTile(tile1: String, tile2: String): Unit
   def layDownTile(tile: String): Unit
   def currentP: PlayerInterface
-  def swState(c: ContState.Value): Unit
+  def swState(c: ControllerState.Value): Unit
   def previousP: PlayerInterface
   def nextP: PlayerInterface
   def addPlayerAndInit(newName: String, max: Int): Unit

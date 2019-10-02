@@ -3,7 +3,7 @@ package de.htwg.se.rummy.controller
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.State
 import org.scalatest.{Matchers, WordSpec}
 
-class ContStateSpec extends WordSpec with Matchers {
+class ControllerStateSpec extends WordSpec with Matchers {
 
 
   "A state " when {

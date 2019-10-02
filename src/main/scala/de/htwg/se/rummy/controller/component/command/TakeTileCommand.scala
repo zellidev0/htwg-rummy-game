@@ -1,6 +1,6 @@
 package de.htwg.se.rummy.controller.component.command
 
-import de.htwg.se.rummy.controller.component.ContState._
+import de.htwg.se.rummy.controller.component.ControllerState._
 import de.htwg.se.rummy.controller.component.Controller
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.TileInterface
 import de.htwg.se.rummy.util.Command
@@ -11,7 +11,7 @@ class TakeTileCommand(controller: Controller) extends Command {
 
 
   override def doStep: Unit = {
-    randomTile = controller.desk.randomTileInBag
+    randomTile = controller.desk.getRandomTileInBag
     controller.desk = controller.desk.takeTileFromBagToPlayer(controller.currentP, randomTile)
     controller.swState(P_FINISHED)
   }

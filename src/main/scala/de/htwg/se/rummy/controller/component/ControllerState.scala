@@ -1,6 +1,6 @@
 package de.htwg.se.rummy.controller.component
 
-object ContState extends Enumeration {
+object ControllerState extends Enumeration {
 
   val MENU, INSERTING_NAMES, P_TURN, P_FINISHED, TABLE_NOT_CORRECT,
   NOT_ENOUGH_PS, START, P_INSERTED, ENOUGH_PS, CREATED,
