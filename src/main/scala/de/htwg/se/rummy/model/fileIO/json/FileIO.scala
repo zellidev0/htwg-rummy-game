@@ -15,7 +15,7 @@ class FileIO @Inject() extends FileIOInterface {
 
   override def load: DeskInterface = {
     var desk: DeskInterface = null
-    val json: JsValue = Json.parse(Source.fromFile("desk.json").getLines.mkString)
+    val json: JsValue = Json.parse(Source.fromFile("target/desk.json").getLines.mkString)
     var players = Set[PlayerInterface]()
     var bagOfTiles = Set[TileInterface]()
     for (i <- 0 until (json \ "desk" \ "amountOfPlayers").get.toString.toInt) {
@@ -58,7 +58,7 @@ class FileIO @Inject() extends FileIOInterface {
 
   override def save(grid: DeskInterface): Unit = {
     import java.io._
-    val pw = new PrintWriter(new File("desk.json"))
+    val pw = new PrintWriter(new File("target/desk.json"))
     pw.write(Json.prettyPrint(deskToJson(grid)))
     pw.close()
   }

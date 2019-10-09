@@ -141,7 +141,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   }
 
   override def loadFile: Unit = {
-    if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.json"))) {
+    if (Files.exists(Paths.get("/target/desk.json"))) {
       desk = fileIO.load
       swState(LOAD_FILE)
       swState(START)

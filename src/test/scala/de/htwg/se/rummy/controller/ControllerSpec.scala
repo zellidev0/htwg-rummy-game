@@ -1,5 +1,6 @@
 package de.htwg.se.rummy.controller
 
+import java.io.File
 import java.nio.file.{Files, Paths}
 
 import de.htwg.se.rummy.controller.component.ControllerState._
@@ -409,6 +410,12 @@ class ControllerSpec extends WordSpec with Matchers {
     }
     "storing a file" should {
       //ATTENTION, will fail if file desk.xml exists. please remove file before running test
+      if (Files.exists(Paths.get("target/desk.xml"))) {
+        new File("target/desk.xml").delete()
+      }
+      if (Files.exists(Paths.get("target/desk.json"))) {
+        new File("target/desk.json").delete()
+      }
       val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))), state = State.TURN)
       val player2 = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))), state = State.TURN)
       val players = Set[PlayerInterface](player1, player2)
@@ -416,9 +423,9 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       "be no file" in {
         var exists = false
-        if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml"))) {
+        if (Files.exists(Paths.get("target/desk.xml"))) {
           exists = true
-        } else if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.json"))) {
+        } else if (Files.exists(Paths.get("target/desk.json"))) {
           exists = true
         }
         exists should be(false)
@@ -427,14 +434,19 @@ class ControllerSpec extends WordSpec with Matchers {
       }
       "be a file now" in {
         var exists = false
-        if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.xml"))) {
+        if (Files.exists(Paths.get("target/desk.xml"))) {
           exists = true
-        } else if (Files.exists(Paths.get("/home/julian/Documents/se/rummy/desk.json"))) {
+        } else if (Files.exists(Paths.get("target/desk.json"))) {
           exists = true
         }
         exists should be(true)
+        if (Files.exists(Paths.get("target/desk.xml"))) {
+          new File("target/desk.xml").delete()
+        }
+        if (Files.exists(Paths.get("target/desk.json"))) {
+          new File("target/desk.json").delete()
+        }
       }
-
     }
   }
 }

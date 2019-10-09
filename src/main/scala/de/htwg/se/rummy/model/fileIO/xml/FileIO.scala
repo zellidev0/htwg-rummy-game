@@ -13,7 +13,7 @@ import scala.xml.PrettyPrinter
 class FileIO @Inject() extends FileIOInterface {
 
   override def load: DeskInterface = {
-    val file = scala.xml.XML.loadFile("/home/julian/Documents/se/rummy/desk.xml")
+    val file = scala.xml.XML.loadFile("/target/desk.xml")
     val t = Tile(-1, Color.RED, -1)
     val amountOfPlayersAttr = (file \\ "desk" \ "@amountOfPlayers")
     val amountOfPlayers = amountOfPlayersAttr.text.toInt
@@ -57,7 +57,7 @@ class FileIO @Inject() extends FileIOInterface {
 
   private def saveString(desk: DeskInterface): Unit = {
     import java.io._
-    val pw = new PrintWriter(new File("/home/julian/Documents/se/rummy/desk.xml"))
+    val pw = new PrintWriter(new File("/target/desk.xml"))
     val prettyPrinter = new PrettyPrinter(120, 4)
     val xml = prettyPrinter.format(deskToXml(desk))
     pw.write(xml)
