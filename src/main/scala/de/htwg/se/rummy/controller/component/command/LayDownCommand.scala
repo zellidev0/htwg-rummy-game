@@ -18,6 +18,6 @@ class LayDownCommand(tile: String, controller: Controller) extends Command {
     val t = Tile(-1, Color.RED, -1)
     controller.desk = controller.desk.putDownTile(controller.currentP, t.stringToTile(tile))
     controller.userPutTileDown += 1
-    controller.notifyObservers()
+    controller.swState(P_TURN)
   }
 }

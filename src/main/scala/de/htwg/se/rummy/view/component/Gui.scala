@@ -59,6 +59,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       case ControllerState.P_FINISHED => handleOnTurnFinished()
     }
   }
+
   override def handleNameInput(name: String = ""): Unit = {
     val nameInputField = new TextField("Insert Name here")
     buttonPanel = new GridPanel(1, 5) {
@@ -171,7 +172,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
   }
 
 
-  override def update: Unit = {
+  override def update(s: String) {
     contr.controllerState match {
       case ControllerState.P_DOES_NOT_OWN_TILE => newsTestView.text += "NEWS:You dont have this tile on the board. Please select another one\n"
       case ControllerState.CREATED => newsTestView.text += "NEWS:Desk created. Please type in a name and confirm with the button\n"; handleNameInput()
@@ -197,6 +198,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       case _ =>
     }
   }
+
   def printUserBoard(): Unit = {
     userBoard = new ScrollPane() {
       contents = new GridPanel(2, 12) {
@@ -212,6 +214,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       contents += userBoard
     }
   }
+
   def tileAsViewForBoard(tile: TileInterface): GridPanel = {
     new GridPanel(3, 1) {
       val value = new TextField(tile.value.toString)
@@ -228,6 +231,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       }
     }
   }
+
   def printTable(): Unit = {
     deskPanel = new ScrollPane() {
       contents = new GridPanel(20, 1) {
@@ -246,6 +250,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       contents += userBoard
     }
   }
+
   def tileAsViewForDesk(tile: TileInterface): GridPanel = {
     new GridPanel(3, 1) {
       val value = new TextField(tile.value.toString)

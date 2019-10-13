@@ -2,6 +2,7 @@ package de.htwg.se.rummy.controller.component.command
 
 
 import de.htwg.se.rummy.controller.component.Controller
+import de.htwg.se.rummy.controller.component.ControllerState.P_TURN
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Color, Tile}
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{Desk, TileInterface}
 import de.htwg.se.rummy.util.Command
@@ -19,7 +20,7 @@ class MoveTileCommand(tile1: String, tile2: String, controller: Controller) exte
       setWithTile = None
     }
     controller.desk = controller.desk.moveTwoTilesOnDesk(t.stringToTile(tile1), t.stringToTile(tile2))
-    controller.notifyObservers()
+    controller.swState(P_TURN)
   }
 
 
@@ -31,12 +32,12 @@ class MoveTileCommand(tile1: String, tile2: String, controller: Controller) exte
         controller.removeTileFromSet(t.stringToTile(tile1))
         controller.desk = Desk(board = controller.desk.board + SortedSet[TileInterface](t.stringToTile(tile1)), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
     }
-    controller.notifyObservers()
+    controller.swState(P_TURN)
   }
 
   override def redoStep: Unit = {
     val t = Tile(-1, Color.RED, -1)
     controller.desk = controller.desk.moveTwoTilesOnDesk(t.stringToTile(tile1), t.stringToTile(tile2))
-    controller.notifyObservers()
+    controller.swState(P_TURN)
   }
 }

@@ -20,5 +20,5 @@ trait UIInterface extends Observer {
 
   def handleMenuInput(input: String): Unit
 
-  def update: Unit
+  def update(message: String)
 }

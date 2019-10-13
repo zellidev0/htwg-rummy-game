@@ -34,6 +34,7 @@ trait ControllerInterface extends Observable {
   def viewOfBoard: SortedSet[TileInterface]
   def storeFile(): Unit
   def loadFile(): Unit
+  def wrongInput(): Unit
 
 
 }

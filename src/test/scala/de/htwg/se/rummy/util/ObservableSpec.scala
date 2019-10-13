@@ -8,7 +8,10 @@ class ObservableSpec extends WordSpec with Matchers {
     val observer = new Observer {
       var updated: Boolean = false
       def isUpdated: Boolean = updated
-      override def update: Unit = {updated = true; updated}
+      override def update(s: String): Unit = {
+        updated = true;
+        ""
+      }
     }
     "add an Observer" in {
       observable.add(observer)
@@ -16,7 +19,7 @@ class ObservableSpec extends WordSpec with Matchers {
     }
     "notify an Observer" in {
       observer.isUpdated should be(false)
-      observable.notifyObservers()
+      observable.notifyObservers("")
       observer.isUpdated should be(true)
     }
     "remove an Observer" in {
