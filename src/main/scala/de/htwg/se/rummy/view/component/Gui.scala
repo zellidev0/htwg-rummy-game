@@ -57,6 +57,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       case ControllerState.INSERTING_NAMES => handleNameInput()
       case ControllerState.P_TURN => handleOnTurn()
       case ControllerState.P_FINISHED => handleOnTurnFinished()
+      case ControllerState.CREATED => handleNameInput()
     }
   }
 
@@ -160,7 +161,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
     buttonPanel.contents += new Button {
       text = "Load stored game"
       reactions += {
-        case ButtonClicked(_) => contr.loadFile
+        case ButtonClicked(_) => contr.loadFile()
       }
     }
     contents = new GridPanel(4, 1) {
@@ -172,29 +173,15 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
   }
 
 
-  override def update(s: String) {
+  override def update() {
+    newsTestView.text += contr.currentStateAsString()
     contr.controllerState match {
-      case ControllerState.P_DOES_NOT_OWN_TILE => newsTestView.text += "NEWS:You dont have this tile on the board. Please select another one\n"
-      case ControllerState.CREATED => newsTestView.text += "NEWS:Desk created. Please type in a name and confirm with the button\n"; handleNameInput()
-      case ControllerState.TABLE_NOT_CORRECT => newsTestView.text += "NEWS:Table looks not correct, please move tiles to match the rules\n"
-      case ControllerState.START => newsTestView.text += "Start. Player 1 begins\n"
-      case ControllerState.ENOUGH_PS => newsTestView.text += "NEWS:The Maximum amount of players is set.Please click the finish button\n"
-      case ControllerState.P_FINISHED => newsTestView.text += "NEWS:You are finished. The next player has to click the button\n"; handleOnTurnFinished()
-      case ControllerState.P_TURN => newsTestView.text += "NEWS:It's " + contr.currentP.name + "'s turn\n"
+      case ControllerState.CREATED => handleNameInput()
+      case ControllerState.P_FINISHED => handleOnTurnFinished()
+      case ControllerState.P_TURN =>
         handleOnTurn()
         printUserBoard()
         printTable()
-      case ControllerState.INSERTED_NAME => newsTestView.text += "NEWS:Player " + contr.getAmountOfPlayers + " is added\n"
-      case ControllerState.NOT_ENOUGH_PS => newsTestView.text += "NEWS:Not enough Players Please insert another name\n"
-      case ControllerState.MENU => newsTestView.text += "NEWS:You're finished. Great.\n"
-      case ControllerState.P_WON => printf("The winner is %s\n", contr.currentP); System.exit(0)
-      case ControllerState.PLAYER_REMOVED => newsTestView.text += "NEWS:You removed the last inserted player.\n"
-      case ControllerState.UNDO_LAY_DOWN_TILE => newsTestView.text += "NEWS:You took the tile up.\n"
-      case ControllerState.CANT_MOVE_THIS_TILE => newsTestView.text += "NEWS:You cant move this tile.\n"
-      case ControllerState.LOAD_FILE => newsTestView.text += "NEWS:You loaded a previous game. You can start now.\n"
-      case ControllerState.STORE_FILE => newsTestView.text += "NEWS:You stored a game. Go on.\n"
-      case ControllerState.COULD_NOT_LOAD_FILE => newsTestView.text += "NEWS:No previous game found. A new desk was created.\n"
-      case ControllerState.BAG_IS_EMPTY => newsTestView.text += "NEWS:No more tiles in the bag. You must lay a tile down\n"
       case _ =>
     }
   }

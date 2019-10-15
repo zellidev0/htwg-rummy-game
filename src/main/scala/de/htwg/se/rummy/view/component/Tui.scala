@@ -26,14 +26,18 @@ class Tui(controller: ControllerInterface) extends UIInterface {
       case "z" => controller.undo()
       case "r" => controller.redo()
       case PlayerNamePattern() => controller.addPlayerAndInit(name.substring(4).trim, elements)
-      case _ => controller.wrongInput()
+      case _ => wrongInput()
     }
+  }
+
+  private def wrongInput() {
+    println("Could not identify your input. Are you sure it was correct'?")
   }
 
   override def handleOnTurnFinished(input: String): Unit = input match {
     case "n" => controller.switchToNextPlayer()
     case "s" => controller.storeFile()
-    case _ => controller.wrongInput()
+    case _ => wrongInput()
   }
 
   override def handleOnTurn(input: String): Unit = {
@@ -43,7 +47,7 @@ class Tui(controller: ControllerInterface) extends UIInterface {
       case "f" => controller.userFinishedPlay()
       case "z" => controller.undo()
       case "r" => controller.redo()
-      case _ => controller.wrongInput()
+      case _ => wrongInput()
     }
   }
 
@@ -51,11 +55,11 @@ class Tui(controller: ControllerInterface) extends UIInterface {
     input match {
       case "c" => controller.createDesk(elements + 1)
       case "l" => controller.loadFile()
-      case _ => controller.wrongInput()
+      case _ => wrongInput()
     }
   }
 
-  override def update(message: String): Unit = {
-    println(message)
+  override def update(): Unit = {
+    println(controller.currentStateAsString())
   }
 }

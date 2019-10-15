@@ -49,7 +49,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   override def swState(c: ControllerState.Value): Unit = {
     controllerState = c
-    notifyObservers(update())
+    notifyObservers()
   }
 
   override def moveTile(tile1: String, tile2: String): Unit = {
@@ -104,7 +104,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   override def nameInputFinished(): Unit = {
     if (desk.correctAmountOfPlayers) {
-      undoManager.emptyStack
+      undoManager.emptyStack()
       swState(START)
       swState(P_TURN)
     } else {
@@ -123,12 +123,12 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   override def undo: Unit = {
     undoManager.undoStep()
-    notifyObservers(update())
+    notifyObservers()
   }
 
   override def redo: Unit = {
     undoManager.redoStep()
-    notifyObservers(update())
+    notifyObservers()
   }
 
   override def viewOfBoard: SortedSet[TileInterface] = desk.viewOfBoard
@@ -154,17 +154,14 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   }
 
-  override def wrongInput(): Unit = notifyObservers("\tNEWS:\tCould not identify your input. Are you sure it was correct'?")
-
-
-  def update(): String = {
+  override def currentStateAsString(): String = {
     controllerState match {
-      case ControllerState.P_DOES_NOT_OWN_TILE => return ("\tNEWS:\tYou dont have this tile on the board. Please select another one")
-      case ControllerState.CREATED => return ("\tNEWS:\tDesk created. Please type in 'name <name1>' where name1 is the first players name. Confirm with enter")
-      case ControllerState.TABLE_NOT_CORRECT => return ("\tNEWS:\tTable looks not correct, please move tiles to match the rules")
-      case ControllerState.START => return ("SSSSS  TTTTT    A    RRRR   TTTTT \nSS       T     A A   R   R    T   \nSSSSS    T    A   A  RRRR     T   \n   SS    T    AAAAA  RRR      T   \nSSSSS    T    A   A  R  RR    T   \n")
-      case ControllerState.ENOUGH_PS => return ("\tNEWS:\tThe Maximum amount of players is set. Type 'f' to finish inserting names")
-      case ControllerState.P_FINISHED => return ("\tNEWS:\tYou are finished. The next player has to type 'n' to continue,\nor type s to store the current game.")
+      case ControllerState.P_DOES_NOT_OWN_TILE => "You dont have this tile on the board. Please select another one\n"
+      case ControllerState.CREATED => "Desk created. Please type in 'name <name1>' where name1 is the first players name.\n"
+      case ControllerState.TABLE_NOT_CORRECT => "Table looks not correct, please move tiles to match the rules\n"
+      case ControllerState.START => "SSSSS  TTTTT    A    RRRR   TTTTT \nSS       T     A A   R   R    T   \nSSSSS    T    A   A  RRRR     T   \n   SS    T    AAAAA  RRR      T   \nSSSSS    T    A   A  R  RR    T   \n"
+      case ControllerState.ENOUGH_PS => "The Maximum amount of players is set. Type 'f' to finish inserting names/n"
+      case ControllerState.P_FINISHED => "You are finished. The next player has to type 'n' to continue,\nor type s to store the current game.\n"
       case ControllerState.P_TURN =>
         var s = ""
         s = s + String.format(
@@ -180,19 +177,20 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
         s = s + userBoard()
         s = s + table()
         s
-      case ControllerState.INSERTED_NAME => ("\tNEWS:\tPlayer " + getAmountOfPlayers + " is added\n\tNEWS:\tType in another players name and confirm with enter (Min 2 players, Max 4) or finish with 'f'")
-      case ControllerState.NOT_ENOUGH_PS => ("\tNEWS:\tNot enough Players. Type <c> to create a desk and insert names")
-      case ControllerState.MENU => ("\tNEWS:\tYou're finished. Great. Now type in 's' and enter to start.")
+      case ControllerState.INSERTED_NAME => "Player " + getAmountOfPlayers + " is added\n"
+      case ControllerState.NOT_ENOUGH_PS => "Not enough Players. Type <c> to create a desk and insert names\n"
+      case ControllerState.MENU => "You're finished. Great. Now type in 's' and enter to start.\n"
       case ControllerState.P_WON =>
         System.exit(0)
         String.format("FFFFFF  I  NN   N  I  SSSSS  H   H  EEEEE  DDD\nF       I  N N  N  I  SS     H   H  E      D  D\nFFFFFF  I  N  N N  I  SSSSS  HHHHH  EEEEE  D   D\nF       I  N  N N  I     SS  H   H  E      D  D\nF       I  N   NN  I  SSSSS  H   H  EEEEE  DDD\n\n\n%s is the winner.\n", currentP.name)
-      case ControllerState.PLAYER_REMOVED => ("\tNEWS:\tYou removed the player you inserted .")
-      case ControllerState.UNDO_LAY_DOWN_TILE => return ("\tNEWS:\tYou took the tile up.")
-      case ControllerState.CANT_MOVE_THIS_TILE => return ("\tNEWS:\tYou cant move this tile.")
-      case ControllerState.LOAD_FILE => ("\tNEWS:\tYou loaded a previous game. You can start now.")
-      case ControllerState.STORE_FILE => ("\tNEWS:\tYou stored a game. Go on.")
-      case ControllerState.COULD_NOT_LOAD_FILE => "\tNEWS:\tNo previous game found. A new desk was created."
-      case ControllerState.BAG_IS_EMPTY => "\tNEWS:\tNo more tiles in the bag. You must lay a tile down"
+      case ControllerState.PLAYER_REMOVED => "You removed the player you inserted .\n"
+      case ControllerState.UNDO_LAY_DOWN_TILE => "You took the tile up.\n"
+      case ControllerState.CANT_MOVE_THIS_TILE => "You cant move this tile.\n"
+      case ControllerState.LOAD_FILE => "You loaded a previous game. You can start now.\n"
+      case ControllerState.STORE_FILE => "You stored a game. Go on.\n"
+      case ControllerState.COULD_NOT_LOAD_FILE => "No previous game found. A new desk was created.\n"
+      case ControllerState.BAG_IS_EMPTY => "No more tiles in the bag. You must lay a tile down\n"
+      case ControllerState.INSERTING_NAMES => "Type in 'name <the name of the player>' and confirm. (Min 2 players, Max 4) or finish with 'f'\n"
       case _ => ""
     }
   }

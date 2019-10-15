@@ -19,6 +19,4 @@ trait UIInterface extends Observer {
   def handleOnTurn(input: String): Unit
 
   def handleMenuInput(input: String): Unit
-
-  def update(message: String)
 }
