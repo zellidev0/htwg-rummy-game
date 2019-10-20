@@ -8,7 +8,7 @@ trait DeskInterface {
 
   val players: Set[PlayerInterface]
   val bagOfTiles: Set[TileInterface]
-  val board: Set[SortedSet[TileInterface]]
+  val table: Set[SortedSet[TileInterface]]
 
   def takeUpTile(p: PlayerInterface, t: TileInterface): Desk
   def removeFromTable(t: TileInterface): Desk
@@ -19,7 +19,7 @@ trait DeskInterface {
   def getCurrentPlayer: PlayerInterface
   def getNextPlayer: PlayerInterface
   def moveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk
-  def boardContains(t: TileInterface): Boolean
+  def tableContains(t: TileInterface): Boolean
   def getRandomTileInBag: TileInterface
   def addPlayer(p: PlayerInterface): Desk
   def switchToNextPlayer(curr: PlayerInterface, next: PlayerInterface): Desk
@@ -29,7 +29,7 @@ trait DeskInterface {
   def lessThan4P: Boolean
   def correctAmountOfPlayers: Boolean
   def currentPlayerWon(): Boolean
-  def viewOfBoard: SortedSet[TileInterface]
-  def viewOfSet: Set[SortedSet[TileInterface]]
+  def viewOfCurrentPlayersBoard: SortedSet[TileInterface]
+  def viewOfTable: Set[SortedSet[TileInterface]]
 
 }

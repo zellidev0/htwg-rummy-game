@@ -40,7 +40,7 @@ class ControllerSpec extends WordSpec with Matchers {
       "table be not correct " in {
         player1.tiles.size should be(1)
         player2.tiles.size should be(1)
-        controller.desk.board.size should be(1)
+        controller.desk.table.size should be(1)
       }
     }
     "usr finishes play and wins" should {
@@ -73,13 +73,13 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.moveTile("2R0", "1R0")
       "have only one set with the 2 tiles side by side" in {
-        controller.desk.board.size should be(1)
-        controller.desk.board.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
+        controller.desk.table.size should be(1)
+        controller.desk.table.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
       }
       controller.moveTile("2R1", "1R0")
       "have change nothing" in {
-        controller.desk.board.size should be(1)
-        controller.desk.board.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
+        controller.desk.table.size should be(1)
+        controller.desk.table.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
       }
     }
     "lay Down a tile the user really has" should {
@@ -88,14 +88,14 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.layDownTile("1R0")
       "should work (have only one set with one tile)" in {
-        controller.desk.board.size should be(1)
-        controller.desk.board.contains(SortedSet(Tile(1, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
+        controller.desk.table.size should be(1)
+        controller.desk.table.contains(SortedSet(Tile(1, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
       }
       controller.layDownTile("1R1")
       "should not work (have only one set with one tile)" in {
-        controller.desk.board.size should be(1)
-        controller.desk.board.contains(SortedSet[TileInterface](Tile(1, Color.RED, 0))) should be(true)
-        controller.desk.board.contains(SortedSet[TileInterface](Tile(1, Color.RED, 1))) should be(false)
+        controller.desk.table.size should be(1)
+        controller.desk.table.contains(SortedSet[TileInterface](Tile(1, Color.RED, 0))) should be(true)
+        controller.desk.table.contains(SortedSet[TileInterface](Tile(1, Color.RED, 1))) should be(false)
       }
     }
     "adding a player and have less than 4" should {
@@ -266,7 +266,7 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.removeTileFromSet(Tile(1, Color.RED, 0))
       "should have one less " in {
-        controller.desk.board.contains(SortedSet(Tile(1, Color.RED, 0))) should be(false)
+        controller.desk.table.contains(SortedSet(Tile(1, Color.RED, 0))) should be(false)
       }
     }
     "calling undo redo when laying down" should {
@@ -278,15 +278,15 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.layDownTile("1R0")
       "undo" in {
         controller.desk.getCurrentPlayer.hasTile(tile1) should be(false)
-        controller.desk.board.contains(SortedSet(tile1)) should be(true)
+        controller.desk.table.contains(SortedSet(tile1)) should be(true)
         controller.undo
         controller.desk.getCurrentPlayer.hasTile(tile1) should be(true)
-        controller.desk.board.contains(SortedSet(tile1)) should be(false)
+        controller.desk.table.contains(SortedSet(tile1)) should be(false)
         controller.redo
       }
       "redo" in {
         controller.desk.getCurrentPlayer.hasTile(tile1) should be(false)
-        controller.desk.board.contains(SortedSet(tile1)) should be(true)
+        controller.desk.table.contains(SortedSet(tile1)) should be(true)
       }
     }
     "calling undo redo when moving tile" should {
@@ -298,16 +298,16 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.moveTile("1R0", "2R0")
       "undo" in {
-        controller.desk.board.size should be(1)
-        controller.desk.board.contains(SortedSet(tile1, tile2)) should be(true)
+        controller.desk.table.size should be(1)
+        controller.desk.table.contains(SortedSet(tile1, tile2)) should be(true)
         controller.undo
-        controller.desk.board.size should be(2)
-        controller.desk.board.contains(SortedSet(tile1, tile2)) should be(false)
+        controller.desk.table.size should be(2)
+        controller.desk.table.contains(SortedSet(tile1, tile2)) should be(false)
         controller.redo
       }
       "redo" in {
-        controller.desk.board.size should be(1)
-        controller.desk.board.contains(SortedSet(tile1, tile2)) should be(true)
+        controller.desk.table.size should be(1)
+        controller.desk.table.contains(SortedSet(tile1, tile2)) should be(true)
       }
     }
     "calling undo redo when name inserting" should {

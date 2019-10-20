@@ -14,30 +14,27 @@ class MoveTileCommand(tile1: String, tile2: String, controller: Controller) exte
 
 
   override def doStep: Unit = {
-    val t = Tile(-1, Color.RED, -1)
-    setWithTile = Option(controller.desk.board.find(s => s.contains(t.stringToTile(tile1))).get.head)
-    if (setWithTile.get.identifier == tile1) {
+    setWithTile = Option(controller.desk.table.find(s => s.contains(Tile.stringToTile(tile1))).get.head)
+    if (setWithTile.get.equals(tile1)) {
       setWithTile = None
     }
-    controller.desk = controller.desk.moveTwoTilesOnDesk(t.stringToTile(tile1), t.stringToTile(tile2))
+    controller.desk = controller.desk.moveTwoTilesOnDesk(Tile.stringToTile(tile1), Tile.stringToTile(tile2))
     controller.swState(P_TURN)
   }
 
 
   override def undoStep: Unit = {
-    val t = Tile(-1, Color.RED, -1)
     setWithTile match {
-      case Some(x) => controller.desk = controller.desk.moveTwoTilesOnDesk(t.stringToTile(tile1), x)
+      case Some(x) => controller.desk = controller.desk.moveTwoTilesOnDesk(Tile.stringToTile(tile1), x)
       case None =>
-        controller.removeTileFromSet(t.stringToTile(tile1))
-        controller.desk = Desk(board = controller.desk.board + SortedSet[TileInterface](t.stringToTile(tile1)), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
+        controller.removeTileFromSet(Tile.stringToTile(tile1))
+        controller.desk = Desk(table = controller.desk.table + SortedSet[TileInterface](Tile.stringToTile(tile1)), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
     }
     controller.swState(P_TURN)
   }
 
   override def redoStep: Unit = {
-    val t = Tile(-1, Color.RED, -1)
-    controller.desk = controller.desk.moveTwoTilesOnDesk(t.stringToTile(tile1), t.stringToTile(tile2))
+    controller.desk = controller.desk.moveTwoTilesOnDesk(Tile.stringToTile(tile1), Tile.stringToTile(tile2))
     controller.swState(P_TURN)
   }
 }

@@ -60,6 +60,10 @@ class Tui(controller: ControllerInterface) extends UIInterface {
   }
 
   override def update(): Unit = {
-    println(controller.currentStateAsString())
+    println(controller.currentStateMessage())
+    if (controller.controllerState == ControllerState.P_TURN) {
+      println(controller.currentTableMessage())
+      println(controller.currentBoardMessage())
+    }
   }
 }

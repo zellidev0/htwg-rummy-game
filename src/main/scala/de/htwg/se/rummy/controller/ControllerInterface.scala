@@ -55,5 +55,9 @@ trait ControllerInterface extends Observable {
 
   def loadFile(): Unit
 
-  def currentStateAsString(): String
+  def currentStateMessage(): String
+
+  def currentTableMessage(): String
+
+  def currentBoardMessage(): String
 }

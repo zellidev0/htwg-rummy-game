@@ -61,15 +61,15 @@ class DeskSpec extends WordSpec with Matchers {
       var amountOfTilesOnBoardOfPlayer1 = players.find(p => p.number == 0).get.tiles.size
       desk = desk.putDownTile(desk.getCurrentPlayer, Tile(1, Color.RED, 0))
       "have one more tile on table" in {
-        desk.boardContains(Tile(1, Color.RED, 0)) should be(true)
-        desk.boardContains(Tile(1, Color.RED, 1)) should be(false)
+        desk.tableContains(Tile(1, Color.RED, 0)) should be(true)
+        desk.tableContains(Tile(1, Color.RED, 1)) should be(false)
       }
       "Player 1 have one tile less" in {
         desk.players.find(p => p.number == 0).get.tiles.size should be(amountOfTilesOnBoardOfPlayer1 - 1)
       }
       "have a tile in a tileSet" in {
 
-        desk.board.size should be(1)
+        desk.table.size should be(1)
       }
     }
     "user takes tile from bag" should {
@@ -159,14 +159,14 @@ class DeskSpec extends WordSpec with Matchers {
       val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN), Player("Name2", 1, Board(SortedSet[TileInterface]())))
       var desk = deskBaseImpl.Desk(players, Set[TileInterface](), setOfCorrectStreets)
       "be true when setOfCorrectStreets" in {
-        for (set <- desk.board) {
+        for (set <- desk.table) {
           desk.checkStreet(set) should be(true)
           desk.checkPair(set) should be(false)
         }
       }
       "be false when setOfWrongStreets" in {
         desk = deskBaseImpl.Desk(players, Set[TileInterface](), setOfWrongStreets)
-        for (set <- desk.board) {
+        for (set <- desk.table) {
           desk.checkStreet(set) should be(false)
           desk.checkPair(set) should be(false)
         }
@@ -182,14 +182,14 @@ class DeskSpec extends WordSpec with Matchers {
       val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN), Player("Name2", 1, Board(SortedSet[TileInterface]())))
       var desk = deskBaseImpl.Desk(players, Set[TileInterface](), setOfCorrectPairs)
       "be true when setOfCorrectPair" in {
-        for (set <- desk.board) {
+        for (set <- desk.table) {
           desk.checkStreet(set) should be(false)
           desk.checkPair(set) should be(true)
         }
       }
       "be true when setOfWrongPair" in {
         desk = deskBaseImpl.Desk(players, Set[TileInterface](), setOfWrongPairs)
-        for (set <- desk.board) {
+        for (set <- desk.table) {
           desk.checkStreet(set) should be(false)
           desk.checkPair(set) should be(false)
         }
@@ -212,7 +212,7 @@ class DeskSpec extends WordSpec with Matchers {
       desk = desk.putDownTile(desk.getCurrentPlayer, tile)
       desk = desk.moveTwoTilesOnDesk(tile, tile2)
       "have 4 tiles in Set on Deks" in {
-        desk.board.size should be(1)
+        desk.table.size should be(1)
       }
     }
     "taking up a tile" should {
@@ -222,7 +222,7 @@ class DeskSpec extends WordSpec with Matchers {
       var desk = deskBaseImpl.Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]](SortedSet(tile2), SortedSet()))
       desk = desk.takeUpTile(desk.getCurrentPlayer, tile2)
       "have 4 tiles in Set on Deks" in {
-        desk.board.head.isEmpty should be(true)
+        desk.table.head.isEmpty should be(true)
       }
     }
     "adding to bag" should {

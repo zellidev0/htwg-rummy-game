@@ -27,7 +27,7 @@ class FileIO @Inject() extends FileIOInterface {
         val playerState: String = (player \ "@state").text.toString
         var board: BoardInterface = Board(SortedSet[TileInterface]())
         for (tile <- player \\ "board" \\ "tile") {
-          board = board + t.stringToTile((tile \ "@identifier").text.toString)
+          board = board + Tile.stringToTile((tile \ "@identifier").text.toString)
         }
         players = players.+(Player(playerName, playerNumber, board, State.stringToState(playerState)))
       }
@@ -35,7 +35,7 @@ class FileIO @Inject() extends FileIOInterface {
 
       for (tileNodes <- file \\ "desk" \\ "bagOfTiles") {
         for (tile <- tileNodes \\ "tile") {
-          bagOfTiles = bagOfTiles + t.stringToTile((tile \ "@identifier").text.toString.trim)
+          bagOfTiles = bagOfTiles + Tile.stringToTile((tile \ "@identifier").text.toString.trim)
         }
       }
 
@@ -43,7 +43,7 @@ class FileIO @Inject() extends FileIOInterface {
         for (set <- ssetsNodes \\ "sortedSet") {
           var sorted = SortedSet[TileInterface]()
           for (tile <- set \\ "tile") {
-            sorted = sorted + t.stringToTile((tile \ "@identifier").text.toString.trim)
+            sorted = sorted + Tile.stringToTile((tile \ "@identifier").text.toString.trim)
           }
           ssets = ssets + sorted
         }
@@ -79,7 +79,7 @@ class FileIO @Inject() extends FileIOInterface {
       </bagOfTiles>
       <sets>
         {for {
-        sset <- desk.board
+        sset <- desk.table
       } yield setToXml(sset)}
       </sets>
     </desk>
@@ -106,5 +106,5 @@ class FileIO @Inject() extends FileIOInterface {
     </board>
 
   private def tiletoXml(tile: TileInterface) =
-    <tile identifier={tile.identifier.toString}></tile>
+    <tile identifier={tile.toString}></tile>
 }

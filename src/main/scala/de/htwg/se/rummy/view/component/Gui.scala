@@ -12,7 +12,7 @@ import scala.swing.{Action, Button, Frame, GridPanel, Menu, MenuBar, MenuItem, S
 
 class Gui(contr: ControllerInterface) extends Frame with UIInterface {
   contr.add(this)
-  val newsTestView: TextArea = new TextArea("News come in here\n") {
+  val newsTestView: TextArea = new TextArea() {
     editable = false
   }
 
@@ -174,7 +174,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
 
 
   override def update() {
-    newsTestView.text += contr.currentStateAsString()
+    newsTestView.text += contr.currentStateMessage()
     contr.controllerState match {
       case ControllerState.CREATED => handleNameInput()
       case ControllerState.P_FINISHED => handleOnTurnFinished()
@@ -213,7 +213,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       contents += new Button() {
         text = "Select"
         reactions += {
-          case ButtonClicked(_) => contr.layDownTile(tile.identifier)
+          case ButtonClicked(_) => contr.layDownTile(tile.toString)
         }
       }
     }
@@ -254,7 +254,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
               if (oneIsSelected.equals(tile)) {
                 oneIsSelected = None
               } else {
-                contr.moveTile(oneIsSelected.get.identifier, tile.identifier)
+                contr.moveTile(oneIsSelected.get.toString, tile.toString)
                 oneIsSelected = None
               }
             } else {

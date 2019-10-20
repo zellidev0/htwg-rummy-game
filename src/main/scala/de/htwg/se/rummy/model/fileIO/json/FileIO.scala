@@ -93,7 +93,7 @@ class FileIO @Inject() extends FileIOInterface {
       "desk" -> Json.obj(
         "amountOfPlayers" -> JsNumber(desk.amountOfPlayers),
         "bagSize" -> JsNumber(desk.bagOfTiles.size),
-        "setsSize" -> JsNumber(desk.board.size),
+        "setsSize" -> JsNumber(desk.table.size),
         "bag" -> Json.toJson(
           for {
             tile <- desk.bagOfTiles
@@ -110,7 +110,7 @@ class FileIO @Inject() extends FileIOInterface {
         ),
         "sets" -> Json.toJson(
           for {
-            set <- desk.board
+            set <- desk.table
           } yield {
             Json.obj(
               "setSize" -> set.size,
