@@ -6,7 +6,7 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.TileInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Player, State}
 import de.htwg.se.rummy.util.Command
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 class NameCommand(newName: String, max: Int, controller: Controller) extends Command {
   override def undoStep: Unit = {

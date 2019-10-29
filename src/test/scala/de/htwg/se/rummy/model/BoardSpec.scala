@@ -4,7 +4,7 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Tile
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{BoardInterface, TileInterface}
 import org.scalatest.{Matchers, WordSpec}
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 class BoardSpec extends WordSpec with Matchers {
 

@@ -3,7 +3,7 @@ package de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl
 import com.google.inject.Inject
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{BoardInterface, TileInterface}
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 case class Board @Inject()(tiles: SortedSet[TileInterface]) extends BoardInterface {
 

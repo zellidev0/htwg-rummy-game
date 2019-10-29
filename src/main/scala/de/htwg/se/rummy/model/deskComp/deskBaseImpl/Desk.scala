@@ -2,7 +2,7 @@ package de.htwg.se.rummy.model.deskComp.deskBaseImpl
 
 import de.htwg.se.rummy.model.DeskInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Color, State}
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 import scala.util.Random
 
 case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], table: Set[SortedSet[TileInterface]]) extends DeskInterface {

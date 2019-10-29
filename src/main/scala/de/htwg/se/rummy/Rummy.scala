@@ -6,7 +6,7 @@ import de.htwg.se.rummy.controller.component.Controller
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{Desk, PlayerInterface, TileInterface}
 import de.htwg.se.rummy.view.component.{Gui, Tui}
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 object Rummy {
 

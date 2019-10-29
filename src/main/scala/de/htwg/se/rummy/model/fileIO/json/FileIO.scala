@@ -8,7 +8,7 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{BoardInterface, PlayerInter
 import de.htwg.se.rummy.model.fileIO.FileIOInterface
 import play.api.libs.json._
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 import scala.io.Source
 
 class FileIO @Inject() extends FileIOInterface {

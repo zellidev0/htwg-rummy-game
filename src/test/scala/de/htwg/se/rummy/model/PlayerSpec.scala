@@ -4,7 +4,7 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl._
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Player, State, _}
 import org.scalatest._
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 class PlayerSpec() extends WordSpec with Matchers {
   "A Player" when {

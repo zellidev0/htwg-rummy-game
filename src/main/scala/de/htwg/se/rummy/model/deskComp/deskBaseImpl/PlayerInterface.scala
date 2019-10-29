@@ -3,7 +3,7 @@ package de.htwg.se.rummy.model.deskComp.deskBaseImpl
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.State
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.State.state
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 
 trait PlayerInterface {

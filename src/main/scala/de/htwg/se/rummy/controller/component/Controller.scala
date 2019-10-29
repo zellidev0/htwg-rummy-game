@@ -15,7 +15,7 @@ import de.htwg.se.rummy.model.fileIO.FileIOInterface
 import de.htwg.se.rummy.util.UndoManager
 import net.codingwell.scalaguice.InjectorExtensions._
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 class Controller(var desk: DeskInterface) extends ControllerInterface {
 

@@ -5,7 +5,7 @@ import de.htwg.se.rummy.model.DeskInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{PlayerInterface, TileInterface}
 import de.htwg.se.rummy.util.Observable
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 trait ControllerInterface extends Observable {
 

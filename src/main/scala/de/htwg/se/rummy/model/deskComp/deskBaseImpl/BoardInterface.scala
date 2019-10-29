@@ -1,6 +1,6 @@
 package de.htwg.se.rummy.model.deskComp.deskBaseImpl
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 
 trait BoardInterface {

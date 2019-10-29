@@ -4,7 +4,7 @@ import com.google.inject.Inject
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.State.state
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{BoardInterface, PlayerInterface, TileInterface}
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 case class Player @Inject()(name: String, number: Int, board: BoardInterface, state: state = State.WAIT) extends PlayerInterface {
 

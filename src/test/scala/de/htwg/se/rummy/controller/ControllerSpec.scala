@@ -10,7 +10,7 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Play
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{TileInterface, _}
 import org.scalatest.{Matchers, WordSpec}
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 class ControllerSpec extends WordSpec with Matchers {
 

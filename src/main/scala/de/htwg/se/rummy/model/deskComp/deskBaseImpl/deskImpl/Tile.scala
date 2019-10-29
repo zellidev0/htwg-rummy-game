@@ -15,7 +15,7 @@ case class Tile @Inject()(value: Int, color: Color.Value, ident: Int) extends Ti
       -1
     }
 
-  override def equals(obj: Any): Boolean = obj.isInstanceOf[TileInterface] && obj.asInstanceOf[Tile].value == this.value && obj.asInstanceOf[Tile].color == this.color && obj.asInstanceOf[Tile].ident == this.ident
+  override def equals(obj: Any): Boolean = obj.asInstanceOf[TileInterface].compare(this) == 0
 
   override def toString: String = value + color.toString.charAt(0).toString + ident
 }

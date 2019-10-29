@@ -2,7 +2,7 @@ package de.htwg.se.rummy.model
 
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{Desk, PlayerInterface, TileInterface}
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 trait DeskInterface {
 

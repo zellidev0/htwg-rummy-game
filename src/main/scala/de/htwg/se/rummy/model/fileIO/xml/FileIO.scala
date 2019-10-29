@@ -7,7 +7,7 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl._
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{BoardInterface, PlayerInterface, TileInterface}
 import de.htwg.se.rummy.model.fileIO.FileIOInterface
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 import scala.xml.PrettyPrinter
 
 class FileIO @Inject() extends FileIOInterface {

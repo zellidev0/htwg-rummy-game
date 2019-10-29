@@ -7,7 +7,7 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Color, Tile}
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{Desk, TileInterface}
 import de.htwg.se.rummy.util.Command
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 class MoveTileCommand(tile1: String, tile2: String, controller: Controller) extends Command {
   var setWithTile: Option[TileInterface] = None
@@ -15,7 +15,7 @@ class MoveTileCommand(tile1: String, tile2: String, controller: Controller) exte
 
   override def doStep: Unit = {
     setWithTile = Option(controller.desk.table.find(s => s.contains(Tile.stringToTile(tile1))).get.head)
-    if (setWithTile.get.equals(tile1)) {
+    if (setWithTile.get.equals(Tile.stringToTile(tile1))) {
       setWithTile = None
     }
     controller.desk = controller.desk.moveTwoTilesOnDesk(Tile.stringToTile(tile1), Tile.stringToTile(tile2))
