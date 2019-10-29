@@ -1,11 +1,9 @@
 package de.htwg.se.rummy.view.component
 
-import de.htwg.se.rummy.controller.ControllerInterface
-import de.htwg.se.rummy.controller.component.ControllerState
+import de.htwg.se.rummy.controller.component.{Controller, ControllerState}
 import de.htwg.se.rummy.view.UIInterface
 
-class Tui(controller: ControllerInterface) extends UIInterface {
-
+class Tui(controller: Controller) extends UIInterface {
   controller.add(this)
 
   override def processInput(input: String): Unit = {
@@ -23,8 +21,8 @@ class Tui(controller: ControllerInterface) extends UIInterface {
   override def handleNameInput(name: String): Unit = {
     name match {
       case "f" => controller.nameInputFinished()
-      case "z" => controller.undo()
-      case "r" => controller.redo()
+      case "z" => controller.undo
+      case "r" => controller.redo
       case PlayerNamePattern() => controller.addPlayerAndInit(name.substring(4).trim, elements)
       case _ => wrongInput()
     }
@@ -36,7 +34,7 @@ class Tui(controller: ControllerInterface) extends UIInterface {
 
   override def handleOnTurnFinished(input: String): Unit = input match {
     case "n" => controller.switchToNextPlayer()
-    case "s" => controller.storeFile()
+    case "s" => controller.storeFile
     case _ => wrongInput()
   }
 
@@ -45,8 +43,8 @@ class Tui(controller: ControllerInterface) extends UIInterface {
       case LayDownTilePattern(c) => controller.layDownTile(c.split(" ").apply(1));
       case MoveTilePattern(c) => controller.moveTile(c.split(" t ").apply(0).split(" ").apply(1), c.split(" t ").apply(1));
       case "f" => controller.userFinishedPlay()
-      case "z" => controller.undo()
-      case "r" => controller.redo()
+      case "z" => controller.undo
+      case "r" => controller.redo
       case _ => wrongInput()
     }
   }
@@ -54,7 +52,7 @@ class Tui(controller: ControllerInterface) extends UIInterface {
   override def handleMenuInput(input: String): Unit = {
     input match {
       case "c" => controller.createDesk(elements + 1)
-      case "l" => controller.loadFile()
+      case "l" => controller.loadFile
       case _ => wrongInput()
     }
   }

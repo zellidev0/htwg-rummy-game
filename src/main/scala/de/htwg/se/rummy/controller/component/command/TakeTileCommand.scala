@@ -2,12 +2,12 @@ package de.htwg.se.rummy.controller.component.command
 
 import de.htwg.se.rummy.controller.component.ControllerState._
 import de.htwg.se.rummy.controller.component.Controller
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.TileInterface
+import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.Tile
 import de.htwg.se.rummy.util.Command
 
 
 class TakeTileCommand(controller: Controller) extends Command {
-  private var randomTile: TileInterface = _
+  private var randomTile: Tile = _
 
 
   override def doStep: Unit = {

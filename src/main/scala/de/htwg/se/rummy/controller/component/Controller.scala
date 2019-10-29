@@ -2,32 +2,25 @@ package de.htwg.se.rummy.controller.component
 
 import java.nio.file.{Files, Paths}
 
-import com.google.inject.{Guice, Injector}
-import de.htwg.se.rummy.RummyModule
-import de.htwg.se.rummy.controller.ControllerInterface
 import de.htwg.se.rummy.controller.component.ControllerState._
 import de.htwg.se.rummy.controller.component.command._
-import de.htwg.se.rummy.model.DeskInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Color, Tile}
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{PlayerInterface, TileInterface}
-import de.htwg.se.rummy.model.fileIO.FileIOInterface
-import de.htwg.se.rummy.util.UndoManager
-import net.codingwell.scalaguice.InjectorExtensions._
+import de.htwg.se.rummy.model.deskComp.deskBaseImpl.Desk
+import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Color, Player, Tile}
+import de.htwg.se.rummy.model.fileIO.json.FileIO
+import de.htwg.se.rummy.util.{Observable, UndoManager}
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
-class Controller(var desk: DeskInterface) extends ControllerInterface {
+class Controller(var desk: Desk) extends Observable {
 
   var userPutTileDown = 0
   var controllerState: ControllerState.Value = MENU
-  val injector: Injector = {
-    Guice.createInjector(new RummyModule)
-  }
-  private val undoManager = new UndoManager
-  private val fileIO = injector.instance[FileIOInterface]
 
-  override def userFinishedPlay(): Unit = {
+  private val undoManager = new UndoManager
+  private val fileIO = new FileIO
+
+  def userFinishedPlay(): Unit = {
     if (userPutTileDown == 0) {
       if (desk.bagOfTiles.isEmpty) {
         swState(BAG_IS_EMPTY)
@@ -47,13 +40,13 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     }
   }
 
-  override def swState(c: ControllerState.Value): Unit = {
+  def swState(c: ControllerState.Value): Unit = {
     controllerState = c
     notifyObservers()
   }
 
-  override def moveTile(tile1: String, tile2: String): Unit = {
-    if (!desk.tableContains(Tile.stringToTile(tile1)) || !desk.tableContains(Tile.stringToTile(tile2))) {
+  def moveTile(tile1: String, tile2: String): Unit = {
+    if (!desk.contains(Tile.stringToTile(tile1)) || !desk.contains(Tile.stringToTile(tile2))) {
       swState(CANT_MOVE_THIS_TILE)
       swState(ControllerState.P_TURN)
     } else {
@@ -61,7 +54,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     }
   }
 
-  override def layDownTile(tile: String): Unit = {
+  def layDownTile(tile: String): Unit = {
     if (!currentP.hasTile(Tile.stringToTile(tile))) {
       swState(P_DOES_NOT_OWN_TILE)
       swState(ControllerState.P_TURN)
@@ -70,13 +63,13 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     }
   }
 
-  override def currentP: PlayerInterface = desk.getCurrentPlayer
+  def currentP: Player = desk.getCurrentPlayer
 
-  override def previousP: PlayerInterface = desk.getPreviousPlayer
+  def previousP: Player = desk.getPreviousPlayer
 
-  override def nextP: PlayerInterface = desk.getNextPlayer
+  def nextP: Player = desk.getNextPlayer
 
-  override def addPlayerAndInit(newName: String, max: Int): Unit = {
+  def addPlayerAndInit(newName: String, max: Int): Unit = {
     if (!hasLessThan4Players) {
       swState(ENOUGH_PS)
     } else {
@@ -84,23 +77,23 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     }
   }
 
-  override def hasLessThan4Players: Boolean = desk.lessThan4P
+  def hasLessThan4Players: Boolean = desk.lessThan4P
 
-  override def createDesk(amount: Int): Unit = {
-    var bagOfTiles: Set[TileInterface] = Set[TileInterface]()
+  def createDesk(amount: Int): Unit = {
+    var bagOfTiles: Set[Tile] = Set[Tile]()
     for (number <- 1 to amount;
          color <- Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE);
          ident <- 0 to 1) {
       bagOfTiles += Tile(number, color, ident)
     }
-    desk = deskBaseImpl.Desk(Set[PlayerInterface](), bagOfTiles, Set[SortedSet[TileInterface]]())
+    desk = deskBaseImpl.Desk(Set[Player](), bagOfTiles, Set[SortedSet[Tile]]())
     swState(CREATED)
     swState(ControllerState.INSERTING_NAMES)
   }
 
-  override def switchToNextPlayer(): Unit = undoManager.doStep(new SwitchPlayerCommand(this))
+  def switchToNextPlayer(): Unit = undoManager.doStep(new SwitchPlayerCommand(this))
 
-  override def nameInputFinished(): Unit = {
+  def nameInputFinished(): Unit = {
     if (desk.correctAmountOfPlayers) {
       undoManager.emptyStack()
       swState(START)
@@ -111,34 +104,34 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     }
   }
 
-  override def getTileSet: Set[SortedSet[TileInterface]] = desk.viewOfTable
+  def getTileSet: Set[SortedSet[Tile]] = desk.viewOfTable
 
-  override def getAmountOfPlayers: Int = desk.amountOfPlayers
+  def getAmountOfPlayers: Int = desk.amountOfPlayers
 
-  override def setsOnDeskAreCorrect: Boolean = desk.checkTable()
+  def setsOnDeskAreCorrect: Boolean = desk.checkTable()
 
-  override def removeTileFromSet(tile: TileInterface): Unit = desk = desk.removeFromTable(tile)
+  def removeTileFromSet(tile: Tile): Unit = desk = desk.removeFromTable(tile)
 
-  override def undo: Unit = {
+  def undo: Unit = {
     undoManager.undoStep()
     notifyObservers()
   }
 
-  override def redo: Unit = {
+  def redo: Unit = {
     undoManager.redoStep()
     notifyObservers()
   }
 
-  override def viewOfBoard: SortedSet[TileInterface] = desk.viewOfCurrentPlayersBoard
+  def viewOfBoard: SortedSet[Tile] = desk.viewOfCurrentPlayersBoard
 
-  override def storeFile: Unit = {
+  def storeFile: Unit = {
     fileIO.save(desk)
     val oldState = controllerState
     swState(STORE_FILE)
     swState(oldState)
   }
 
-  override def loadFile: Unit = {
+  def loadFile: Unit = {
     if (Files.exists(Paths.get("/target/desk.json"))) {
       desk = fileIO.load
       swState(LOAD_FILE)
@@ -152,7 +145,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   }
 
-  override def currentTableMessage(): String = {
+  def currentTableMessage(): String = {
     var s = ""
     s = s + String.format(
       "|---------------------------------------------------------------------------------------|\n" +
@@ -184,7 +177,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     s
   }
 
-  override def currentBoardMessage(): String = {
+  def currentBoardMessage(): String = {
     var s = ""
     s = s + String.format(
       "|---------------------------------------------------------------------------------------|\n" +
@@ -214,7 +207,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     s
   }
 
-  override def currentStateMessage(): String = {
+  def currentStateMessage(): String = {
     controllerState match {
       case ControllerState.P_DOES_NOT_OWN_TILE => "You dont have this tile on the board. Please select another one\n"
       case ControllerState.CREATED => "Desk created. Please type in 'name <name1>' where name1 is the first players name.\n"
@@ -252,8 +245,6 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
       case _ => ""
     }
   }
-
-
 
 
 }

@@ -1,17 +1,16 @@
 package de.htwg.se.rummy.model
 
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Tile}
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{BoardInterface, TileInterface}
 import org.scalatest.{Matchers, WordSpec}
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
 
 class BoardSpec extends WordSpec with Matchers {
 
 
   "A Board" when {
     "created" should {
-      val set = SortedSet[TileInterface](Tile(1, Color.RED, 0))
+      val set = SortedSet[Tile](Tile(1, Color.RED, 0))
       val board = Board(tiles = set)
       "have 0 tiles" in {
         board.isEmpty should be(false)
@@ -19,7 +18,7 @@ class BoardSpec extends WordSpec with Matchers {
     }
     "created with 1" should {
       val tile = Tile(1, Color.RED, 0)
-      val set = SortedSet[TileInterface](tile)
+      val set = SortedSet[Tile](tile)
       val board = Board(set)
       "have 1 tile" in {
         board.contains(tile) should be(true)
@@ -28,7 +27,7 @@ class BoardSpec extends WordSpec with Matchers {
       }
     }
     "gets added a tile" should {
-      var board: BoardInterface = Board(SortedSet[TileInterface]())
+      var board: Board = Board(SortedSet[Tile]())
       val tile = Tile(1, Color.RED, 0)
       board = board + tile
       "have 1 more tile" in {
@@ -44,7 +43,7 @@ class BoardSpec extends WordSpec with Matchers {
     }
     "gets removed a tile" should {
       val tile = Tile(1, Color.RED, 0)
-      var board: BoardInterface = Board(SortedSet[TileInterface](tile))
+      var board: Board = Board(SortedSet[Tile](tile))
       board.amountOfTiles() should be(1)
       board.contains(tile) should be(true)
       board = board - tile
@@ -60,7 +59,7 @@ class BoardSpec extends WordSpec with Matchers {
     }
     "checked if empty" should {
       val tile = Tile(1, Color.RED, 0)
-      val board: BoardInterface = Board(SortedSet[TileInterface]())
+      val board: Board = Board(SortedSet[Tile]())
       "should be" in {
         board.isEmpty should be(true)
         board.amountOfTiles() should be(0)

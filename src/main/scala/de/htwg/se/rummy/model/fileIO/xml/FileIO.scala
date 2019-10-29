@@ -1,31 +1,31 @@
 package de.htwg.se.rummy.model.fileIO.xml
 
 import com.google.inject.Inject
-import de.htwg.se.rummy.model.DeskInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl
+import de.htwg.se.rummy.model.deskComp.deskBaseImpl.Desk
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl._
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{BoardInterface, PlayerInterface, TileInterface}
 import de.htwg.se.rummy.model.fileIO.FileIOInterface
 
-import scala.collection.SortedSet
+import scala.collection.immutable.SortedSet
+import scala.collection.immutable.Set
 import scala.xml.PrettyPrinter
 
 class FileIO @Inject() extends FileIOInterface {
 
-  override def load: DeskInterface = {
+  override def load: Desk = {
     val file = scala.xml.XML.loadFile("/target/desk.xml")
     val t = Tile(-1, Color.RED, -1)
     val amountOfPlayersAttr = (file \\ "desk" \ "@amountOfPlayers")
     val amountOfPlayers = amountOfPlayersAttr.text.toInt
-    var players = Set[PlayerInterface]()
-    var bagOfTiles = Set[TileInterface]()
-    var ssets = Set[SortedSet[TileInterface]]()
+    var players = Set[Player]()
+    var bagOfTiles = Set[Tile]()
+    var ssets = scala.collection.immutable.Set[SortedSet[Tile]]()
     for (playerNodes <- file \\ "desk" \\ "players") {
       for (player <- playerNodes \\ "player") {
         val playerName: String = (player \ "@name").text.toString
         val playerNumber: Int = (player \ "@number").text.toInt
         val playerState: String = (player \ "@state").text.toString
-        var board: BoardInterface = Board(SortedSet[TileInterface]())
+        var board: Board = Board(SortedSet[Tile]())
         for (tile <- player \\ "board" \\ "tile") {
           board = board + Tile.stringToTile((tile \ "@identifier").text.toString)
         }
@@ -41,7 +41,7 @@ class FileIO @Inject() extends FileIOInterface {
 
       for (ssetsNodes <- file \\ "desk" \\ "sets") {
         for (set <- ssetsNodes \\ "sortedSet") {
-          var sorted = SortedSet[TileInterface]()
+          var sorted = SortedSet[Tile]()
           for (tile <- set \\ "tile") {
             sorted = sorted + Tile.stringToTile((tile \ "@identifier").text.toString.trim)
           }
@@ -52,10 +52,10 @@ class FileIO @Inject() extends FileIOInterface {
     deskBaseImpl.Desk(players, bagOfTiles, ssets)
   }
 
-  def save(grid: DeskInterface): Unit = saveString(grid)
+  def save(grid: Desk): Unit = saveString(grid)
 
 
-  private def saveString(desk: DeskInterface): Unit = {
+  private def saveString(desk: Desk): Unit = {
     import java.io._
     val pw = new PrintWriter(new File("/target/desk.xml"))
     val prettyPrinter = new PrettyPrinter(120, 4)
@@ -65,7 +65,7 @@ class FileIO @Inject() extends FileIOInterface {
   }
 
 
-  private def deskToXml(desk: DeskInterface) = {
+  private def deskToXml(desk: Desk) = {
     <desk amountOfPlayers={desk.amountOfPlayers.toString}>
       <players>
         {for {
@@ -86,7 +86,7 @@ class FileIO @Inject() extends FileIOInterface {
   }
 
 
-  private def playerToXml(player: PlayerInterface) = {
+  private def playerToXml(player: Player) = {
     <player name={player.name.toString}
             number={player.number.toString}
             state={player.state.toString}>
@@ -94,17 +94,17 @@ class FileIO @Inject() extends FileIOInterface {
     </player>
   }
 
-  private def setToXml(sset: SortedSet[TileInterface]) = {
+  private def setToXml(sset: SortedSet[Tile]) = {
     <sortedSet>
       {sset.map(s => tiletoXml(s))}
     </sortedSet>
   }
 
-  private def boardToXml(set: SortedSet[TileInterface]) =
+  private def boardToXml(set: SortedSet[Tile]) =
     <board>
       {set.map(s => tiletoXml(s))}
     </board>
 
-  private def tiletoXml(tile: TileInterface) =
+  private def tiletoXml(tile: Tile) =
     <tile identifier={tile.toString}></tile>
 }

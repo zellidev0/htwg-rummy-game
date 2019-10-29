@@ -2,15 +2,14 @@ package de.htwg.se.rummy.view.component
 
 import java.awt.Dimension
 
-import de.htwg.se.rummy.controller.ControllerInterface
-import de.htwg.se.rummy.controller.component.ControllerState
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.TileInterface
+import de.htwg.se.rummy.controller.component.{Controller, ControllerState}
+import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.Tile
 import de.htwg.se.rummy.view.UIInterface
 
 import scala.swing.event.ButtonClicked
 import scala.swing.{Action, Button, Frame, GridPanel, Menu, MenuBar, MenuItem, ScrollPane, TextArea, TextField}
 
-class Gui(contr: ControllerInterface) extends Frame with UIInterface {
+class Gui(contr: Controller) extends Frame with UIInterface {
   contr.add(this)
   val newsTestView: TextArea = new TextArea() {
     editable = false
@@ -31,7 +30,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
   val scrollContainerNews: ScrollPane = new ScrollPane() {
     contents = newsTestView
   }
-  var oneIsSelected: Option[TileInterface] = None
+  var oneIsSelected: Option[Tile] = None
   var buttonPanel = new GridPanel(1, 6)
   var deskPanel = new ScrollPane()
   var userBoard: ScrollPane = new ScrollPane() {
@@ -79,13 +78,13 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       contents += new Button {
         text = "Undo"
         reactions += {
-          case ButtonClicked(_) => contr.undo()
+          case ButtonClicked(_) => contr.undo
         }
       }
       contents += new Button {
         text = "Redo"
         reactions += {
-          case ButtonClicked(_) => contr.redo()
+          case ButtonClicked(_) => contr.redo
         }
       }
     }
@@ -126,13 +125,13 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       contents += new Button() {
         text = "Redo"
         reactions += {
-          case ButtonClicked(_) => contr.redo()
+          case ButtonClicked(_) => contr.redo
         }
       }
       contents += new Button() {
         text = "Undo"
         reactions += {
-          case ButtonClicked(_) => contr.undo()
+          case ButtonClicked(_) => contr.undo
         }
       }
       contents += new Button() {
@@ -161,7 +160,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
     buttonPanel.contents += new Button {
       text = "Load stored game"
       reactions += {
-        case ButtonClicked(_) => contr.loadFile()
+        case ButtonClicked(_) => contr.loadFile
       }
     }
     contents = new GridPanel(4, 1) {
@@ -202,7 +201,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
     }
   }
 
-  def tileAsViewForBoard(tile: TileInterface): GridPanel = {
+  def tileAsViewForBoard(tile: Tile): GridPanel = {
     new GridPanel(3, 1) {
       val value = new TextField(tile.value.toString)
       value.editable = false
@@ -238,7 +237,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
     }
   }
 
-  def tileAsViewForDesk(tile: TileInterface): GridPanel = {
+  def tileAsViewForDesk(tile: Tile): GridPanel = {
     new GridPanel(3, 1) {
       val value = new TextField(tile.value.toString)
       value.editable = false

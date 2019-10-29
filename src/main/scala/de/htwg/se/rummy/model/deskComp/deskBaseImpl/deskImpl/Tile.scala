@@ -1,12 +1,9 @@
 package de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl
 
-import com.google.inject.Inject
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.TileInterface
 
+case class Tile (value: Int, color: Color.Value, ident: Int) extends Ordered[Tile] {
 
-case class Tile @Inject()(value: Int, color: Color.Value, ident: Int) extends TileInterface {
-
-  override def compare(that: TileInterface): Int =
+  override def compare(that: Tile): Int =
     if (this.value == that.value && this.color == that.color && this.ident == that.ident) {
       0
     } else if (this.value > that.value) {
@@ -15,13 +12,13 @@ case class Tile @Inject()(value: Int, color: Color.Value, ident: Int) extends Ti
       -1
     }
 
-  override def equals(obj: Any): Boolean = obj.isInstanceOf[TileInterface] && obj.asInstanceOf[Tile].value == this.value && obj.asInstanceOf[Tile].color == this.color && obj.asInstanceOf[Tile].ident == this.ident
+  override def equals(obj: Any): Boolean = compare(obj.asInstanceOf[Tile]) == 0
 
   override def toString: String = value + color.toString.charAt(0).toString + ident
 }
 
 object Tile {
-  def stringToTile(string: String): TileInterface = {
+  def stringToTile(string: String): Tile = {
     val color = string.charAt(string.length - 2) match {
       case 'R' => Color.RED
       case 'B' => Color.BLUE
