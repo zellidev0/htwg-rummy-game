@@ -27,38 +27,31 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   override def userFinishedPlay(): Unit = {
     if (userPutTileDown == 0) {
       if (desk.bagOfTiles.isEmpty) {
-        switchAnswerState(AnswerState.BAG_IS_EMPTY)
-        switchControllerState(ControllerState.P_TURN)
+        switchState(AnswerState.BAG_IS_EMPTY, ControllerState.P_TURN)
       } else {
         undoManager.doStep(new TakeTileCommand(this))
       }
     } else if (desk.checkTable()) {
       if (desk.currentPlayerWon()) {
-        switchAnswerState(AnswerState.P_WON)
-        switchControllerState(ControllerState.KILL)
+        switchState(AnswerState.P_WON, ControllerState.KILL)
       } else {
         undoManager.doStep(new FinishedCommand(userPutTileDown, this))
       }
     } else {
-      switchAnswerState(AnswerState.TABLE_NOT_CORRECT)
-      switchControllerState(ControllerState.P_TURN)
+      switchState(AnswerState.TABLE_NOT_CORRECT, ControllerState.P_TURN)
     }
   }
 
-  override def switchControllerState(c: ControllerState.Value): Unit = {
+  override def switchState(answer: AnswerState.Value, c: ControllerState.Value): Unit = {
+    answerState = answer
     controllerState = c
     notifyObservers()
   }
 
-  override def switchAnswerState(c: AnswerState.Value): Unit = {
-    answerState = c
-    notifyObservers()
-  }
 
   override def moveTile(thisTile: TileInterface, toThisTile: TileInterface): Unit = {
     if (!desk.tableContains(thisTile) || !desk.tableContains(toThisTile)) {
-      switchAnswerState(AnswerState.CANT_MOVE_THIS_TILE)
-      switchControllerState(ControllerState.P_TURN)
+      switchState(AnswerState.CANT_MOVE_THIS_TILE, ControllerState.P_TURN)
     } else {
       undoManager.doStep(new MoveTileCommand(thisTile, toThisTile, this))
     }
@@ -66,8 +59,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   override def layDownTile(tile: TileInterface): Unit = {
     if (!getCurrentPlayer.hasTile(tile)) {
-      switchAnswerState(AnswerState.P_DOES_NOT_OWN_TILE)
-      switchControllerState(ControllerState.P_TURN)
+      switchState(AnswerState.P_DOES_NOT_OWN_TILE, ControllerState.P_TURN)
     } else {
       undoManager.doStep(new LayDownCommand(tile, this))
     }
@@ -81,8 +73,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   override def addPlayerAndInit(newName: String, max: Int): Unit = {
     if (!hasLessThan4Players) {
-      switchAnswerState(AnswerState.ADDED_PLAYER)
-      switchControllerState(ControllerState.ENOUGH_PLAYER)
+      switchState(AnswerState.ENOUGH_PLAYER, ControllerState.INSERTING_NAMES)
     } else {
       undoManager.doStep(new NameCommand(newName, max, this))
     }
@@ -98,8 +89,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
       bagOfTiles += Tile(number, color, ident)
     }
     desk = deskBaseImpl.Desk(Set[PlayerInterface](), bagOfTiles, Set[SortedSet[TileInterface]]())
-    switchAnswerState(AnswerState.CREATED_DESK)
-    switchControllerState(ControllerState.INSERTING_NAMES)
+    switchState(AnswerState.CREATED_DESK, ControllerState.INSERTING_NAMES)
   }
 
   override def switchToNextPlayer(): Unit = undoManager.doStep(new SwitchPlayerCommand(this))
@@ -107,11 +97,9 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   override def nameInputFinished(): Unit = {
     if (desk.correctAmountOfPlayers) {
       undoManager.emptyStack()
-      switchAnswerState(AnswerState.INSERTING_NAMES_FINISHED)
-      switchControllerState(P_TURN)
+      switchState(AnswerState.INSERTING_NAMES_FINISHED, P_TURN)
     } else {
-      switchAnswerState(AnswerState.NOT_ENOUGH_PLAYERS)
-      switchControllerState(ControllerState.INSERTING_NAMES)
+      switchState(AnswerState.NOT_ENOUGH_PLAYERS, ControllerState.INSERTING_NAMES)
     }
   }
 
@@ -134,17 +122,15 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   override def storeFile(): Unit = {
     fileIO.save(desk)
-    switchAnswerState(AnswerState.STORED_FILE)
-    switchControllerState(controllerState)
+    switchState(AnswerState.STORED_FILE, controllerState)
   }
 
   override def loadFile(): Unit = {
     if (Files.exists(Paths.get("/target/desk.json"))) {
       desk = fileIO.load
-      switchAnswerState(AnswerState.LOADED_FILE)
-      switchControllerState(P_TURN)
+      switchState(AnswerState.LOADED_FILE, P_TURN)
     } else {
-      switchAnswerState(AnswerState.COULD_NOT_LOAD_FILE)
+      switchState(AnswerState.COULD_NOT_LOAD_FILE,MENU)
       createDesk(12)
     }
   }

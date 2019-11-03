@@ -10,8 +10,7 @@ import scala.collection.immutable.SortedSet
 class NameCommand(newName: String, max: Int, controller: Controller) extends Command {
   override def undoStep(): Unit = {
     controller.desk = controller.desk.removePlayer(Player(newName, controller.desk.amountOfPlayers - 1, Board(SortedSet[TileInterface]()), if (controller.desk.players.nonEmpty) State.WAIT else State.TURN))
-    controller.switchAnswerState(AnswerState.PLAYER_REMOVED)
-    controller.switchControllerState(ControllerState.INSERTING_NAMES)
+    controller.switchState(AnswerState.PLAYER_REMOVED, ControllerState.INSERTING_NAMES)
   }
   override def redoStep(): Unit = doStep()
   override def doStep(): Unit = {
@@ -19,7 +18,6 @@ class NameCommand(newName: String, max: Int, controller: Controller) extends Com
     for (_ <- 1 to max) {
       controller.desk = controller.desk.takeTileFromBagToPlayer(controller.desk.players.find(_.number == controller.desk.amountOfPlayers - 1).get, controller.desk.getRandomTileInBag)
     }
-    controller.switchAnswerState(AnswerState.ADDED_PLAYER)
-    controller.switchControllerState(ControllerState.INSERTING_NAMES)
+    controller.switchState(AnswerState.ADDED_PLAYER, ControllerState.INSERTING_NAMES)
   }
 }

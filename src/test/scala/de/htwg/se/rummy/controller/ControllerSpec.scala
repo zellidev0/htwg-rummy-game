@@ -224,7 +224,7 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.addPlayerAndInit("Name4", 12)
       }
       "be also 4" in {
-        controller.currentControllerState should be(ENOUGH_PLAYER)
+        controller.currentControllerState should be(INSERTING_NAMES)
         controller.addPlayerAndInit("Name5", 12)
       }
     }

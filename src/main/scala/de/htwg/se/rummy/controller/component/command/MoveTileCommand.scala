@@ -18,8 +18,7 @@ class MoveTileCommand(fromTile: TileInterface, toTile: TileInterface, controller
       setWithTile = None
     }
     controller.desk = controller.desk.moveTwoTilesOnDesk(fromTile, toTile)
-    controller.switchAnswerState(AnswerState.MOVED_TILE)
-    controller.switchControllerState(P_TURN)
+    controller.switchState(AnswerState.MOVED_TILE, P_TURN)
   }
 
 
@@ -30,13 +29,11 @@ class MoveTileCommand(fromTile: TileInterface, toTile: TileInterface, controller
         controller.removeTileFromSet(fromTile)
         controller.desk = Desk(table = controller.desk.table + SortedSet[TileInterface](fromTile), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
     }
-    controller.switchAnswerState(AnswerState.UNDO_MOVED_TILE)
-    controller.switchControllerState(P_TURN)
+    controller.switchState(AnswerState.UNDO_MOVED_TILE, P_TURN)
   }
 
   override def redoStep(): Unit = {
     controller.desk = controller.desk.moveTwoTilesOnDesk(fromTile, toTile)
-    controller.switchAnswerState(AnswerState.MOVED_TILE)
-    controller.switchControllerState(P_TURN)
+    controller.switchState(AnswerState.MOVED_TILE, P_TURN)
   }
 }

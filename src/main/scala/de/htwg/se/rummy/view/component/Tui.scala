@@ -92,8 +92,6 @@ class Tui(controller: ControllerInterface) extends UIInterface {
         System.exit(0)
       case ControllerState.INSERTING_NAMES =>
         "Type in 'name <the name of the player>' and confirm with enter. (Min 2 players, Max 4) or finish with 'f'"
-      case ControllerState.ENOUGH_PLAYER =>
-        "The Maximum amount of players is set. Type 'f' to finish inserting names"
       case ControllerState.NEXT_TYPE_N =>
         "The next player has to type 'n' to continue, or type s to store the current game."
       case _ => ""
@@ -132,6 +130,8 @@ class Tui(controller: ControllerInterface) extends UIInterface {
         "You finished inserting the names."
       case AnswerState.STORED_FILE =>
         "You stored the game in a file"
+      case AnswerState.ENOUGH_PLAYER =>
+        "The Maximum amount of players is set. Type 'f' to finish inserting names"
       case AnswerState.NOT_ENOUGH_PLAYERS =>
         "Not enough Players. Add some more."
       case AnswerState.COULD_NOT_LOAD_FILE =>

@@ -61,8 +61,6 @@ trait ControllerInterface extends Observable {
 
   def viewOfTable: Set[SortedSet[TileInterface]]
 
-  def switchControllerState(c: ControllerState.Value): Unit
-
-  def switchAnswerState(c: AnswerState.Value): Unit
+  def switchState(answerState: AnswerState.Value, c: ControllerState.Value): Unit
 
 }

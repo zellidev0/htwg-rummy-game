@@ -17,13 +17,11 @@ class TakeTileCommand(controller: Controller) extends Command {
 
   override def undoStep(): Unit = {
     controller.desk = controller.desk.takeTileFromPlayerToBag(controller.getCurrentPlayer, randomTile)
-    controller.switchAnswerState(AnswerState.UNDO_TAKE_TILE)
-    controller.switchControllerState(P_TURN)
+    controller.switchState(AnswerState.UNDO_TAKE_TILE, P_TURN)
   }
 
   override def redoStep(): Unit = {
     controller.desk = controller.desk.takeTileFromBagToPlayer(controller.getCurrentPlayer, randomTile)
-    controller.switchAnswerState(AnswerState.TAKE_TILE)
-    controller.switchControllerState(NEXT_TYPE_N)
+    controller.switchState(AnswerState.TAKE_TILE, NEXT_TYPE_N)
   }
 }
