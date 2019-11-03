@@ -1,40 +1,42 @@
 package de.htwg.se.rummy.controller.component.command
 
 
-import de.htwg.se.rummy.controller.component.Controller
+import de.htwg.se.rummy.controller.component.{AnswerState, Controller}
 import de.htwg.se.rummy.controller.component.ControllerState.P_TURN
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Color, Tile}
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{Desk, TileInterface}
 import de.htwg.se.rummy.util.Command
 
 import scala.collection.immutable.SortedSet
 
-class MoveTileCommand(tile1: String, tile2: String, controller: Controller) extends Command {
+class MoveTileCommand(fromTile: TileInterface, toTile: TileInterface, controller: Controller) extends Command {
   var setWithTile: Option[TileInterface] = None
 
 
-  override def doStep: Unit = {
-    setWithTile = Option(controller.desk.table.find(s => s.contains(Tile.stringToTile(tile1))).get.head)
-    if (setWithTile.get.equals(Tile.stringToTile(tile1))) {
+  override def doStep(): Unit = {
+    setWithTile = Option(controller.desk.table.find(s => s.contains(fromTile)).get.head)
+    if (setWithTile.get.equals(fromTile)) {
       setWithTile = None
     }
-    controller.desk = controller.desk.moveTwoTilesOnDesk(Tile.stringToTile(tile1), Tile.stringToTile(tile2))
-    controller.swState(P_TURN)
+    controller.desk = controller.desk.moveTwoTilesOnDesk(fromTile, toTile)
+    controller.switchAnswerState(AnswerState.MOVED_TILE)
+    controller.switchControllerState(P_TURN)
   }
 
 
-  override def undoStep: Unit = {
+  override def undoStep(): Unit = {
     setWithTile match {
-      case Some(x) => controller.desk = controller.desk.moveTwoTilesOnDesk(Tile.stringToTile(tile1), x)
+      case Some(x) => controller.desk = controller.desk.moveTwoTilesOnDesk(fromTile, x)
       case None =>
-        controller.removeTileFromSet(Tile.stringToTile(tile1))
-        controller.desk = Desk(table = controller.desk.table + SortedSet[TileInterface](Tile.stringToTile(tile1)), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
+        controller.removeTileFromSet(fromTile)
+        controller.desk = Desk(table = controller.desk.table + SortedSet[TileInterface](fromTile), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
     }
-    controller.swState(P_TURN)
+    controller.switchAnswerState(AnswerState.UNDO_MOVED_TILE)
+    controller.switchControllerState(P_TURN)
   }
 
-  override def redoStep: Unit = {
-    controller.desk = controller.desk.moveTwoTilesOnDesk(Tile.stringToTile(tile1), Tile.stringToTile(tile2))
-    controller.swState(P_TURN)
+  override def redoStep(): Unit = {
+    controller.desk = controller.desk.moveTwoTilesOnDesk(fromTile, toTile)
+    controller.switchAnswerState(AnswerState.MOVED_TILE)
+    controller.switchControllerState(P_TURN)
   }
 }

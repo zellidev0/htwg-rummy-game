@@ -1,6 +1,6 @@
 package de.htwg.se.rummy.controller
 
-import de.htwg.se.rummy.controller.component.ControllerState
+import de.htwg.se.rummy.controller.component.{AnswerState, ControllerState}
 import de.htwg.se.rummy.model.DeskInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{PlayerInterface, TileInterface}
 import de.htwg.se.rummy.util.Observable
@@ -9,35 +9,26 @@ import scala.collection.immutable.SortedSet
 
 trait ControllerInterface extends Observable {
 
-  var desk: DeskInterface
-  var controllerState: ControllerState.Value
-  var userPutTileDown: Int
+  protected var desk: DeskInterface
+  protected var answerState: AnswerState.Value = AnswerState.NONE
+  protected var controllerState: ControllerState.Value  = ControllerState.MENU
+  var userPutTileDown = 0
 
   def userFinishedPlay(): Unit
 
-  def moveTile(tile1: String, tile2: String): Unit
+  def moveTile(thisTile: TileInterface, toThis: TileInterface): Unit
 
-  def layDownTile(tile: String): Unit
-
-  def currentP: PlayerInterface
-
-  def swState(c: ControllerState.Value): Unit
-
-  def previousP: PlayerInterface
-
-  def nextP: PlayerInterface
+  def layDownTile(tile: TileInterface): Unit
 
   def addPlayerAndInit(newName: String, max: Int): Unit
 
-  def hasLessThan4Players: Boolean
-
   def createDesk(amount: Int): Unit
+
+  def hasLessThan4Players: Boolean
 
   def switchToNextPlayer(): Unit
 
   def nameInputFinished(): Unit
-
-  def getTileSet: Set[SortedSet[TileInterface]]
 
   def getAmountOfPlayers: Int
 
@@ -49,15 +40,29 @@ trait ControllerInterface extends Observable {
 
   def redo(): Unit
 
-  def viewOfBoard: SortedSet[TileInterface]
-
   def storeFile(): Unit
 
   def loadFile(): Unit
 
-  def currentStateMessage(): String
 
-  def currentTableMessage(): String
+  def getCurrentPlayer: PlayerInterface
 
-  def currentBoardMessage(): String
+  def getPreviousPlayer: PlayerInterface
+
+  def getNextPlayer: PlayerInterface
+
+
+  def currentAnswerState: AnswerState.Value
+
+  def currentControllerState: ControllerState.Value
+
+
+  def viewOfBoard: SortedSet[TileInterface]
+
+  def viewOfTable: Set[SortedSet[TileInterface]]
+
+  def switchControllerState(c: ControllerState.Value): Unit
+
+  def switchAnswerState(c: AnswerState.Value): Unit
+
 }

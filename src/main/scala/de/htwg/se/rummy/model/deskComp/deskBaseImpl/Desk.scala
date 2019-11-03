@@ -39,9 +39,9 @@ case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], t
 
   override def currentPlayerWon(): Boolean = getCurrentPlayer.won()
 
-  override def viewOfCurrentPlayersBoard: SortedSet[TileInterface] = getCurrentPlayer.tiles
+  override def boardView: SortedSet[TileInterface] = getCurrentPlayer.tiles
 
-  override def viewOfTable: Set[SortedSet[TileInterface]] = table
+  override def tableView: Set[SortedSet[TileInterface]] = table
 
   override def takeUpTile(p: PlayerInterface, t: TileInterface): Desk = removeFromTable(t).addToPlayer(p, t)
 
@@ -51,7 +51,7 @@ case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], t
 
   override def amountOfPlayers: Int = players.size
 
-  override def checkTable(): Boolean = table.forall(set => checkStreet(set) || checkPair(set))
+  override def checkTable(): Boolean = true //table.forall(set => checkStreet(set) || checkPair(set))
 
   private[model] def addToTable(t: TileInterface): Desk = copy(table = table + (SortedSet[TileInterface]() + t))
 

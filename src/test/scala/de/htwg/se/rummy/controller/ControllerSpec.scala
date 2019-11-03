@@ -4,7 +4,7 @@ import java.io.File
 import java.nio.file.{Files, Paths}
 
 import de.htwg.se.rummy.controller.component.ControllerState._
-import de.htwg.se.rummy.controller.component.Controller
+import de.htwg.se.rummy.controller.component.{AnswerState, Controller}
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Player, State, _}
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{TileInterface, _}
@@ -35,7 +35,7 @@ class ControllerSpec extends WordSpec with Matchers {
       "userPutTileDown be 1 and table is ok " in {
         player1.tiles.size should be(1)
       }
-      controller.layDownTile("2R0")
+      controller.layDownTile(Tile.stringToTile("2R0"))
       controller.userFinishedPlay()
       "table be not correct " in {
         player1.tiles.size should be(1)
@@ -52,7 +52,7 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.userPutTileDown = 1
       controller.userFinishedPlay()
       "user should win " in {
-        controller.controllerState should be(P_WON)
+        controller.currentAnswerState should be(AnswerState.P_WON)
       }
     }
     "user finished play and bag is empty" should {
@@ -64,19 +64,19 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.userFinishedPlay()
       "bag be empty " in {
         controller.desk.bagOfTiles.isEmpty should be(true)
-        controller.controllerState should be(MENU)
+        controller.currentControllerState should be(MENU)
       }
     }
     "should move two correct and movable tiles" should {
       val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN), Player("Name2", 1, Board(SortedSet[TileInterface]())))
       val desk = deskBaseImpl.Desk(players, Set(), Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0))))
       val controller = new Controller(desk)
-      controller.moveTile("2R0", "1R0")
+      controller.moveTile(Tile.stringToTile("2R0"), Tile.stringToTile("1R0"))
       "have only one set with the 2 tiles side by side" in {
         controller.desk.table.size should be(1)
         controller.desk.table.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
       }
-      controller.moveTile("2R1", "1R0")
+      controller.moveTile(Tile.stringToTile("2R1"), Tile.stringToTile("1R0"))
       "have change nothing" in {
         controller.desk.table.size should be(1)
         controller.desk.table.contains(SortedSet(Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
@@ -86,12 +86,12 @@ class ControllerSpec extends WordSpec with Matchers {
       val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), state = State.TURN), Player("Name2", 1, Board(SortedSet[TileInterface]())))
       val desk = deskBaseImpl.Desk(players, Set(), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
-      controller.layDownTile("1R0")
+      controller.layDownTile(Tile.stringToTile("1R0"))
       "should work (have only one set with one tile)" in {
         controller.desk.table.size should be(1)
         controller.desk.table.contains(SortedSet(Tile(1, Color.RED, 0), Tile(1, Color.RED, 0))) should be(true)
       }
-      controller.layDownTile("1R1")
+      controller.layDownTile(Tile.stringToTile("1R1"))
       "should not work (have only one set with one tile)" in {
         controller.desk.table.size should be(1)
         controller.desk.table.contains(SortedSet[TileInterface](Tile(1, Color.RED, 0))) should be(true)
@@ -138,9 +138,9 @@ class ControllerSpec extends WordSpec with Matchers {
       val sets = Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0)))
       val desk = Desk(players, Set(), sets)
       val controller = new Controller(desk)
-      val oldState = controller.controllerState
+      val oldState = controller.currentControllerState
       "be sets" in {
-        controller.getTileSet should be(sets)
+        controller.viewOfTable should be(sets)
       }
     }
     "switching players" should {
@@ -151,33 +151,33 @@ class ControllerSpec extends WordSpec with Matchers {
       val players = Set[PlayerInterface](player0, player1, player2, player3)
       val controller = new Controller(deskBaseImpl.Desk(players, Set(), Set[SortedSet[TileInterface]]()))
       "have the correct previous, current and next player" in {
-        controller.previousP.number should be(player3.number)
-        controller.currentP.number should be(player0.number)
-        controller.nextP.number should be(player1.number)
+        controller.getPreviousPlayer.number should be(player3.number)
+        controller.getCurrentPlayer.number should be(player0.number)
+        controller.getNextPlayer.number should be(player1.number)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player1" in {
-        controller.previousP.number should be(player0.number)
-        controller.currentP.number should be(player1.number)
-        controller.nextP.number should be(player2.number)
+        controller.getPreviousPlayer.number should be(player0.number)
+        controller.getCurrentPlayer.number should be(player1.number)
+        controller.getNextPlayer.number should be(player2.number)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player2" in {
-        controller.previousP.number should be(player1.number)
-        controller.currentP.number should be(player2.number)
-        controller.nextP.number should be(player3.number)
+        controller.getPreviousPlayer.number should be(player1.number)
+        controller.getCurrentPlayer.number should be(player2.number)
+        controller.getNextPlayer.number should be(player3.number)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player3" in {
-        controller.previousP.number should be(player2.number)
-        controller.currentP.number should be(player3.number)
-        controller.nextP.number should be(player0.number)
+        controller.getPreviousPlayer.number should be(player2.number)
+        controller.getCurrentPlayer.number should be(player3.number)
+        controller.getNextPlayer.number should be(player0.number)
         controller.switchToNextPlayer()
       }
       "have the correct previous, current and next player4" in {
-        controller.previousP.number should be(player3.number)
-        controller.currentP.number should be(player0.number)
-        controller.nextP.number should be(player1.number)
+        controller.getPreviousPlayer.number should be(player3.number)
+        controller.getCurrentPlayer.number should be(player0.number)
+        controller.getNextPlayer.number should be(player1.number)
       }
     }
     "name input finished" should {
@@ -185,18 +185,18 @@ class ControllerSpec extends WordSpec with Matchers {
       val desk = deskBaseImpl.Desk(players, Set(), Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0))))
       val controller = new Controller(desk)
       controller.createDesk(12) // must create desk or you cant init players
-      val oldState = controller.controllerState
+      val oldState = controller.currentControllerState
       controller.addPlayerAndInit("Name1", 12)
       controller.nameInputFinished()
       "when having not correct amount of players" in {
         oldState should be(INSERTING_NAMES)
-        controller.controllerState should be(INSERTING_NAMES)
+        controller.currentControllerState should be(INSERTING_NAMES)
         controller.addPlayerAndInit("Name2", 12)
         controller.nameInputFinished()
       }
       "when having correct amount of players" in {
         oldState should be(INSERTING_NAMES)
-        controller.controllerState should be(P_TURN)
+        controller.currentControllerState should be(P_TURN)
       }
     }
     "get amount of players" should {
@@ -206,7 +206,7 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.createDesk(12)
       controller.addPlayerAndInit("Name0", 12)
-      val oldState = controller.controllerState
+      val oldState = controller.currentControllerState
       "be 1" in {
         controller.getAmountOfPlayers should be(1)
         controller.addPlayerAndInit("Name1", 12)
@@ -224,7 +224,7 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.addPlayerAndInit("Name4", 12)
       }
       "be also 4" in {
-        controller.controllerState should be(ENOUGH_PS)
+        controller.currentControllerState should be(ENOUGH_PLAYER)
         controller.addPlayerAndInit("Name5", 12)
       }
     }
@@ -275,14 +275,14 @@ class ControllerSpec extends WordSpec with Matchers {
       val players = Set[PlayerInterface](player1)
       val desk = deskBaseImpl.Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]]())
       val controller = new Controller(desk)
-      controller.layDownTile("1R0")
+      controller.layDownTile(Tile.stringToTile("1R0"))
       "undo" in {
         controller.desk.getCurrentPlayer.hasTile(tile1) should be(false)
         controller.desk.table.contains(SortedSet(tile1)) should be(true)
-        controller.undo
+        controller.undo()
         controller.desk.getCurrentPlayer.hasTile(tile1) should be(true)
         controller.desk.table.contains(SortedSet(tile1)) should be(false)
-        controller.redo
+        controller.redo()
       }
       "redo" in {
         controller.desk.getCurrentPlayer.hasTile(tile1) should be(false)
@@ -296,14 +296,14 @@ class ControllerSpec extends WordSpec with Matchers {
       val players = Set[PlayerInterface](player1)
       val desk = deskBaseImpl.Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]](SortedSet[TileInterface](tile1), SortedSet[TileInterface](tile2)))
       val controller = new Controller(desk)
-      controller.moveTile("1R0", "2R0")
+      controller.moveTile(Tile.stringToTile("1R0"), Tile.stringToTile("2R0"))
       "undo" in {
         controller.desk.table.size should be(1)
         controller.desk.table.contains(SortedSet(tile1, tile2)) should be(true)
-        controller.undo
+        controller.undo()
         controller.desk.table.size should be(2)
         controller.desk.table.contains(SortedSet(tile1, tile2)) should be(false)
-        controller.redo
+        controller.redo()
       }
       "redo" in {
         controller.desk.table.size should be(1)
@@ -317,9 +317,9 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.addPlayerAndInit("Name0", 12)
       "undo" in {
         controller.desk.amountOfPlayers should be(1)
-        controller.undo
+        controller.undo()
         controller.desk.amountOfPlayers should be(0)
-        controller.redo
+        controller.redo()
       }
       "redo" in {
         controller.desk.amountOfPlayers should be(1)
@@ -337,11 +337,11 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.userFinishedPlay()
       "userPutTileDown be 1" in {
         controller.userPutTileDown should be(0)
-        controller.undo
+        controller.undo()
       }
       "undo" in {
         controller.userPutTileDown should be(1)
-        controller.redo
+        controller.redo()
       }
       "redo" in {
         controller.userPutTileDown should be(0)
@@ -357,15 +357,15 @@ class ControllerSpec extends WordSpec with Matchers {
       val controller = new Controller(desk)
       controller.switchToNextPlayer()
       "userPutTileDown be 1" in {
-        controller.currentP.number should be(1)
-        controller.undo
+        controller.getCurrentPlayer.number should be(1)
+        controller.undo()
       }
       "undo" in {
-        controller.currentP.number should be(0)
-        controller.redo
+        controller.getCurrentPlayer.number should be(0)
+        controller.redo()
       }
       "redo" in {
-        controller.currentP.number should be(1)
+        controller.getCurrentPlayer.number should be(1)
       }
     }
     "calling undo redo when taking a tile" should {
@@ -376,15 +376,15 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.userPutTileDown = 0
       controller.userFinishedPlay()
       "userPutTileDown be 1" in {
-        controller.currentP.tiles.size should be(1)
-        controller.undo
+        controller.getCurrentPlayer.tiles.size should be(1)
+        controller.undo()
       }
       "undo" in {
-        controller.currentP.tiles.size should be(0)
-        controller.redo
+        controller.getCurrentPlayer.tiles.size should be(0)
+        controller.redo()
       }
       "redo" in {
-        controller.currentP.tiles.size should be(1)
+        controller.getCurrentPlayer.tiles.size should be(1)
       }
     }
     "accessing view of board" should {

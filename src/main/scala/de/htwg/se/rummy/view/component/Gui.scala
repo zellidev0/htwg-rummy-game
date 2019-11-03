@@ -5,6 +5,7 @@ import java.awt.Dimension
 import de.htwg.se.rummy.controller.ControllerInterface
 import de.htwg.se.rummy.controller.component.ControllerState
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.TileInterface
+import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.Tile
 import de.htwg.se.rummy.view.UIInterface
 
 import scala.swing.event.ButtonClicked
@@ -17,14 +18,14 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
   }
 
   title = "Rummy"
-  size = new Dimension(1000, 1000)
+  bounds = new swing.Rectangle(800, 800)
   menuBar = new MenuBar {
     contents += new Menu("Menu") {
       contents += new MenuItem(Action("Quit game") {
         System.exit(0)
       })
       contents += new MenuItem(Action("Save game") {
-        contr.storeFile
+        contr.storeFile()
       })
     }
   }
@@ -52,12 +53,11 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
 
 
   override def processInput(input: String): Unit = {
-    contr.controllerState match {
+    contr.currentControllerState match {
       case ControllerState.MENU => handleMenuInput()
       case ControllerState.INSERTING_NAMES => handleNameInput()
       case ControllerState.P_TURN => handleOnTurn()
-      case ControllerState.P_FINISHED => handleOnTurnFinished()
-      case ControllerState.CREATED => handleNameInput()
+      case ControllerState.NEXT_TYPE_N => handleOnTurnFinished()
     }
   }
 
@@ -174,10 +174,11 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
 
 
   override def update() {
-    newsTestView.text += contr.currentStateMessage()
-    contr.controllerState match {
-      case ControllerState.CREATED => handleNameInput()
-      case ControllerState.P_FINISHED => handleOnTurnFinished()
+    newsTestView.text += contr.currentAnswerState + "\n"
+    newsTestView.text += contr.currentControllerState + "\n"
+    contr.currentControllerState match {
+      case ControllerState.INSERTING_NAMES => handleNameInput()
+      case ControllerState.NEXT_TYPE_N => handleOnTurnFinished()
       case ControllerState.P_TURN =>
         handleOnTurn()
         printUserBoard()
@@ -213,7 +214,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       contents += new Button() {
         text = "Select"
         reactions += {
-          case ButtonClicked(_) => contr.layDownTile(tile.toString)
+          case ButtonClicked(_) => contr.layDownTile(Tile.stringToTile(tile.toString))
         }
       }
     }
@@ -222,7 +223,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
   def printTable(): Unit = {
     deskPanel = new ScrollPane() {
       contents = new GridPanel(20, 1) {
-        for (sortedSet <- contr.getTileSet) {
+        for (sortedSet <- contr.viewOfTable) {
           contents += new GridPanel(1, 13) {
             for (tile <- sortedSet)
               contents += tileAsViewForDesk(tile)
@@ -254,7 +255,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
               if (oneIsSelected.equals(tile)) {
                 oneIsSelected = None
               } else {
-                contr.moveTile(oneIsSelected.get.toString, tile.toString)
+                contr.moveTile(Tile.stringToTile(oneIsSelected.get.toString), Tile.stringToTile(tile.toString))
                 oneIsSelected = None
               }
             } else {

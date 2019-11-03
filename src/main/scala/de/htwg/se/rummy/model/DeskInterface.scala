@@ -29,7 +29,7 @@ trait DeskInterface {
   def lessThan4P: Boolean
   def correctAmountOfPlayers: Boolean
   def currentPlayerWon(): Boolean
-  def viewOfCurrentPlayersBoard: SortedSet[TileInterface]
-  def viewOfTable: Set[SortedSet[TileInterface]]
+  def boardView: SortedSet[TileInterface]
+  def tableView: Set[SortedSet[TileInterface]]
 
 }
