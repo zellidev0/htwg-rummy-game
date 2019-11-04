@@ -14,7 +14,22 @@ case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], t
 
   override def getNextPlayer: PlayerInterface = if (getCurrentPlayer.number + 1 == players.size) players.find(_.number == 0).get else players.find(_.number == getCurrentPlayer.number + 1).get
 
-  override def moveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk = if (tableContains(t1) && tableContains(t2)) copy(table = (table - table.find(_.contains(t1)).get + (table.find(_.contains(t1)).get - t1) - table.find(_.contains(t2)).get + (table.find(_.contains(t2)).get + t1)).filter(_.nonEmpty)) else this
+  override def moveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk = {
+    if (tableContains(t1) && tableContains(t2)) {
+      val setOfT1 = table.find(_.contains(t1)).get
+      val setOfT2 = table.find(_.contains(t2)).get
+      if (!setOfT1.equals(setOfT2)) {
+        val setOfT1WithoutT1 = setOfT1 - t1
+        val setOfT2WithT1 = setOfT2 + t1
+        var tableWithoutAny = table - setOfT1
+        tableWithoutAny = tableWithoutAny - setOfT2
+        tableWithoutAny = tableWithoutAny + setOfT1WithoutT1
+        tableWithoutAny = tableWithoutAny + setOfT2WithT1
+        return copy(table = tableWithoutAny.filter(elements => elements.nonEmpty))
+      }
+    }
+      this
+  }
 
   override def tableContains(t: TileInterface): Boolean = table.exists(_.contains(t))
 

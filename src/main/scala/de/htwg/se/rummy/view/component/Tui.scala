@@ -140,6 +140,8 @@ class Tui(controller: ControllerInterface) extends UIInterface {
         "You loaded a file"
       case AnswerState.CREATED_DESK =>
         "You started the game by creating a desk"
+      case AnswerState.UNDO_MOVED_TILE_NOT_DONE =>
+        "Undo the move of the tile unnecessary. Nothing did happen."
       case AnswerState.P_FINISHED_UNDO =>
         "Its is again your turn. "
       case _ => ""

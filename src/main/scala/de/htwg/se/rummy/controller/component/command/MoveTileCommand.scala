@@ -9,31 +9,33 @@ import de.htwg.se.rummy.util.Command
 import scala.collection.immutable.SortedSet
 
 class MoveTileCommand(fromTile: TileInterface, toTile: TileInterface, controller: Controller) extends Command {
-  var setWithTile: Option[TileInterface] = None
+  private val desk = controller.desk.table
+  private var moved = false
 
 
   override def doStep(): Unit = {
-    setWithTile = Option(controller.desk.table.find(s => s.contains(fromTile)).get.head)
-    if (setWithTile.get.equals(fromTile)) {
-      setWithTile = None
+    val setWithFromTile = controller.desk.table.find(s => s.contains(fromTile)).get
+    val setWithToTile = controller.desk.table.find(s => s.contains(toTile)).get
+    if (setWithFromTile.equals(setWithToTile)) {
+      controller.switchState(AnswerState.CANT_MOVE_THIS_TILE, P_TURN)
+    } else {
+      moved = true
+      controller.desk = controller.desk.moveTwoTilesOnDesk(fromTile, toTile)
+      controller.switchState(AnswerState.MOVED_TILE, P_TURN)
     }
-    controller.desk = controller.desk.moveTwoTilesOnDesk(fromTile, toTile)
-    controller.switchState(AnswerState.MOVED_TILE, P_TURN)
   }
 
 
   override def undoStep(): Unit = {
-    setWithTile match {
-      case Some(x) => controller.desk = controller.desk.moveTwoTilesOnDesk(fromTile, x)
-      case None =>
-        controller.removeTileFromSet(fromTile)
-        controller.desk = Desk(table = controller.desk.table + SortedSet[TileInterface](fromTile), players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
+    if (!moved) {
+      controller.switchState(AnswerState.UNDO_MOVED_TILE_NOT_DONE, P_TURN)
+    } else {
+      controller.desk = Desk(table = desk, players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
+      controller.switchState(AnswerState.UNDO_MOVED_TILE, P_TURN)
     }
-    controller.switchState(AnswerState.UNDO_MOVED_TILE, P_TURN)
   }
 
   override def redoStep(): Unit = {
-    controller.desk = controller.desk.moveTwoTilesOnDesk(fromTile, toTile)
-    controller.switchState(AnswerState.MOVED_TILE, P_TURN)
+    doStep()
   }
 }

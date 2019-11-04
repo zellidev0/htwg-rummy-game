@@ -7,15 +7,13 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.TileInterface
 case class Tile @Inject()(value: Int, color: Color.Value, ident: Int) extends TileInterface {
 
   override def compare(that: TileInterface): Int =
-    if (this.value == that.value && this.color == that.color && this.ident == that.ident) {
+    if (this.equals(that)) {
       0
     } else if (this.value > that.value) {
       1
     } else {
       -1
     }
-
-  override def equals(obj: Any): Boolean = obj.asInstanceOf[TileInterface].compare(this) == 0
 
   override def toString: String = value + color.toString.charAt(0).toString + ident
 }
