@@ -63,6 +63,8 @@ class FileIO @Inject() extends FileIOInterface {
     pw.close()
   }
 
+  override def toJson(grid: DeskInterface): JsObject = deskToJson(grid)
+
   implicit val tileWrites = new Writes[TileInterface] {
     def writes(tile: TileInterface) = Json.obj(
       "value" -> tile.value,

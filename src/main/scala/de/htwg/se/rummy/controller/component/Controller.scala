@@ -14,6 +14,7 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{PlayerInterface, TileInterf
 import de.htwg.se.rummy.model.fileIO.FileIOInterface
 import de.htwg.se.rummy.util.UndoManager
 import net.codingwell.scalaguice.InjectorExtensions._
+import play.api.libs.json.JsObject
 
 import scala.collection.immutable.SortedSet
 
@@ -126,7 +127,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   }
 
   override def loadFile(): Unit = {
-    if (Files.exists(Paths.get("/target/desk.json"))) {
+    if (Files.exists(Paths.get("target/desk.json"))) {
       desk = fileIO.load
       switchState(AnswerState.LOADED_FILE, P_TURN)
     } else {
@@ -142,6 +143,8 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   override def currentControllerState: ControllerState.Value = controllerState
 
   override def currentAnswerState: AnswerState.Value = answerState
+
+  override def toJson(): JsObject = fileIO.toJson(desk)
 
 
 }

@@ -6,6 +6,7 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl._
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{BoardInterface, PlayerInterface, TileInterface}
 import de.htwg.se.rummy.model.fileIO.FileIOInterface
+import play.api.libs.json.JsObject
 
 import scala.collection.immutable.SortedSet
 import scala.xml.PrettyPrinter
@@ -107,4 +108,6 @@ class FileIO @Inject() extends FileIOInterface {
 
   private def tiletoXml(tile: TileInterface) =
     <tile identifier={tile.toString}></tile>
+
+  override def toJson(grid: DeskInterface): JsObject = null
 }

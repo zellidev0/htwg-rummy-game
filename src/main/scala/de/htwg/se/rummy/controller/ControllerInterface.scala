@@ -4,6 +4,7 @@ import de.htwg.se.rummy.controller.component.{AnswerState, ControllerState}
 import de.htwg.se.rummy.model.DeskInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{PlayerInterface, TileInterface}
 import de.htwg.se.rummy.util.Observable
+import play.api.libs.json.JsObject
 
 import scala.collection.immutable.SortedSet
 
@@ -11,7 +12,7 @@ trait ControllerInterface extends Observable {
 
   protected var desk: DeskInterface
   protected var answerState: AnswerState.Value = AnswerState.NONE
-  protected var controllerState: ControllerState.Value  = ControllerState.MENU
+  protected var controllerState: ControllerState.Value = ControllerState.MENU
   var userPutTileDown = 0
 
   def userFinishedPlay(): Unit
@@ -63,4 +64,5 @@ trait ControllerInterface extends Observable {
 
   def switchState(answerState: AnswerState.Value, c: ControllerState.Value): Unit
 
+  def toJson(): JsObject
 }

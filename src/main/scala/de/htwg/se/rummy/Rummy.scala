@@ -19,7 +19,7 @@ object Rummy {
   val desk = Desk(defaultPlayer, defaultBag, defaultSet)
   val controller: ControllerInterface = new Controller(desk)
   val tui = new Tui(controller)
-  val gui = new Gui(controller)
+//  val gui = new Gui(controller)
 
 
   def main(args: Array[String]): Unit = {
