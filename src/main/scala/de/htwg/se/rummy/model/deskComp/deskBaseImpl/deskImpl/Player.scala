@@ -10,9 +10,9 @@ case class Player @Inject()(name: String, number: Int, board: BoardInterface, st
 
   override def won(): Boolean = board.isEmpty
 
-  override def -(tile: TileInterface): PlayerInterface = copy(board = board - tile)
+  override def removeTile(tile: TileInterface): PlayerInterface = copy(board = board - tile)
 
-  override def +(tile: TileInterface): PlayerInterface = copy(board = board + tile)
+  override def addTile(tile: TileInterface): PlayerInterface = copy(board = board + tile)
 
   override def changeState(newState: State.Value): PlayerInterface = copy(state = newState)
 

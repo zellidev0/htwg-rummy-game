@@ -16,10 +16,10 @@ object Rummy {
   val defaultBag: Set[TileInterface] = Set[TileInterface]()
   val defaultSet: Set[SortedSet[TileInterface]] = Set[SortedSet[TileInterface]]()
 
-  val desk = Desk(defaultPlayer, defaultBag, defaultSet)
+  val desk: Desk = Desk(defaultPlayer, defaultBag, defaultSet)
   val controller: ControllerInterface = new Controller(desk)
   val tui = new Tui(controller)
-//  val gui = new Gui(controller)
+  val gui = new Gui(controller)
 
 
   def main(args: Array[String]): Unit = {

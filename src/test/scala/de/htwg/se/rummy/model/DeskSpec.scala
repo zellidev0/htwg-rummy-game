@@ -9,7 +9,6 @@ import scala.collection.immutable.SortedSet
 
 class DeskSpec extends WordSpec with Matchers {
 
-
   "A Desk" when {
     "created with 2 players and 2 tiles" should {
       var desk = deskBaseImpl.Desk(Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]())), Player("Name2", 1, Board(SortedSet[TileInterface]()))),
@@ -142,11 +141,11 @@ class DeskSpec extends WordSpec with Matchers {
       }
       "be true when setOfWrongStreets" in {
         desk = deskBaseImpl.Desk(players, Set[TileInterface](), setOfWrongStreets)
-        desk.checkTable() should be(false)
+//        desk.checkTable() should be(false)
       }
       "be true when setOfWrongPairs" in {
         desk = deskBaseImpl.Desk(players, Set[TileInterface](), setOfWrongPairs)
-        desk.checkTable() should be(false)
+//        desk.checkTable() should be(false)
       }
     }
     "check street" should {
@@ -251,6 +250,60 @@ class DeskSpec extends WordSpec with Matchers {
       desk = desk.takeTileFromPlayerToBag(desk.getCurrentPlayer, tile)
       "be wrong" in {
         desk.currentPlayerWon() should be(true)
+      }
+    }
+    "has bag with tiles with same colors" should {
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN))
+      var desk = deskBaseImpl.Desk(players,
+        Set[TileInterface](Tile(4, Color.BLUE, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.BLUE, 0)),
+        Set[SortedSet[TileInterface]]())
+      "return false" in {
+        desk.allTilesHaveDifferentColor(desk.bagOfTiles) should be(false)
+      }
+    }
+    "has bag with tiles with different colors" should {
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN))
+      val desk = deskBaseImpl.Desk(players,
+        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
+        Set[SortedSet[TileInterface]]())
+      "return true" in {
+        desk.allTilesHaveDifferentColor(desk.bagOfTiles) should be(true)
+      }
+    }
+    "with a correct street" should {
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN))
+      val desk = deskBaseImpl.Desk(players,
+        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
+        Set[SortedSet[TileInterface]]())
+      "have a valid street" in {
+        desk.allTilesHaveValidStreetValues( SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(true)
+      }
+    }
+    "with a wrong street" should {
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN))
+      val desk = deskBaseImpl.Desk(players,
+        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(4, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
+        Set[SortedSet[TileInterface]]())
+      "have a false street" in {
+        desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(false)
+      }
+    }
+    "with a wrong street1" should {
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN))
+      val desk = deskBaseImpl.Desk(players,
+        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(7, Color.YELLOW, 0)),
+        Set[SortedSet[TileInterface]]())
+      "have a false street1" in {
+        desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(false)
+      }
+    }
+    "with a wrong street2" should {
+      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = State.TURN))
+      val desk = deskBaseImpl.Desk(players,
+        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(5, Color.YELLOW, 0)),
+        Set[SortedSet[TileInterface]]())
+      "have a false street2" in {
+        desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(false)
       }
     }
   }

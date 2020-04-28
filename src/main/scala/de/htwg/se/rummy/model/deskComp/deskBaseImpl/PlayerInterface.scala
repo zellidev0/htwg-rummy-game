@@ -14,8 +14,8 @@ trait PlayerInterface {
   val state: state
 
   def won(): Boolean
-  def -(tile: TileInterface): PlayerInterface
-  def +(tile: TileInterface): PlayerInterface
+  def removeTile(tile: TileInterface): PlayerInterface
+  def addTile(tile: TileInterface): PlayerInterface
   def changeState(newState: State.Value): PlayerInterface
   def hasTile(tile: TileInterface): Boolean
   def tiles: SortedSet[TileInterface]

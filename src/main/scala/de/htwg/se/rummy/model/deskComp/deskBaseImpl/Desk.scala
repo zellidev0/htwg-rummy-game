@@ -5,14 +5,30 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Color, State}
 import scala.collection.immutable.SortedSet
 import scala.util.Random
 
-case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], table: Set[SortedSet[TileInterface]]) extends DeskInterface {
+case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], table: Set[SortedSet[TileInterface]])
+  extends DeskInterface {
   val minSize = 3
 
-  override def getPreviousPlayer: PlayerInterface = if (getCurrentPlayer.number - 1 < 0) players.find(_.number == players.size - 1).get else players.find(_.number == getCurrentPlayer.number - 1).get
+  override def getPreviousPlayer: PlayerInterface = {
+    val playerNumber = getCurrentPlayer.number - 1;
+    if (playerNumber < 0) {
+      players.find(_.number == players.size - 1).get
+    } else {
+      players.find(_.number == playerNumber).get
+    }
+  }
 
-  override def getCurrentPlayer: PlayerInterface = players.find(_.state == State.TURN).get
+  override def getCurrentPlayer: PlayerInterface =
+    players.find(_.state == State.TURN).get
 
-  override def getNextPlayer: PlayerInterface = if (getCurrentPlayer.number + 1 == players.size) players.find(_.number == 0).get else players.find(_.number == getCurrentPlayer.number + 1).get
+  override def getNextPlayer: PlayerInterface = {
+    val playerNumber = getCurrentPlayer.number + 1
+    if (playerNumber == players.size) {
+      players.find(_.number == 0).get
+    } else {
+      players.find(_.number == playerNumber).get
+    }
+  }
 
   override def moveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk = {
     if (tableContains(t1) && tableContains(t2)) {
@@ -28,83 +44,110 @@ case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], t
         return copy(table = tableWithoutAny.filter(elements => elements.nonEmpty))
       }
     }
-      this
+    this
   }
 
-  override def tableContains(t: TileInterface): Boolean = table.exists(_.contains(t))
+  override def tableContains(t: TileInterface): Boolean =
+    table.exists(_.contains(t))
 
-  override def getRandomTileInBag: TileInterface = bagOfTiles.toVector(Random.nextInt(bagOfTiles.size))
+  override def getRandomTileInBag: TileInterface =
+    bagOfTiles.toVector(Random.nextInt(bagOfTiles.size))
 
-  override def addPlayer(p: PlayerInterface): Desk = copy(players = players + p)
+  override def addPlayer(p: PlayerInterface): Desk =
+    copy(players = players + p)
 
   override def switchToNextPlayer(curr: PlayerInterface, next: PlayerInterface): Desk = {
-    val newPlayers = players - curr + players.find(_ == curr).get.changeState(State.WAIT)
-    copy(players = newPlayers - next + newPlayers.find(_ == next).get.changeState(State.TURN))
+    val newPlayers = replacePlayer(curr, getPlayer(curr).changeState(State.WAIT))
+    newPlayers.replacePlayer(next, newPlayers.getPlayer(next).changeState(State.TURN))
   }
 
-  override def removePlayer(p: PlayerInterface): Desk = copy(players - players.find(_.number == p.number).get)
+  override def removePlayer(p: PlayerInterface): Desk =
+    copy(players = players.filterNot(_.number == p.number))
 
-  override def takeTileFromBagToPlayer(p: PlayerInterface, t: TileInterface): Desk = addToPlayer(p, t).removeFromBag(t)
+  override def takeTileFromBagToPlayer(p: PlayerInterface, t: TileInterface): Desk =
+    addToPlayer(p, t).removeFromBag(t)
 
-  override def takeTileFromPlayerToBag(p: PlayerInterface, t: TileInterface): Desk = removeFromPlayer(p, t).addToBag(t)
+  override def takeTileFromPlayerToBag(p: PlayerInterface, t: TileInterface): Desk =
+    removeTileFromPlayer(t, p).addToBag(t)
 
-  override def lessThan4P: Boolean = players.size < 4
+  override def lessThan4P: Boolean =
+    players.size < 4
 
-  override def correctAmountOfPlayers: Boolean = moreThan1P && players.size <= 4
+  override def correctAmountOfPlayers: Boolean =
+    moreThan1P && players.size <= 4
 
-  override def currentPlayerWon(): Boolean = getCurrentPlayer.won()
+  override def currentPlayerWon(): Boolean =
+    getCurrentPlayer.won()
 
-  override def boardView: SortedSet[TileInterface] = getCurrentPlayer.tiles
+  override def boardView: SortedSet[TileInterface] =
+    getCurrentPlayer.tiles
 
-  override def tableView: Set[SortedSet[TileInterface]] = table
+  override def tableView: Set[SortedSet[TileInterface]] =
+    table
 
-  override def takeUpTile(p: PlayerInterface, t: TileInterface): Desk = removeFromTable(t).addToPlayer(p, t)
+  override def takeUpTile(p: PlayerInterface, t: TileInterface): Desk =
+    removeFromTable(t).addToPlayer(p, t)
 
-  override def removeFromTable(t: TileInterface): Desk = copy(table = table - table.find(_.contains(t)).get + (table.find(_.contains(t)).get - t))
+  override def removeFromTable(t: TileInterface): Desk =
+    copy(table = table - table.find(_.contains(t)).get + (table.find(_.contains(t)).get - t))
 
-  override def putDownTile(p: PlayerInterface, t: TileInterface): Desk = addToTable(t).removeFromPlayer(p, t)
+  override def putDownTile(p: PlayerInterface, t: TileInterface): Desk =
+    addToTable(t).removeTileFromPlayer(t, p)
 
-  override def amountOfPlayers: Int = players.size
+  override def amountOfPlayers: Int =
+    players.size
 
-  override def checkTable(): Boolean = true //table.forall(set => checkStreet(set) || checkPair(set))
+  override def checkTable(): Boolean =
+    true //table.forall(set => checkStreet(set) || checkPair(set))
 
-  private[model] def addToTable(t: TileInterface): Desk = copy(table = table + (SortedSet[TileInterface]() + t))
+  private[model] def addToTable(t: TileInterface): Desk =
+    copy(table = table + (SortedSet[TileInterface]() + t))
 
-  private[model] def addToPlayer(p: PlayerInterface, t: TileInterface): Desk = copy(players - p + (players.find(_ == p).get + t))
+  private[model] def addToPlayer(p: PlayerInterface, t: TileInterface): Desk =
+    replacePlayer(oldPlayer = p, newPlayer = getPlayer(p) addTile t)
 
-  private[model] def removeFromPlayer(p: PlayerInterface, t: TileInterface): Desk = copy(players = players - p + (players.find(_ == p).get - t))
+  private[model] def removeTileFromPlayer(t: TileInterface, p: PlayerInterface): Desk =
+    replacePlayer(oldPlayer = p, newPlayer = getPlayer(p) removeTile t)
 
-  private[model] def checkStreet(set: SortedSet[TileInterface]): Boolean = {
-    if (set.isEmpty || set.size < minSize) return false
-    val x = set.toArray
-    var first = x.apply(0)
-    for (i <- x.indices) {
-      if (i != x.length - 1) {
-        if (first.value != x.apply(i + 1).value - 1 || first.color != x.apply(i + 1).color) return false
-        first = x.apply(i + 1)
-      } else {
-        if (first.value != x.apply(i - 1).value + 1 || first.color != x.apply(i - 1).color) return false
-      }
-    }
-    true
-  }
+  private[model] def checkStreet(set: SortedSet[TileInterface]): Boolean =
+    set.size >= minSize && allTilesHaveSameColor(set) && allTilesHaveValidStreetValues(set)
 
-  private[model] def checkPair(set: SortedSet[TileInterface]): Boolean = {
-    if (set.isEmpty || set.size < minSize || set.size > 4) {
-      return false
-    }
-    var setOfValues = Set[Int]()
-    var setOfColors = Set[Color.Value]()
-    set.foreach(t => setOfValues += t.value)
-    set.foreach(t => setOfColors += t.color)
-    if (setOfValues.size != 1 || setOfColors.size != set.size) return false
-    true
-  }
+  private[model] def checkPair(set: SortedSet[TileInterface]): Boolean =
+    correctPairSize(set) && allTilesHaveSameValues(set) && allTilesHaveDifferentColor(set)
+
+  private[model] def getPlayer(player: PlayerInterface): PlayerInterface =
+    players.find(_ == player).get
+
+  private[model] def replacePlayer(oldPlayer: PlayerInterface, newPlayer: PlayerInterface): Desk =
+    copy(players = (players - oldPlayer) + newPlayer)
+
+  private[model] def correctPairSize(set: Set[TileInterface]): Boolean =
+    set.size == minSize || set.size == 4
+
+  private[model] def moreThan1P: Boolean =
+    players.size >= 2
+
+  private[model] def addToBag(t: TileInterface): Desk =
+    copy(bagOfTiles = bagOfTiles + t)
+
+  private[model] def removeFromBag(t: TileInterface): Desk =
+    copy(bagOfTiles = bagOfTiles - t)
+
+  private[model] def allTilesHaveSameColor(set: Set[TileInterface]): Boolean =
+    set.nonEmpty && set.forall(tile => tile.color == set.head.color) && !allTilesHaveDifferentColor(set)
+
+  private[model] def allTilesHaveDifferentColor(set: Set[TileInterface]): Boolean =
+    set.map(tile => tile.color).size == set.size
+
+  private[model] def allTilesHaveSameValues(set: Set[TileInterface]): Boolean =
+    set.nonEmpty && set.forall(tile => tile.value == set.head.value) && !allTilesHaveDifferentValues(set)
+
+  private[model] def allTilesHaveDifferentValues(set: Set[TileInterface]): Boolean =
+    set.map(tile => tile.value).size == set.size
+
+  private[model] def allTilesHaveValidStreetValues(set: SortedSet[TileInterface]): Boolean =
+    set.map(tile => tile.value).size == set.size &&
+      set.map(tile => tile.value).last - set.map(tile => tile.value).head == set.size - 1
 
 
-  private[model] def moreThan1P: Boolean = players.size >= 2
-
-  private[model] def addToBag(t: TileInterface): Desk = copy(bagOfTiles = bagOfTiles + t)
-
-  private[model] def removeFromBag(t: TileInterface): Desk = copy(bagOfTiles = bagOfTiles - t)
 }

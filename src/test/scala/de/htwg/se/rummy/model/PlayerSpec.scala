@@ -26,7 +26,7 @@ class PlayerSpec() extends WordSpec with Matchers {
     "takes a Tile" should {
       var player: PlayerInterface = Player("Name1", 1, Board(SortedSet[TileInterface]()))
       player.tiles.size should be(0)
-      player = player + Tile(1, Color.RED, 0)
+      player = player addTile Tile(1, Color.RED, 0)
       "have one tile in board" in {
         player.tiles.size should be(1)
       }
@@ -35,7 +35,7 @@ class PlayerSpec() extends WordSpec with Matchers {
     "lays down a Tile" should {
       var player: PlayerInterface = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))))
       player.tiles.size should be(1)
-      player = player.-(Tile(1, Color.RED, 0))
+      player = player.removeTile(Tile(1, Color.RED, 0))
       "have one tile in board" in {
         player.tiles.size should be(0)
       }

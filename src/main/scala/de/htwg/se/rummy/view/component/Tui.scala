@@ -2,7 +2,7 @@ package de.htwg.se.rummy.view.component
 
 import de.htwg.se.rummy.controller.ControllerInterface
 import de.htwg.se.rummy.controller.component.{AnswerState, ControllerState}
-import de.htwg.se.rummy.controller.component.ControllerState.Value
+import de.htwg.se.rummy.controller.component.ControllerState._
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.TileInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.Tile
 import de.htwg.se.rummy.view.UIInterface
@@ -18,10 +18,10 @@ class Tui(controller: ControllerInterface) extends UIInterface {
       System.exit(0)
     }
     controller.currentControllerState match {
-      case ControllerState.MENU => handleMenuInput(input)
-      case ControllerState.INSERTING_NAMES => handleNameInput(input)
-      case ControllerState.P_TURN => handleOnTurn(input)
-      case ControllerState.NEXT_TYPE_N => handleOnTurnFinished(input)
+      case MENU => handleMenuInput(input)
+      case INSERTING_NAMES => handleNameInput(input)
+      case P_TURN => handleOnTurn(input)
+      case NEXT_TYPE_N => handleOnTurnFinished(input)
     }
   }
 
@@ -47,8 +47,11 @@ class Tui(controller: ControllerInterface) extends UIInterface {
 
   override def handleOnTurn(input: String): Unit = {
     input match {
-      case LayDownTilePattern(c) => controller.layDownTile(Tile.stringToTile(c.split(" ").apply(1)));
-      case MoveTilePattern(c) => controller.moveTile(Tile.stringToTile(c.split(" t ").apply(0).split(" ").apply(1)), Tile.stringToTile(c.split(" t ").apply(1)));
+      case LayDownTilePattern(c) =>
+        controller.layDownTile(Tile.stringToTile(c.split(" ").apply(1)));
+      case MoveTilePattern(c) =>
+        controller.moveTile(Tile.stringToTile(c.split(" t ").apply(0).split(" ").apply(1)),
+          Tile.stringToTile(c.split(" t ").apply(1)));
       case "f" => controller.userFinishedPlay()
       case "z" => controller.undo()
       case "r" => controller.redo()
