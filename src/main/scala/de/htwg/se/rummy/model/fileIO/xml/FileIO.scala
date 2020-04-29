@@ -109,5 +109,5 @@ class FileIO @Inject() extends FileIOInterface {
   private def tiletoXml(tile: TileInterface) =
     <tile identifier={tile.toString}></tile>
 
-  override def toJson(grid: DeskInterface): JsObject = null
+  override def toJson(grid: DeskInterface): JsObject = throw new NotImplementedError("Not available in this class, use JSON")
 }
