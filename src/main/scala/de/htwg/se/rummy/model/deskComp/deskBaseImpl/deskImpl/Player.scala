@@ -16,15 +16,15 @@ case class Player @Inject()(name: String, board: BoardInterface, hasTurn: Boolea
   override def add(tile: TileInterface): PlayerInterface =
     copy(board = board add tile)
 
-  override def change(turn:Boolean): PlayerInterface =
+  override def change(turn: Boolean): PlayerInterface =
     copy(hasTurn = turn)
-
-  override def toString: String =
-    s"Player $name, turn: ${hasTurn}, boardsize: ${board.amountOfTiles()}"
 
   override def has(tile: TileInterface): Boolean =
     board.contains(tile)
 
   override def tiles: SortedSet[TileInterface] =
     board.tiles
+
+  override def toString: String =
+    s"Player $name, turn: ${hasTurn}, boardsize: ${board.amountOfTiles()}"
 }

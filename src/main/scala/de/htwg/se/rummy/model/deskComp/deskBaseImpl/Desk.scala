@@ -56,10 +56,9 @@ case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], 
   override def addPlayer(p: PlayerInterface): Desk =
     copy(players = players :+ p)
 
-  override def switchToNextPlayer(current: PlayerInterface, next: PlayerInterface): Desk = {
-    val newPlayers = replacePlayer(current, getPlayer(current) change (turn = false))
-    newPlayers.replacePlayer(next, newPlayers.getPlayer(next).change(turn = true))
-  }
+  override def switchToNextPlayer(current: PlayerInterface, next: PlayerInterface): Desk =
+    replacePlayer(current, current change (turn = false))
+      .replacePlayer(next, next change (turn = true))
 
   override def removePlayer(p: PlayerInterface): Desk =
     copy(players = players.filterNot(pl => pl == p))
@@ -119,7 +118,7 @@ case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], 
     players.find(_ == player).get
 
   private[model] def replacePlayer(oldPlayer: PlayerInterface, newPlayer: PlayerInterface): Desk =
-    copy(players = players.filterNot(p => p == oldPlayer) :+ newPlayer)
+    copy(players = players.filterNot(_ == oldPlayer) :+ newPlayer)
 
   private[model] def correctPairSize(set: Set[TileInterface]): Boolean =
     set.size == minSize || set.size == 4
