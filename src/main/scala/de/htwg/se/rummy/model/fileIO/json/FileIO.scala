@@ -52,16 +52,17 @@ class FileIO @Inject() extends FileIOInterface {
   }
 
 
-  override def save(grid: DeskInterface): Unit = {
+  override def save(desk: DeskInterface): DeskInterface = {
     import java.io._
     val pw = new PrintWriter(new File("target/desk.json"))
-    pw.write(Json.prettyPrint(deskToJson(grid)))
+    pw.write(Json.prettyPrint(deskToJson(desk)))
     pw.close()
+    desk
   }
 
   override def toJson(grid: DeskInterface): JsObject = deskToJson(grid)
 
-  implicit val tileWrites = new Writes[TileInterface] {
+  implicit val tileWrites: Writes[TileInterface] = new Writes[TileInterface] {
     def writes(tile: TileInterface) = Json.obj(
       "value" -> tile.value,
       "color" -> tile.color.toString,
@@ -70,7 +71,7 @@ class FileIO @Inject() extends FileIOInterface {
   }
 
 
-  implicit val playerWrites = new Writes[PlayerInterface] {
+  implicit val playerWrites: Writes[PlayerInterface] = new Writes[PlayerInterface] {
     def writes(player: PlayerInterface) = Json.obj(
       "name" -> player.name,
       "hasTurn" -> player.hasTurn,

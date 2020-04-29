@@ -123,7 +123,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
 
   override def storeFile(): Unit = {
-    fileIO.save(desk)
+    desk = fileIO.save(desk)
     switchState(AnswerState.STORED_FILE, controllerState)
   }
 
