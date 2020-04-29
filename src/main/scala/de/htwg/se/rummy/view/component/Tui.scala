@@ -81,16 +81,16 @@ class Tui(controller: ControllerInterface) extends UIInterface {
     println(currentState match {
       case ControllerState.P_TURN =>
         s"""
-            |---------------------------------------------------------------------------------------|
-            | ${controller.getCurrentPlayer.name} it's your turn. Do your stuff.${" " * (55 - controller.getCurrentPlayer.name.length)}|
-            |---------------------------------------------------------------------------------------|
-            | Type 'l <value> <FirstLetterOfColor> <num>' to put it on the table                    |
-            | Type 'm <valueA> <FirstLetterOfColorA> <numA> t <valueB> <FirstLetterOfColorB> <numB> |
-            |     to put A in where B is                                                            |
-            | Type 'f' to finish (and take a tile automatically if you did nothing)                 |
-            | Type 'z' to undo                                                                      |
-            | Type 'r' to redo                                                                      |
-            |---------------------------------------------------------------------------------------|"""
+           |---------------------------------------------------------------------------------------|
+           | ${controller.getCurrentPlayer.name} it's your turn. Do your stuff.${" " * (55 - controller.getCurrentPlayer.name.length)}|
+           |---------------------------------------------------------------------------------------|
+           | Type 'l <value> <FirstLetterOfColor> <num>' to put it on the table                    |
+           | Type 'm <valueA> <FirstLetterOfColorA> <numA> t <valueB> <FirstLetterOfColorB> <numB> |
+           |     to put A in where B is                                                            |
+           | Type 'f' to finish (and take a tile automatically if you did nothing)                 |
+           | Type 'z' to undo                                                                      |
+           | Type 'r' to redo                                                                      |
+           |---------------------------------------------------------------------------------------|"""
       case ControllerState.KILL =>
         System.exit(0)
       case ControllerState.INSERTING_NAMES =>
@@ -153,64 +153,63 @@ class Tui(controller: ControllerInterface) extends UIInterface {
 
 
   def printCurrentTableView(desk: Set[SortedSet[TileInterface]]): Unit = {
-    var s = ""
-    s = s +
+
+    var s =
       """
-            |---------------------------------------------------------------------------------------|
-            | That's on the desk.                                                                   |
-            |---------------------------------------------------------------------------------------|""" + "\n"
+        |---------------------------------------------------------------------------------------|
+        | That's on the desk.                                                                   |
+        |---------------------------------------------------------------------------------------|""" + "\n"
     for (sortedSet <- desk) {
       for (_ <- sortedSet) {
         s = s + "____ "
       }
-      s = s + "\n"
+      s += "\n"
       for (tile <- sortedSet) {
-        s = s + String.format("|%2s| ", tile.value.toString)
+        s += String.format("|%2s| ", tile.value.toString)
       }
-      s = s + "\n"
+      s += "\n"
       for (tile <- sortedSet) {
-        s = s + String.format("|%s | ", tile.color.toString.charAt(0).toString)
+        s += String.format("|%s | ", tile.color.toString.charAt(0).toString)
       }
-      s = s + "\n"
+      s += "\n"
       for (tile <- sortedSet) {
-        s = s + String.format("|%s | ", tile.ident.toString)
+        s += String.format("|%s | ", tile.ident.toString)
       }
-      s = s + "\n"
+      s += "\n"
       for (_ <- sortedSet) {
-        s = s + String.format("\u203E\u203E\u203E\u203E ")
+        s += String.format("\u203E\u203E\u203E\u203E ")
       }
-      s = s + "\n"
+      s += "\n"
     }
     println(s)
   }
 
   def printCurrentBoardView(board: SortedSet[TileInterface]): Unit = {
-    var s = ""
-    s = s +
+    var s =
       s"""
-            |---------------------------------------------------------------------------------------|
-            | ${controller.getCurrentPlayer.name} thats on your board.${" " * (65 - controller.getCurrentPlayer.name.length)}|
-            |---------------------------------------------------------------------------------------|""" + "\n"
+         |---------------------------------------------------------------------------------------|
+         | ${controller.getCurrentPlayer.name} thats on your board.${" " * (65 - controller.getCurrentPlayer.name.length)}|
+         |---------------------------------------------------------------------------------------|""" + "\n"
     for (_ <- board) {
-      s = s + "____ "
+      s += "____ "
     }
-    s = s + "\n"
+    s += "\n"
     for (tile <- board) {
-      s = s + String.format("|%2s| ", tile.value.toString)
+      s += String.format("|%2s| ", tile.value.toString)
     }
-    s = s + "\n"
+    s += "\n"
     for (tile <- board) {
-      s = s + String.format("|%s | ", tile.color.toString.charAt(0).toString)
+      s += String.format("|%s | ", tile.color.toString.charAt(0).toString)
     }
-    s = s + "\n"
+    s += "\n"
     for (tile <- board) {
-      s = s + String.format("|%s | ", tile.ident.toString)
+      s += String.format("|%s | ", tile.ident.toString)
     }
-    s = s + "\n"
+    s += "\n"
     for (_ <- board) {
-      s = s + String.format("\u203E\u203E\u203E\u203E ")
+      s += String.format("\u203E\u203E\u203E\u203E ")
     }
-    s = s + "\n"
+    s += "\n"
     println(s)
   }
 
