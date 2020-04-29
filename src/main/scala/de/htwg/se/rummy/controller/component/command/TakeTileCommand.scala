@@ -6,14 +6,12 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.TileInterface
 import de.htwg.se.rummy.util.Command
 
 
-class TakeTileCommand(controller: Controller) extends Command {
-  private var randomTile: TileInterface = _
+class TakeTileCommand(private val controller: Controller,
+                      private val randomTile: TileInterface) extends Command {
 
   override def doStep(): Unit = {
-    randomTile = controller.desk.getTileFromBag
     redoStep()
   }
-
 
   override def undoStep(): Unit = {
     controller.desk = controller.desk.takeTileFromPlayerToBag(controller.getCurrentPlayer, randomTile)

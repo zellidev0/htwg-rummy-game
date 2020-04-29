@@ -6,6 +6,7 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl.TileInterface
 import de.htwg.se.rummy.util.Command
 
 class LayDownCommand(tile: TileInterface, controller: Controller) extends Command {
+
   override def undoStep(): Unit = {
     controller.desk = controller.desk.takeUpTile(controller.getCurrentPlayer, tile)
     controller.userPutTileDown -= 1

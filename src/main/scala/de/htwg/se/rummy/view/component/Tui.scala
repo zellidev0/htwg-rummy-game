@@ -118,7 +118,7 @@ class Tui(controller: ControllerInterface) extends UIInterface {
       case AnswerState.UNDO_MOVED_TILE =>
         "You undid the move of a specific tile."
       case AnswerState.MOVED_TILE =>
-        "You did move a tile to another."
+        "You did move a tile to another when possible."
       case AnswerState.UNDO_LAY_DOWN_TILE =>
         "You undid the lay down you took the tile up."
       case AnswerState.ADDED_PLAYER =>

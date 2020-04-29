@@ -31,7 +31,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
       if (desk.bagOfTiles.isEmpty) {
         switchState(AnswerState.BAG_IS_EMPTY, ControllerState.P_TURN)
       } else {
-        undoManager.doStep(new TakeTileCommand(this))
+        undoManager.doStep(new TakeTileCommand(this, desk.getTileFromBag))
       }
     } else if (desk.checkTable()) {
       if (desk.currentPlayerWon()) {
@@ -67,11 +67,14 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     }
   }
 
-  override def getCurrentPlayer: PlayerInterface = desk.getCurrentPlayer
+  override def getCurrentPlayer: PlayerInterface =
+    desk.getCurrentPlayer
 
-  override def getPreviousPlayer: PlayerInterface = desk.getPreviousPlayer
+  override def getPreviousPlayer: PlayerInterface =
+    desk.getPreviousPlayer
 
-  override def getNextPlayer: PlayerInterface = desk.getNextPlayer
+  override def getNextPlayer: PlayerInterface =
+    desk.getNextPlayer
 
   override def addPlayerAndInit(newName: String, max: Int): Unit = {
     if (!hasLessThan4Players) {
@@ -132,7 +135,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
       desk = fileIO.load
       switchState(AnswerState.LOADED_FILE, P_TURN)
     } else {
-      switchState(AnswerState.COULD_NOT_LOAD_FILE,MENU)
+      switchState(AnswerState.COULD_NOT_LOAD_FILE, MENU)
       createDesk(12)
     }
   }

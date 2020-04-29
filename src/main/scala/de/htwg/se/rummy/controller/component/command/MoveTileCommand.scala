@@ -3,36 +3,31 @@ package de.htwg.se.rummy.controller.component.command
 
 import de.htwg.se.rummy.controller.component.{AnswerState, Controller}
 import de.htwg.se.rummy.controller.component.ControllerState.P_TURN
+import de.htwg.se.rummy.model.DeskInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{Desk, TileInterface}
 import de.htwg.se.rummy.util.Command
 
 import scala.collection.immutable.SortedSet
 
 class MoveTileCommand(fromTile: TileInterface, toTile: TileInterface, controller: Controller) extends Command {
-  private val desk = controller.desk.table
-  private var moved = false
-
+  private var savedDesk: Option[DeskInterface] = None
 
   override def doStep(): Unit = {
-    val setWithFromTile = controller.desk.table.find(s => s.contains(fromTile)).get
-    val setWithToTile = controller.desk.table.find(s => s.contains(toTile)).get
-    if (setWithFromTile.equals(setWithToTile)) {
-      controller.switchState(AnswerState.CANT_MOVE_THIS_TILE, P_TURN)
-    } else {
-      moved = true
-      controller.desk = controller.desk.moveTwoTilesOnDesk(fromTile, toTile)
-      controller.switchState(AnswerState.MOVED_TILE, P_TURN)
-    }
+    val desk = controller.desk.moveTwoTilesOnDesk(fromTile, toTile)
+    savedDesk = if (controller.desk != desk) Some(desk) else None
+    controller.desk = desk
+    controller.switchState(AnswerState.MOVED_TILE, P_TURN)
   }
 
 
   override def undoStep(): Unit = {
-    if (!moved) {
-      controller.switchState(AnswerState.UNDO_MOVED_TILE_NOT_DONE, P_TURN)
-    } else {
-      controller.desk = Desk(table = desk, players = controller.desk.players, bagOfTiles = controller.desk.bagOfTiles)
-      controller.switchState(AnswerState.UNDO_MOVED_TILE, P_TURN)
-    }
+    controller.switchState(savedDesk match {
+      case Some(x) =>
+        controller.desk = x
+        AnswerState.UNDO_MOVED_TILE
+      case None =>
+        AnswerState.UNDO_MOVED_TILE_NOT_DONE
+    }, P_TURN)
   }
 
   override def redoStep(): Unit = {
