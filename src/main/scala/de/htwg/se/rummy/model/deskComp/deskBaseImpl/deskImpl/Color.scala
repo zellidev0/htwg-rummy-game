@@ -11,4 +11,17 @@ object Color extends Enumeration {
       case "BLUE" => Color.BLUE
     }
   }
+
+  def beginningChar(color:Color.Value): String = {
+    color.toString.charAt(0).toString
+  }
+
+  def colorToChar(char:Char): Color.Value = {
+    char match {
+      case 'R' => Color.RED
+      case 'B' => Color.BLUE
+      case 'Y' => Color.YELLOW
+      case 'G' => Color.GREEN
+    }
+  }
 }
