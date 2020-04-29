@@ -25,12 +25,10 @@ object Rummy {
   def main(args: Array[String]): Unit = {
     try {
       println("Type <c> to create a new desk or <l> to load a previous game")
-      var input: String = ""
-      if (args.length > 0) input = args(0)
+      val input = if (args.length > 0) args(0) else "";
       if (!input.isEmpty) tui.processInput(input)
       else do {
-        input = readLine()
-        tui.processInput(input)
+        tui.processInput(readLine())
       } while (input != "q")
     } catch {
       case e: Exception => e.printStackTrace()
