@@ -24,15 +24,16 @@ class NameCommand(newName: String, max: Int, controller: Controller) extends Com
     controller.switchState(AnswerState.ADDED_PLAYER, ControllerState.INSERTING_NAMES)
   }
 
-  /** Adds 12 tiles to the player. Works recursively. */
-  def takeMaxTilesFromBagToPlayersBoard(desk: DeskInterface, count: Int = 0): Desk = count match {
-    case this.max => takeTileFromBagToPlayer(desk)
+  /** Adds max tiles to the player. Works recursively. */
+  def takeMaxTilesFromBagToPlayersBoard(desk: DeskInterface, count: Int = 0): DeskInterface = count match {
+    case x if this.max == x => desk
     case _ => takeMaxTilesFromBagToPlayersBoard(takeTileFromBagToPlayer(desk), count + 1)
   }
 
   /** Wrapper to take one tile from the bag and put it on the users board */
-  def takeTileFromBagToPlayer(desk: DeskInterface): Desk =
+  def takeTileFromBagToPlayer(desk: DeskInterface): DeskInterface = {
     desk.takeTileFromBagToPlayer(desk.players.find(pl => pl.name == newName).get, desk.getTileFromBag)
+  }
 
   /** Wrapper to add the player to the desk */
   def addPlayerToDesk(desk: DeskInterface): DeskInterface =

@@ -8,24 +8,17 @@ case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], 
   extends DeskInterface {
   val minSize = 3
 
-  override def getPreviousPlayer: PlayerInterface =
-    players.indexOf(getCurrentPlayer) match {
-      case 0 => players.last
-      case 1 => players.head
-      case 2 => players.tail.head
-      case 3 => players.tail.tail.head
+  override def getPreviousPlayer: PlayerInterface = {
+    val index = players.indexOf(getCurrentPlayer)
+    if ((index - 1) < 0) players.last else players(index - 1)
+  }
+
+  override def getNextPlayer: PlayerInterface =
+    players size match {
+      case num if Range(2, 5) contains num => players(((players indexOf getCurrentPlayer) + 1) % num)
       case _ => throw new RuntimeException("Less than 2 or more than 4 player in the game")
     }
 
-  override def getNextPlayer: PlayerInterface = {
-    players.indexOf(getCurrentPlayer) match {
-      case 0 => players.tail.head
-      case 1 => players.tail.tail.head
-      case 2 => players.last
-      case 3 => players.head
-      case _ => throw new RuntimeException("Less than 2 or more than 4 player in the game")
-    }
-  }
 
   override def getCurrentPlayer: PlayerInterface =
     players.find(p => p.hasTurn).get
@@ -102,9 +95,9 @@ case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], 
   private[model] def addToTable(t: TileInterface): Desk =
     copy(table = table + (SortedSet[TileInterface]() + t))
 
-  private[model] def addToPlayer(p: PlayerInterface, t: TileInterface): Desk =
+  private[model] def addToPlayer(p: PlayerInterface, t: TileInterface): Desk = {
     replacePlayer(oldPlayer = p, newPlayer = getPlayer(p) add t)
-
+  }
   private[model] def removeTileFromPlayer(t: TileInterface, p: PlayerInterface): Desk =
     replacePlayer(oldPlayer = p, newPlayer = getPlayer(p) remove t)
 
