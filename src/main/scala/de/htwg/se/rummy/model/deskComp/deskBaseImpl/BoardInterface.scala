@@ -7,13 +7,9 @@ trait BoardInterface {
   val tiles: SortedSet[TileInterface]
 
   def isEmpty: Boolean
-
   def amountOfTiles(): Int
-
   def +(tile: TileInterface): BoardInterface
-
   def -(tile: TileInterface): BoardInterface
-
   def contains(tile: TileInterface): Boolean
 
 }

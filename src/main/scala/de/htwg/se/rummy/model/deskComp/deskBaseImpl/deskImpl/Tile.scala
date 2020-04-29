@@ -15,7 +15,8 @@ case class Tile @Inject()(value: Int, color: Color.Value, ident: Int) extends Ti
       -1
     }
 
-  override def toString: String = value + color.toString.charAt(0).toString + ident
+  override def toString: String =
+    value + color.toString.charAt(0).toString + ident
 }
 
 object Tile {
@@ -26,6 +27,7 @@ object Tile {
       case 'Y' => Color.YELLOW
       case 'G' => Color.GREEN
     }
-    Tile(Integer.parseInt(string.substring(0, string.length - 2)), color, Integer.parseInt(string.charAt(string.length - 1).toString))
+    Tile(Integer.parseInt(string.substring(0, string.length - 2)), color,
+      Integer.parseInt(string.charAt(string.length - 1).toString))
   }
 }
