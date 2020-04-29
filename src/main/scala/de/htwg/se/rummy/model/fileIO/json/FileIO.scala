@@ -14,7 +14,6 @@ import scala.io.Source
 class FileIO @Inject() extends FileIOInterface {
 
   override def load: DeskInterface = {
-    var desk: DeskInterface = null
     val json: JsValue = Json.parse(Source.fromFile("target/desk.json").getLines.mkString)
     var players = Set[PlayerInterface]()
     var bagOfTiles = Set[TileInterface]()
@@ -49,10 +48,7 @@ class FileIO @Inject() extends FileIOInterface {
       }
       ssets = ssets + sortedSet
     }
-
-
-    desk = deskBaseImpl.Desk(players, bagOfTiles, ssets)
-    desk
+    deskBaseImpl.Desk(players, bagOfTiles, ssets)
   }
 
 
