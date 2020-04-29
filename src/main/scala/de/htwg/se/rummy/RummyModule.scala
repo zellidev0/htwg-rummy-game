@@ -7,7 +7,7 @@ import net.codingwell.scalaguice.ScalaModule
 class RummyModule extends AbstractModule with ScalaModule {
 
 
-  def configure() = {
+  def configure(): Unit = {
     //    bind[DeskInterface].to[Desk]
     //    bind[ControllerInterface].to[Controller]
     //    bind[TileInterface].to[Tile]

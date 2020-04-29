@@ -11,12 +11,12 @@ import scala.collection.immutable.SortedSet
 object Rummy {
 
   val injector: Injector = Guice.createInjector(new RummyModule)
-  //  val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
-  val defaultPlayer: List[PlayerInterface] = List[PlayerInterface]()
-  val defaultBag: Set[TileInterface] = Set[TileInterface]()
-  val defaultSet: Set[SortedSet[TileInterface]] = Set[SortedSet[TileInterface]]()
 
-  val desk: Desk = Desk(defaultPlayer, defaultBag, defaultSet)
+  val desk: Desk = Desk(
+    players = List[PlayerInterface](),
+    bagOfTiles = Set[TileInterface](),
+    table = Set[SortedSet[TileInterface]]())
+
   val controller: ControllerInterface = new Controller(desk)
   val tui = new Tui(controller)
   val gui = new Gui(controller)
