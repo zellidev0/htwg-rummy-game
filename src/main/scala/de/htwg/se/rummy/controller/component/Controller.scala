@@ -17,6 +17,7 @@ import net.codingwell.scalaguice.InjectorExtensions._
 import play.api.libs.json.JsObject
 
 import scala.collection.immutable.SortedSet
+import scala.util.Random
 
 class Controller(var desk: DeskInterface) extends ControllerInterface {
 
@@ -59,7 +60,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   }
 
   override def layDownTile(tile: TileInterface): Unit = {
-    if (!getCurrentPlayer.hasTile(tile)) {
+    if (!getCurrentPlayer.has(tile)) {
       switchState(AnswerState.P_DOES_NOT_OWN_TILE, ControllerState.P_TURN)
     } else {
       undoManager.doStep(new LayDownCommand(tile, this))
@@ -89,7 +90,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
          ident <- 0 to 1) {
       bagOfTiles += Tile(number, color, ident)
     }
-    desk = deskBaseImpl.Desk(Set[PlayerInterface](), bagOfTiles, Set[SortedSet[TileInterface]]())
+    desk = deskBaseImpl.Desk(List[PlayerInterface](), Random.shuffle(bagOfTiles), Set[SortedSet[TileInterface]]())
     switchState(AnswerState.CREATED_DESK, ControllerState.INSERTING_NAMES)
   }
 
@@ -136,15 +137,20 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     }
   }
 
-  override def viewOfTable: Set[SortedSet[TileInterface]] = desk.tableView
+  override def viewOfTable: Set[SortedSet[TileInterface]] =
+    desk.tableView
 
-  override def viewOfBoard: SortedSet[TileInterface] = desk.boardView
+  override def viewOfBoard: SortedSet[TileInterface] =
+    desk.boardView
 
-  override def currentControllerState: ControllerState.Value = controllerState
+  override def currentControllerState: ControllerState.Value =
+    controllerState
 
-  override def currentAnswerState: AnswerState.Value = answerState
+  override def currentAnswerState: AnswerState.Value =
+    answerState
 
-  override def toJson(): JsObject = fileIO.toJson(desk)
+  override def toJson(): JsObject =
+    fileIO.toJson(desk)
 
 
 }

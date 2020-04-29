@@ -6,7 +6,7 @@ import scala.collection.immutable.SortedSet
 
 trait DeskInterface {
 
-  val players: Set[PlayerInterface]
+  val players: List[PlayerInterface]
   val bagOfTiles: Set[TileInterface]
   val table: Set[SortedSet[TileInterface]]
 
@@ -20,7 +20,7 @@ trait DeskInterface {
   def getNextPlayer: PlayerInterface
   def moveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk
   def tableContains(t: TileInterface): Boolean
-  def getRandomTileInBag: TileInterface
+  def getTileFromBag: TileInterface
   def addPlayer(p: PlayerInterface): Desk
   def switchToNextPlayer(curr: PlayerInterface, next: PlayerInterface): Desk
   def removePlayer(p: PlayerInterface): Desk
@@ -31,5 +31,4 @@ trait DeskInterface {
   def currentPlayerWon(): Boolean
   def boardView: SortedSet[TileInterface]
   def tableView: Set[SortedSet[TileInterface]]
-
 }

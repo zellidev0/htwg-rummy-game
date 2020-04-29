@@ -12,7 +12,7 @@ object Rummy {
 
   val injector: Injector = Guice.createInjector(new RummyModule)
   //  val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
-  val defaultPlayer: Set[PlayerInterface] = Set[PlayerInterface]()
+  val defaultPlayer: List[PlayerInterface] = List[PlayerInterface]()
   val defaultBag: Set[TileInterface] = Set[TileInterface]()
   val defaultSet: Set[SortedSet[TileInterface]] = Set[SortedSet[TileInterface]]()
 

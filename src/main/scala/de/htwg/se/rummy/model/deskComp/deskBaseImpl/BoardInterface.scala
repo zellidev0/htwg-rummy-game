@@ -8,8 +8,8 @@ trait BoardInterface {
 
   def isEmpty: Boolean
   def amountOfTiles(): Int
-  def +(tile: TileInterface): BoardInterface
-  def -(tile: TileInterface): BoardInterface
+  def add(tile: TileInterface): BoardInterface
+  def remove(tile: TileInterface): BoardInterface
   def contains(tile: TileInterface): Boolean
 
 }

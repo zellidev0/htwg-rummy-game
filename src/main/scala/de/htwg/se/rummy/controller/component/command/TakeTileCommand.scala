@@ -10,7 +10,7 @@ class TakeTileCommand(controller: Controller) extends Command {
   private var randomTile: TileInterface = _
 
   override def doStep(): Unit = {
-    randomTile = controller.desk.getRandomTileInBag
+    randomTile = controller.desk.getTileFromBag
     redoStep()
   }
 

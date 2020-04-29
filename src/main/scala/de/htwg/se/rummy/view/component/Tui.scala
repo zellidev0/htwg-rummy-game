@@ -48,10 +48,10 @@ class Tui(controller: ControllerInterface) extends UIInterface {
   override def handleOnTurn(input: String): Unit = {
     input match {
       case LayDownTilePattern(c) =>
-        controller.layDownTile(Tile.stringToTile(c.split(" ").apply(1)));
+        controller.layDownTile(Tile.stringToTile(c.split(" ").apply(1)).get);
       case MoveTilePattern(c) =>
-        controller.moveTile(Tile.stringToTile(c.split(" t ").apply(0).split(" ").apply(1)),
-          Tile.stringToTile(c.split(" t ").apply(1)));
+        controller.moveTile(Tile.stringToTile(c.split(" t ").apply(0).split(" ").apply(1)).get,
+          Tile.stringToTile(c.split(" t ").apply(1)).get);
       case "f" => controller.userFinishedPlay()
       case "z" => controller.undo()
       case "r" => controller.redo()
@@ -125,7 +125,7 @@ class Tui(controller: ControllerInterface) extends UIInterface {
         "You added a player."
       case AnswerState.PUT_TILE_DOWN =>
         "You put down a tile"
-      case AnswerState.PLAYER_REMOVED =>
+      case AnswerState.REMOVED_PLAYER =>
         "You removed the player you inserted."
       case AnswerState.P_DOES_NOT_OWN_TILE =>
         "You dont have this tile on the board. Please select another one"

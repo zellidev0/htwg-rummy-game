@@ -1,23 +1,45 @@
 package de.htwg.se.rummy.controller.component.command
 
 import de.htwg.se.rummy.controller.component.{AnswerState, Controller, ControllerState}
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.TileInterface
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Player, State}
+import de.htwg.se.rummy.model.DeskInterface
+import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Player}
+import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{Desk, PlayerInterface, TileInterface}
 import de.htwg.se.rummy.util.Command
 
 import scala.collection.immutable.SortedSet
 
+
 class NameCommand(newName: String, max: Int, controller: Controller) extends Command {
+
   override def undoStep(): Unit = {
-    controller.desk = controller.desk.removePlayer(Player(newName, controller.desk.amountOfPlayers - 1, Board(SortedSet[TileInterface]()), if (controller.desk.players.nonEmpty) State.WAIT else State.TURN))
-    controller.switchState(AnswerState.PLAYER_REMOVED, ControllerState.INSERTING_NAMES)
+    controller.desk = removePlayerFromDesk(controller.desk)
+    controller.switchState(AnswerState.REMOVED_PLAYER, ControllerState.INSERTING_NAMES)
   }
-  override def redoStep(): Unit = doStep()
+
+  override def redoStep(): Unit =
+    doStep()
+
   override def doStep(): Unit = {
-    controller.desk = controller.desk.addPlayer(Player(newName, controller.desk.amountOfPlayers, Board(SortedSet[TileInterface]()), if (controller.desk.players.nonEmpty) State.WAIT else State.TURN))
-    for (_ <- 1 to max) {
-      controller.desk = controller.desk.takeTileFromBagToPlayer(controller.desk.players.find(_.number == controller.desk.amountOfPlayers - 1).get, controller.desk.getRandomTileInBag)
-    }
+    controller.desk = takeMaxTilesFromBagToPlayersBoard(addPlayerToDesk(controller.desk))
     controller.switchState(AnswerState.ADDED_PLAYER, ControllerState.INSERTING_NAMES)
   }
+
+  /** Adds 12 tiles to the player. Works recursively. */
+  def takeMaxTilesFromBagToPlayersBoard(desk: DeskInterface, count: Int = 0): Desk = count match {
+    case 12 => takeTileFromBagToPlayer(desk)
+    case _ => takeMaxTilesFromBagToPlayersBoard(takeTileFromBagToPlayer(desk), count + 1)
+  }
+
+  /** Wrapper to take one tile from the bag and put it on the users board */
+  def takeTileFromBagToPlayer(desk: DeskInterface): Desk =
+    desk.takeTileFromBagToPlayer(desk.players.find(pl => pl.name == newName).get, desk.getTileFromBag)
+
+  /** Wrapper to add the player to the desk */
+  def addPlayerToDesk(desk: DeskInterface): DeskInterface =
+    desk addPlayer Player(newName, Board(SortedSet[TileInterface]()), desk.amountOfPlayers == 0)
+
+  /** Wrapper to remove a player from the desk */
+  def removePlayerFromDesk(desk: DeskInterface): DeskInterface =
+    desk removePlayer desk.players.find(p => p.name == newName).get
+
 }

@@ -9,8 +9,7 @@ class ObservableSpec extends WordSpec with Matchers {
       var updated: Boolean = false
       def isUpdated: Boolean = updated
       override def update(): Unit = {
-        updated = true;
-        ""
+        updated = true
       }
     }
     "add an Observer" in {

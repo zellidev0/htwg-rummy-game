@@ -18,25 +18,24 @@ class FileIO @Inject() extends FileIOInterface {
     val t = Tile(-1, Color.RED, -1)
     val amountOfPlayersAttr = (file \\ "desk" \ "@amountOfPlayers")
     val amountOfPlayers = amountOfPlayersAttr.text.toInt
-    var players = Set[PlayerInterface]()
+    var players = List[PlayerInterface]()
     var bagOfTiles = Set[TileInterface]()
     var ssets = Set[SortedSet[TileInterface]]()
     for (playerNodes <- file \\ "desk" \\ "players") {
       for (player <- playerNodes \\ "player") {
-        val playerName: String = (player \ "@name").text.toString
-        val playerNumber: Int = (player \ "@number").text.toInt
-        val playerState: String = (player \ "@state").text.toString
+        val playerName: String = (player \ "@name").text
+        val playerState: Boolean = (player \ "@state").text.toBoolean
         var board: BoardInterface = Board(SortedSet[TileInterface]())
         for (tile <- player \\ "board" \\ "tile") {
-          board = board + Tile.stringToTile((tile \ "@identifier").text.toString)
+          board = board add Tile.stringToTile((tile \ "@identifier").text).get
         }
-        players = players.+(Player(playerName, playerNumber, board, State.stringToState(playerState)))
+        players = players :+ Player(playerName, board, playerState)
       }
 
 
       for (tileNodes <- file \\ "desk" \\ "bagOfTiles") {
         for (tile <- tileNodes \\ "tile") {
-          bagOfTiles = bagOfTiles + Tile.stringToTile((tile \ "@identifier").text.toString.trim)
+          bagOfTiles = bagOfTiles + Tile.stringToTile((tile \ "@identifier").text.toString.trim).get
         }
       }
 
@@ -44,7 +43,7 @@ class FileIO @Inject() extends FileIOInterface {
         for (set <- ssetsNodes \\ "sortedSet") {
           var sorted = SortedSet[TileInterface]()
           for (tile <- set \\ "tile") {
-            sorted = sorted + Tile.stringToTile((tile \ "@identifier").text.toString.trim)
+            sorted = sorted + Tile.stringToTile((tile \ "@identifier").text.toString.trim).get
           }
           ssets = ssets + sorted
         }
@@ -89,8 +88,7 @@ class FileIO @Inject() extends FileIOInterface {
 
   private def playerToXml(player: PlayerInterface) = {
     <player name={player.name.toString}
-            number={player.number.toString}
-            state={player.state.toString}>
+            state={player.hasTurn.toString}>
       {boardToXml(player.tiles)}
     </player>
   }

@@ -13,14 +13,15 @@ case class Board @Inject()(tiles: SortedSet[TileInterface]) extends BoardInterfa
   override def amountOfTiles(): Int =
     tiles.size
 
-  override def +(tile: TileInterface): BoardInterface =
+  override def add(tile: TileInterface): BoardInterface =
     copy(tiles + tile)
 
-  override def -(tile: TileInterface): BoardInterface =
-    if (!tiles.contains(tile)) copy() else copy(tiles.filterNot(t => tile.equals(t)))
+  override def remove(tile: TileInterface): BoardInterface =
+    copy(tiles filterNot(_ == tile))
 
-  override def contains(tile: TileInterface): Boolean = {
-    val x = tiles.contains(tile)
-    x //TODO sometimes when laying down this return false even though it should clearly not
-  }
+  override def contains(tile: TileInterface): Boolean =
+     tiles contains tile
+
+  //TODO sometimes when laying down this return false even though it should clearly not
+
 }

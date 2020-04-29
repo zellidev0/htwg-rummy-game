@@ -1,34 +1,34 @@
 package de.htwg.se.rummy.model.deskComp.deskBaseImpl
 
 import de.htwg.se.rummy.model.DeskInterface
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Color, State}
 import scala.collection.immutable.SortedSet
 import scala.util.Random
 
-case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], table: Set[SortedSet[TileInterface]])
+case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], table: Set[SortedSet[TileInterface]])
   extends DeskInterface {
   val minSize = 3
 
-  override def getPreviousPlayer: PlayerInterface = {
-    val playerNumber = getCurrentPlayer.number - 1;
-    if (playerNumber < 0) {
-      players.find(_.number == players.size - 1).get
-    } else {
-      players.find(_.number == playerNumber).get
+  override def getPreviousPlayer: PlayerInterface =
+    players.indexOf(getCurrentPlayer) match {
+      case 0 => players.last
+      case 1 => players.head
+      case 2 => players.tail.head
+      case 3 => players.tail.tail.head
+      case _ => throw new RuntimeException("Less than 2 or more than 4 player in the game")
+    }
+
+  override def getNextPlayer: PlayerInterface = {
+    players.indexOf(getCurrentPlayer) match {
+      case 0 => players.tail.head
+      case 1 => players.tail.tail.head
+      case 2 => players.last
+      case 3 => players.head
+      case _ => throw new RuntimeException("Less than 2 or more than 4 player in the game")
     }
   }
 
   override def getCurrentPlayer: PlayerInterface =
-    players.find(_.state == State.TURN).get
-
-  override def getNextPlayer: PlayerInterface = {
-    val playerNumber = getCurrentPlayer.number + 1
-    if (playerNumber == players.size) {
-      players.find(_.number == 0).get
-    } else {
-      players.find(_.number == playerNumber).get
-    }
-  }
+    players.find(p => p.hasTurn).get
 
   override def moveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk = {
     if (tableContains(t1) && tableContains(t2)) {
@@ -50,19 +50,19 @@ case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], t
   override def tableContains(t: TileInterface): Boolean =
     table.exists(_.contains(t))
 
-  override def getRandomTileInBag: TileInterface =
-    bagOfTiles.toVector(Random.nextInt(bagOfTiles.size))
+  override def getTileFromBag: TileInterface =
+    bagOfTiles.head
 
   override def addPlayer(p: PlayerInterface): Desk =
-    copy(players = players + p)
+    copy(players = players :+ p)
 
-  override def switchToNextPlayer(curr: PlayerInterface, next: PlayerInterface): Desk = {
-    val newPlayers = replacePlayer(curr, getPlayer(curr).changeState(State.WAIT))
-    newPlayers.replacePlayer(next, newPlayers.getPlayer(next).changeState(State.TURN))
+  override def switchToNextPlayer(current: PlayerInterface, next: PlayerInterface): Desk = {
+    val newPlayers = replacePlayer(current, getPlayer(current) change (turn = false))
+    newPlayers.replacePlayer(next, newPlayers.getPlayer(next).change(turn = true))
   }
 
   override def removePlayer(p: PlayerInterface): Desk =
-    copy(players = players.filterNot(_.number == p.number))
+    copy(players = players.filterNot(pl => pl == p))
 
   override def takeTileFromBagToPlayer(p: PlayerInterface, t: TileInterface): Desk =
     addToPlayer(p, t).removeFromBag(t)
@@ -104,10 +104,10 @@ case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], t
     copy(table = table + (SortedSet[TileInterface]() + t))
 
   private[model] def addToPlayer(p: PlayerInterface, t: TileInterface): Desk =
-    replacePlayer(oldPlayer = p, newPlayer = getPlayer(p) addTile t)
+    replacePlayer(oldPlayer = p, newPlayer = getPlayer(p) add t)
 
   private[model] def removeTileFromPlayer(t: TileInterface, p: PlayerInterface): Desk =
-    replacePlayer(oldPlayer = p, newPlayer = getPlayer(p) removeTile t)
+    replacePlayer(oldPlayer = p, newPlayer = getPlayer(p) remove t)
 
   private[model] def checkStreet(set: SortedSet[TileInterface]): Boolean =
     set.size >= minSize && allTilesHaveSameColor(set) && allTilesHaveValidStreetValues(set)
@@ -119,7 +119,7 @@ case class Desk(players: Set[PlayerInterface], bagOfTiles: Set[TileInterface], t
     players.find(_ == player).get
 
   private[model] def replacePlayer(oldPlayer: PlayerInterface, newPlayer: PlayerInterface): Desk =
-    copy(players = (players - oldPlayer) + newPlayer)
+    copy(players = players.filterNot(p => p == oldPlayer) :+ newPlayer)
 
   private[model] def correctPairSize(set: Set[TileInterface]): Boolean =
     set.size == minSize || set.size == 4

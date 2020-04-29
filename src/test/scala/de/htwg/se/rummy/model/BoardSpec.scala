@@ -30,7 +30,7 @@ class BoardSpec extends WordSpec with Matchers {
     "gets added a tile" should {
       var board: BoardInterface = Board(SortedSet[TileInterface]())
       val tile = Tile(1, Color.RED, 0)
-      board = board + tile
+      board = board add tile
       "have 1 more tile" in {
         val opt = board.tiles.find(t => tile.equals(t))
         if (opt.isDefined) {
@@ -47,7 +47,7 @@ class BoardSpec extends WordSpec with Matchers {
       var board: BoardInterface = Board(SortedSet[TileInterface](tile))
       board.amountOfTiles() should be(1)
       board.contains(tile) should be(true)
-      board = board - tile
+      board = board remove tile
       "have 0 tiles" in {
         val opt = board.tiles.find(t => tile.equals(t))
         if (opt.isEmpty) {

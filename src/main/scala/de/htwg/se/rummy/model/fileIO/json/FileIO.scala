@@ -15,20 +15,20 @@ class FileIO @Inject() extends FileIOInterface {
 
   override def load: DeskInterface = {
     val json: JsValue = Json.parse(Source.fromFile("target/desk.json").getLines.mkString)
-    var players = Set[PlayerInterface]()
+    var players = List[PlayerInterface]()
     var bagOfTiles = Set[TileInterface]()
     for (i <- 0 until (json \ "desk" \ "amountOfPlayers").get.toString.toInt) {
       val name = ((json \ "desk" \ "players") (i) \ "name").as[String]
       val number = ((json \ "desk" \ "players") (i) \ "number").as[Int]
-      val state = ((json \ "desk" \ "players") (i) \ "state").as[String]
+      val state = ((json \ "desk" \ "players") (i) \ "hasTurn").as[Boolean]
       var board: BoardInterface = Board(SortedSet[TileInterface]())
       for (j <- 0 until ((json \ "desk" \ "players") (i) \ "tilesOnBoard").as[Int]) {
         val value = (((json \ "desk" \ "players") (i) \ "board") (j) \ "value").as[Int]
         val color = (((json \ "desk" \ "players") (i) \ "board") (j) \ "color").as[String]
         val ident = (((json \ "desk" \ "players") (i) \ "board") (j) \ "ident").as[Int]
-        board = board + Tile(value, Color.colorFromString(color), ident)
+        board = board add Tile(value, Color.colorFromString(color), ident)
       }
-      players = players + Player(name, number, board, State.stringToState(state))
+      players = players :+ Player(name, board, state)
     }
     for (i <- 0 until (json \ "desk" \ "bagSize").get.toString.toInt) {
       val value = ((json \ "desk" \ "bag") (i) \ "value").as[Int]
@@ -73,8 +73,7 @@ class FileIO @Inject() extends FileIOInterface {
   implicit val playerWrites = new Writes[PlayerInterface] {
     def writes(player: PlayerInterface) = Json.obj(
       "name" -> player.name,
-      "number" -> player.number,
-      "state" -> player.state,
+      "hasTurn" -> player.hasTurn,
       "tilesOnBoard" -> player.tiles.size,
       "board" -> Json.toJson(
         for {

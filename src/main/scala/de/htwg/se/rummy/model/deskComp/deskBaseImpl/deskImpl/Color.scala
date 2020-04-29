@@ -16,12 +16,4 @@ object Color extends Enumeration {
     color.toString.charAt(0).toString
   }
 
-  def colorToChar(char:Char): Color.Value = {
-    char match {
-      case 'R' => Color.RED
-      case 'B' => Color.BLUE
-      case 'Y' => Color.YELLOW
-      case 'G' => Color.GREEN
-    }
-  }
 }

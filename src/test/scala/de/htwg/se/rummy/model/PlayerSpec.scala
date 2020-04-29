@@ -1,63 +1,43 @@
 package de.htwg.se.rummy.model
 
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl._
-import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Player, State, _}
+import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Player, Tile}
 import org.scalatest._
 
 import scala.collection.immutable.SortedSet
 
 class PlayerSpec() extends WordSpec with Matchers {
   "A Player" when {
-    "created" should {
-      val player = Player("Name1", 1, Board(SortedSet[TileInterface]()))
+      val player = Player("John",Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))))
+    "created with one tile on board" should {
       "have a name" in {
-        player.name should be("Name1")
+        player.name should be("John")
       }
       "have a nice String representation" in {
-        player.toString should be("Player 1: 1 with state: WAIT boardsize: 0")
+        player.toString should be("Player John, turn: false, boardsize: 1")
       }
-      "have a player number" in {
-        player.number should be(1)
-      }
-      "have the status Wait" in {
-        player.state should be(State.WAIT)
+      "have the turn false" in {
+        player.hasTurn should be(false)
       }
     }
     "takes a Tile" should {
-      var player: PlayerInterface = Player("Name1", 1, Board(SortedSet[TileInterface]()))
-      player.tiles.size should be(0)
-      player = player addTile Tile(1, Color.RED, 0)
-      "have one tile in board" in {
-        player.tiles.size should be(1)
+      val tile = Tile(2, Color.RED, 0)
+      val newPlayer = player add tile
+      "have a tile more on board" in {
+        newPlayer.has(tile) should be(true)
       }
-
     }
     "lays down a Tile" should {
-      var player: PlayerInterface = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))))
-      player.tiles.size should be(1)
-      player = player.removeTile(Tile(1, Color.RED, 0))
-      "have one tile in board" in {
-        player.tiles.size should be(0)
-      }
-    }
-    "its status is changed" should {
-      var player1: PlayerInterface = Player("Name1", 1, Board(SortedSet[TileInterface]()), State.TURN)
-      player1 = player1.changeState(State.WAIT)
-      "the new status be turn " in {
-        player1.tiles.size should be(0)
-      }
-    }
-    "its board is empty" should {
-      val player1: PlayerInterface = Player("Name1", 1, Board(SortedSet[TileInterface]()), State.TURN)
-      "the new status be turn " in {
-        player1.won() should be(true)
-      }
-    }
-    "has tile" should {
       val tile = Tile(1, Color.RED, 0)
-      val player1 = Player("Name1", 1, Board(SortedSet[TileInterface](tile)), State.TURN)
-      "have the tile" in {
-        player1.hasTile(tile) should be(true)
+      val newPlayer = player remove tile
+      "have one tile less on board" in {
+        newPlayer.has(tile) should be(false)
+      }
+    }
+    "its turn status is changed" should {
+      val newPlayer = player.change(true)
+      "have turn " in {
+        newPlayer.hasTurn should be(true)
       }
     }
   }

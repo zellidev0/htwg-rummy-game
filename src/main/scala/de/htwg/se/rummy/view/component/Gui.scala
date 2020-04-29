@@ -214,7 +214,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
       contents += new Button() {
         text = "Select"
         reactions += {
-          case ButtonClicked(_) => contr.layDownTile(Tile.stringToTile(tile.toString))
+          case ButtonClicked(_) => contr.layDownTile(Tile.stringToTile(tile.toString).get)
         }
       }
     }
@@ -255,7 +255,7 @@ class Gui(contr: ControllerInterface) extends Frame with UIInterface {
               if (oneIsSelected.equals(tile)) {
                 oneIsSelected = None
               } else {
-                contr.moveTile(Tile.stringToTile(oneIsSelected.get.toString), Tile.stringToTile(tile.toString))
+                contr.moveTile(Tile.stringToTile(oneIsSelected.get.toString).get, Tile.stringToTile(tile.toString).get)
                 oneIsSelected = None
               }
             } else {

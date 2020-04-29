@@ -10,5 +10,4 @@ trait TileInterface extends Ordered[TileInterface] {
   val ident: Int
 
   override def compare(that: TileInterface): Int
-
 }
