@@ -52,18 +52,18 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
 
   override def moveTile(thisTile: TileInterface, toThisTile: TileInterface): Unit = {
-    if (!desk.tableContains(thisTile) || !desk.tableContains(toThisTile)) {
-      switchState(AnswerState.CANT_MOVE_THIS_TILE, ControllerState.P_TURN)
-    } else {
+    if ((desk tableContains thisTile) && (desk tableContains toThisTile)) {
       undoManager.doStep(new MoveTileCommand(thisTile, toThisTile, this))
+    } else {
+      switchState(AnswerState.CANT_MOVE_THIS_TILE, ControllerState.P_TURN)
     }
   }
 
   override def layDownTile(tile: TileInterface): Unit = {
-    if (!getCurrentPlayer.has(tile)) {
-      switchState(AnswerState.P_DOES_NOT_OWN_TILE, ControllerState.P_TURN)
-    } else {
+    if (getCurrentPlayer has tile) {
       undoManager.doStep(new LayDownCommand(tile, this))
+    } else {
+      switchState(AnswerState.P_DOES_NOT_OWN_TILE, ControllerState.P_TURN)
     }
   }
 
