@@ -22,7 +22,6 @@ trait DeskInterface {
   def tableContains(t: TileInterface): Boolean
   def getTileFromBag: TileInterface
   def addPlayer(p: PlayerInterface): Desk
-  def switchToNextPlayer(curr: PlayerInterface, next: PlayerInterface): Desk
   def removePlayer(p: PlayerInterface): Desk
   def takeTileFromBagToPlayer(p: PlayerInterface, t: TileInterface): Desk
   def takeTileFromPlayerToBag(p: PlayerInterface, t: TileInterface): Desk
@@ -31,4 +30,7 @@ trait DeskInterface {
   def currentPlayerWon(): Boolean
   def boardView: SortedSet[TileInterface]
   def tableView: Set[SortedSet[TileInterface]]
+  def getPlayerByName(playerName: String): Option[PlayerInterface]
+  def switchToPreviousPlayer: Desk
+  def switchToNextPlayer: Desk
 }

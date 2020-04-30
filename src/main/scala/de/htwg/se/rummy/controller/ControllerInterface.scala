@@ -65,4 +65,5 @@ trait ControllerInterface extends Observable {
   def switchState(answerState: AnswerState.Value, c: ControllerState.Value): Unit
 
   def toJson(): JsObject
+  def getPlayerByName(name: String): Option[PlayerInterface]
 }

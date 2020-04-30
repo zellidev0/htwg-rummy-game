@@ -70,6 +70,9 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   override def getCurrentPlayer: PlayerInterface =
     desk.getCurrentPlayer
 
+  override def getPlayerByName(name:String): Option[PlayerInterface] =
+    desk.getPlayerByName(name)
+
   override def getPreviousPlayer: PlayerInterface =
     desk.getPreviousPlayer
 
@@ -126,7 +129,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
 
 
   override def storeFile(): Unit = {
-    desk = fileIO.save(desk)
+    fileIO.save(desk)
     switchState(AnswerState.STORED_FILE, controllerState)
   }
 

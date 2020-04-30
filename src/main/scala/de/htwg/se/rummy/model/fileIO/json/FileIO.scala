@@ -52,12 +52,11 @@ class FileIO @Inject() extends FileIOInterface {
   }
 
 
-  override def save(desk: DeskInterface): DeskInterface = {
+  override def save(desk: DeskInterface): Unit = {
     import java.io._
     val pw = new PrintWriter(new File("target/desk.json"))
     pw.write(Json.prettyPrint(deskToJson(desk)))
     pw.close()
-    desk
   }
 
   override def toJson(grid: DeskInterface): JsObject = deskToJson(grid)

@@ -52,16 +52,16 @@ class FileIO @Inject() extends FileIOInterface {
     deskBaseImpl.Desk(players, bagOfTiles, ssets)
   }
 
-  def save(grid: DeskInterface): DeskInterface = saveString(grid)
+  override def save(grid: DeskInterface): Unit =
+    saveString(grid)
 
-  private def saveString(desk: DeskInterface): DeskInterface = {
+  private def saveString(desk: DeskInterface): Unit = {
     import java.io._
     val pw = new PrintWriter(new File("/target/desk.xml"))
     val prettyPrinter = new PrettyPrinter(120, 4)
     val xml = prettyPrinter.format(deskToXml(desk))
     pw.write(xml)
     pw.close()
-    desk
   }
 
 

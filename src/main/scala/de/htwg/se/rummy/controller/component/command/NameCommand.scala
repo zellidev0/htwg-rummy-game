@@ -12,7 +12,8 @@ import scala.collection.immutable.SortedSet
 class NameCommand(newName: String, max: Int, controller: Controller) extends Command {
 
   override def undoStep(): Unit = {
-    controller.desk = removePlayerFromDesk(controller.desk)
+    controller.desk =
+      controller.desk.removePlayer(controller.getPlayerByName(newName).get)
     controller.switchState(AnswerState.REMOVED_PLAYER, ControllerState.INSERTING_NAMES)
   }
 
@@ -20,7 +21,8 @@ class NameCommand(newName: String, max: Int, controller: Controller) extends Com
     doStep()
 
   override def doStep(): Unit = {
-    controller.desk = takeMaxTilesFromBagToPlayersBoard(addPlayerToDesk(controller.desk))
+    controller.desk = takeMaxTilesFromBagToPlayersBoard(
+      controller.desk addPlayer Player(newName, Board(SortedSet[TileInterface]()), controller.getAmountOfPlayers == 0))
     controller.switchState(AnswerState.ADDED_PLAYER, ControllerState.INSERTING_NAMES)
   }
 
@@ -32,15 +34,9 @@ class NameCommand(newName: String, max: Int, controller: Controller) extends Com
 
   /** Wrapper to take one tile from the bag and put it on the users board */
   def takeTileFromBagToPlayer(desk: DeskInterface): DeskInterface = {
-    desk.takeTileFromBagToPlayer(desk.players.find(pl => pl.name == newName).get, desk.getTileFromBag)
+    desk.takeTileFromBagToPlayer(desk.getPlayerByName(newName).get, desk.getTileFromBag)
   }
 
-  /** Wrapper to add the player to the desk */
-  def addPlayerToDesk(desk: DeskInterface): DeskInterface =
-    desk addPlayer Player(newName, Board(SortedSet[TileInterface]()), desk.amountOfPlayers == 0)
 
-  /** Wrapper to remove a player from the desk */
-  def removePlayerFromDesk(desk: DeskInterface): DeskInterface =
-    desk removePlayer desk.players.find(p => p.name == newName).get
 
 }
