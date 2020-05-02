@@ -14,7 +14,7 @@ import scala.collection.immutable.SortedSet
 
 class ControllerSpec extends WordSpec with Matchers {
 
-//
+
 //  "A Controller" when {
 //    "user finishes play" should {
 //      val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), state = PlayerState.TURN)
@@ -101,14 +101,14 @@ class ControllerSpec extends WordSpec with Matchers {
 //    "adding a player and have less than 4" should {
 //      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = PlayerState.TURN))
 //      val desk = deskBaseImpl.Desk(players, Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[TileInterface]]())
-//      val controller = new Controller(desk)
-//      controller.createDesk(12) // must create or you cant init all players
-//      val amountOfPlayersBefore = controller.desk.players.size
-//      controller.addPlayerAndInit("Name2", 12)
-//      "have 2 players" in {
-//        controller.hasLessThan4Players should be(true)
-//        controller.desk.players.size should be(amountOfPlayersBefore + 1)
-//        controller.addPlayerAndInit("Name3", 12)
+//    val controller = new Controller(desk)
+//    controller.createDesk(12) // must create or you cant init all players
+//    val amountOfPlayersBefore = controller.desk.players.size
+//    controller.addPlayerAndInit("Name2", 12)
+//    "have 2 players" in {
+//      controller.hasLessThan4Players should be(true)
+//      controller.desk.players.size should be(amountOfPlayersBefore + 1)
+//      controller.addPlayerAndInit("Name3", 12)
 //      }
 //      "have 3 players" in {
 //        controller.hasLessThan4Players should be(true)
@@ -276,7 +276,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //      val desk = deskBaseImpl.Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]]())
 //      val controller = new Controller(desk)
 //      controller.layDownTile(Tile.stringToTile("1R0").get)
-//      "undo" in {
+//       "undo" in {
 //        controller.desk.getCurrentPlayer.has(tile1) should be(false)
 //        controller.desk.table.contains(SortedSet(tile1)) should be(true)
 //        controller.undo()
@@ -348,21 +348,21 @@ class ControllerSpec extends WordSpec with Matchers {
 //      }
 //    }
 //    "calling undo redo when switching player" should {
-//      val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), state = PlayerState.TURN)
-//      val player2 = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
-//      val player3 = Player("Name2", 2, Board(SortedSet[TileInterface]()))
-//      val player4 = Player("Name3", 3, Board(SortedSet[TileInterface]()))
-//      val players = Set[PlayerInterface](player1, player2, player3, player4)
-//      val desk = deskBaseImpl.Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
-//      val controller = new Controller(desk)
-//      controller.switchToNextPlayer()
-//      "userPutTileDown be 1" in {
-//        controller.getCurrentPlayer.number should be(1)
-//        controller.undo()
-//      }
-//      "undo" in {
-//        controller.getCurrentPlayer.number should be(0)
-//        controller.redo()
+//     val player1 = Player("Name0", 0, Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), state = PlayerState.TURN)
+//     val player2 = Player("Name1", 1, Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
+//     val player3 = Player("Name2", 2, Board(SortedSet[TileInterface]()))
+//     val player4 = Player("Name3", 3, Board(SortedSet[TileInterface]()))
+//     val players = Set[PlayerInterface](player1, player2, player3, player4)
+//     val desk = deskBaseImpl.Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
+//     val controller = new Controller(desk)
+//     controller.switchToNextPlayer()
+//     "userPutTileDown be 1" in {
+//       controller.getCurrentPlayer.number should be(1)
+//       controller.undo()
+//     }
+//     "undo" in {
+//       controller.getCurrentPlayer.number should be(0)
+//       controller.redo()
 //      }
 //      "redo" in {
 //        controller.getCurrentPlayer.number should be(1)
