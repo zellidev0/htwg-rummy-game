@@ -142,61 +142,63 @@ class DeskSpec extends WordSpec with Matchers {
     }
 
     //checkTable always true
-//    "be true when setOfWrongStreets" in {
-//      val desk2 = Desk(players, Set[TileInterface](), setOfWrongStreets)
-//      desk2.checkTable() should be(false)
-//    }
-//    "be true when setOfWrongPairs" in {
-//      val desk3 = Desk(players, Set[TileInterface](), setOfWrongPairs)
-//      desk3.checkTable() should be(false)
-//    }
+    //    "be true when setOfWrongStreets" in {
+    //      val desk2 = Desk(players, Set[TileInterface](), setOfWrongStreets)
+    //      desk2.checkTable() should be(false)
+    //    }
+    //    "be true when setOfWrongPairs" in {
+    //      val desk3 = Desk(players, Set[TileInterface](), setOfWrongPairs)
+    //      desk3.checkTable() should be(false)
+    //    }
   }
-    "check street" should {
-      val setOfCorrectStreets =
-        Set(SortedSet[TileInterface](Tile(1, Color.GREEN, 0), Tile(2, Color.GREEN, 1), Tile(3, Color.GREEN, 0), Tile(4, Color.GREEN, 0), Tile(5, Color.GREEN, 0)), //Street 4 GREEN
-          SortedSet[TileInterface](Tile(4, Color.RED, 0), Tile(5, Color.RED, 0), Tile(6, Color.RED, 0))) // Street 3 RED
-      val setOfWrongStreets =
-        Set(SortedSet[TileInterface](Tile(9, Color.BLUE, 1), Tile(11, Color.BLUE, 1), Tile(12, Color.BLUE, 1), Tile(13, Color.BLUE, 0)), // Street with missing one
-          SortedSet[TileInterface](Tile(7, Color.RED, 0), Tile(8, Color.RED, 1))) // street with only 2
-      val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface]()), true), Player("Name2", Board(SortedSet[TileInterface]())))
-      val desk = Desk(players, Set[TileInterface](), setOfCorrectStreets)
-      "be true when setOfCorrectStreets" in {
-        for (set <- desk.table) {
-          desk.checkStreet(set) should be(true)
-          desk.checkPair(set) should be(false)
-        }
-      }
-      "be false when setOfWrongStreets" in {
-        val desk1 = Desk(players, Set[TileInterface](), setOfWrongStreets)
-        for (set <- desk.table) {
-//          desk1.checkStreet(set) should be(false)                                    #checkStreet is wrong
-          desk1.checkPair(set) should be(false)
-        }
+  "check street" should {
+    val setOfCorrectStreets =
+      Set(SortedSet[TileInterface](Tile(1, Color.GREEN, 0), Tile(2, Color.GREEN, 1), Tile(3, Color.GREEN, 0), Tile(4, Color.GREEN, 0), Tile(5, Color.GREEN, 0)), //Street 4 GREEN
+        SortedSet[TileInterface](Tile(4, Color.RED, 0), Tile(5, Color.RED, 0), Tile(6, Color.RED, 0))) // Street 3 RED
+    val setOfWrongStreets =
+      Set(SortedSet[TileInterface](Tile(9, Color.BLUE, 1), Tile(11, Color.BLUE, 1), Tile(12, Color.BLUE, 1), Tile(13, Color.BLUE, 0)), // Street with missing one
+        SortedSet[TileInterface](Tile(7, Color.RED, 0), Tile(8, Color.RED, 1))) // street with only 2
+    val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface]()), true), Player("Name2", Board(SortedSet[TileInterface]())))
+    val desk = Desk(players, Set[TileInterface](), setOfCorrectStreets)
+    "be true when setOfCorrectStreets" in {
+      for (set <- desk.table) {
+        desk.checkStreet(set) should be(true)
+        desk.checkPair(set) should be(false)
       }
     }
-  //    "check pair" should {
-  //      val setOfCorrectPairs =
-  //        Set(SortedSet[TileInterface](Tile(2, Color.GREEN, 0), Tile(2, Color.YELLOW, 0), Tile(2, Color.BLUE, 0)), // Pair 3 different
-  //          SortedSet[TileInterface](Tile(8, Color.RED, 0), Tile(8, Color.BLUE, 0), Tile(8, Color.YELLOW, 0), Tile(8, Color.GREEN, 0))) // Pair 4 different
-  //      val setOfWrongPairs =
-  //        Set(SortedSet[TileInterface](Tile(10, Color.GREEN, 0), Tile(10, Color.GREEN, 1), Tile(10, Color.BLUE, 0)), // Pair of 3 where 2 same
-  //          SortedSet[TileInterface](Tile(13, Color.YELLOW, 0), Tile(13, Color.GREEN, 0))) // Pair of 2
-  //      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = PlayerState.TURN), Player("Name2", 1, Board(SortedSet[TileInterface]())))
-  //      var desk = deskBaseImpl.Desk(players, Set[TileInterface](), setOfCorrectPairs)
-  //      "be true when setOfCorrectPair" in {
-  //        for (set <- desk.table) {
-  //          desk.checkStreet(set) should be(false)
-  //          desk.checkPair(set) should be(true)
-  //        }
-  //      }
-  //      "be true when setOfWrongPair" in {
-  //        desk = deskBaseImpl.Desk(players, Set[TileInterface](), setOfWrongPairs)
-  //        for (set <- desk.table) {
-  //          desk.checkStreet(set) should be(false)
-  //          desk.checkPair(set) should be(false)
-  //        }
-  //      }
-  //    }
+    "be false when setOfWrongStreets" in {
+      val desk1 = Desk(players, Set[TileInterface](), setOfWrongStreets)
+      for (set <- desk.table) {
+        //          desk1.checkStreet(set) should be(false)                                    #checkStreet is wrong
+        desk1.checkPair(set) should be(false)
+      }
+    }
+  }
+  "check pair" should {
+    val setOfCorrectPairs =
+      Set(SortedSet[TileInterface](Tile(2, Color.GREEN, 0), Tile(2, Color.BLUE, 1), Tile(2, Color.RED, 0), Tile(2, Color.YELLOW, 0)), //Street 4 GREEN
+        SortedSet[TileInterface](Tile(4, Color.RED, 0), Tile(4, Color.GREEN, 0), Tile(4, Color.BLUE, 0))) // Street 3 RED
+    // Set(SortedSet[TileInterface](Tile(2, Color.GREEN, 0), Tile(2, Color.YELLOW, 0), Tile(2, Color.BLUE, 0)), // Pair 3 different
+    //   SortedSet[TileInterface](Tile(8, Color.RED, 0), Tile(8, Color.BLUE, 0), Tile(8, Color.YELLOW, 0), Tile(8, Color.GREEN, 0))) // Pair 4 different
+    val setOfWrongPairs =
+    Set(SortedSet[TileInterface](Tile(10, Color.GREEN, 0), Tile(10, Color.GREEN, 1), Tile(10, Color.BLUE, 0)), // Pair of 3 where 2 same
+      SortedSet[TileInterface](Tile(13, Color.YELLOW, 0), Tile(13, Color.GREEN, 0))) // Pair of 2
+    val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface]())), Player("Name2", Board(SortedSet[TileInterface]())))
+    val desk = Desk(players, Set[TileInterface](), setOfCorrectPairs)
+    "be true when setOfCorrectPair" in {
+      for (set <- desk.table) {
+        desk.checkStreet(set) should be(false)
+        desk.checkPair(set) should be(true)
+      }
+    }
+    "be true when setOfWrongPair" in {
+      val desk1 = deskBaseImpl.Desk(players, Set[TileInterface](), setOfWrongPairs)
+      for (set <- desk.table) {
+        desk1.checkStreet(set) should be(false)
+        desk1.checkPair(set) should be(false)
+      }
+    }
+  }
   //    "one player puts last tile down" should {
   //      val tile = Tile(1, Color.RED, 0)
   //      var desk = deskBaseImpl.Desk(Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface](tile)), state = PlayerState.TURN), Player("Name2", 1, Board(SortedSet[TileInterface]()))), Set[TileInterface](), Set[SortedSet[TileInterface]]())
