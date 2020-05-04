@@ -198,165 +198,179 @@ class DeskSpec extends WordSpec with Matchers {
       }
     }
   }
-//  "check pair" should {
-//    val setOfCorrectPairs =
-//      Set(
-//        SortedSet[TileInterface](
-//          Tile(2, Color.GREEN, 0),
-//          Tile(2, Color.BLUE, 1),
-//          Tile(2, Color.RED, 0),
-//          Tile(2, Color.YELLOW, 0)),
-//        SortedSet[TileInterface](
-//          Tile(4, Color.RED, 0),
-//          Tile(4, Color.GREEN, 0),
-//          Tile(4, Color.BLUE, 0)
-//        )
-//      )
-//    Set(SortedSet[TileInterface](
-//      Tile(2, Color.GREEN, 0),
-//      Tile(2, Color.YELLOW, 0),
-//      Tile(2, Color.BLUE, 0)
-//    ),
-//      SortedSet[TileInterface](
-//        Tile(8, Color.RED, 0),
-//        Tile(8, Color.BLUE, 0),
-//        Tile(8, Color.YELLOW, 0),
-//        Tile(8, Color.GREEN, 0)))
-//    val setOfWrongPairs =
-//      Set(
-//        SortedSet[TileInterface](
-//          Tile(10, Color.GREEN, 0),
-//          Tile(10, Color.GREEN, 1),
-//          Tile(10, Color.BLUE, 0)),
-//        SortedSet[TileInterface](
-//          Tile(13, Color.YELLOW, 0),
-//          Tile(13, Color.GREEN, 0)))
-//    val players = List[PlayerInterface](Player("Name1", emptyBoard), Player("Name2", emptyBoard))
-//    val desk = Desk(players, Set[TileInterface](), setOfCorrectPairs)
-//  "be true when setOfCorrectPair" in {
-//    for (set <- desk.table) {
-//      desk.checkStreet(set) should be(false)
-//      desk.checkPair(set) should be(true)
-//    }
-//  }
-//  "be true when setOfWrongPair" in {
-//    val desk1 = deskBaseImpl.Desk(players, Set[TileInterface](), setOfWrongPairs)
-//    for (set <- desk.table) {
-//      desk1.checkStreet(set) should be(false)
-//      desk1.checkPair(set) should be(false)
-//    }
-//  }
-//}
-    "one player puts last tile down" should {
-      val tile = Tile(1, Color.RED, 0)
-      val desk = deskBaseImpl.Desk(List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](tile)), true), Player("Name2",  emptyBoard)), Set[TileInterface](), emptyDesk)
-      desk.currentPlayerWon() should be(false)
+  //  "check pair" should {
+  //    val setOfCorrectPairs =
+  //      Set(
+  //        SortedSet[TileInterface](
+  //          Tile(2, Color.GREEN, 0),
+  //          Tile(2, Color.BLUE, 1),
+  //          Tile(2, Color.RED, 0),
+  //          Tile(2, Color.YELLOW, 0)),
+  //        SortedSet[TileInterface](
+  //          Tile(4, Color.RED, 0),
+  //          Tile(4, Color.GREEN, 0),
+  //          Tile(4, Color.BLUE, 0)
+  //        )
+  //      )
+  //    Set(SortedSet[TileInterface](
+  //      Tile(2, Color.GREEN, 0),
+  //      Tile(2, Color.YELLOW, 0),
+  //      Tile(2, Color.BLUE, 0)
+  //    ),
+  //      SortedSet[TileInterface](
+  //        Tile(8, Color.RED, 0),
+  //        Tile(8, Color.BLUE, 0),
+  //        Tile(8, Color.YELLOW, 0),
+  //        Tile(8, Color.GREEN, 0)))
+  //    val setOfWrongPairs =
+  //      Set(
+  //        SortedSet[TileInterface](
+  //          Tile(10, Color.GREEN, 0),
+  //          Tile(10, Color.GREEN, 1),
+  //          Tile(10, Color.BLUE, 0)),
+  //        SortedSet[TileInterface](
+  //          Tile(13, Color.YELLOW, 0),
+  //          Tile(13, Color.GREEN, 0)))
+  //    val players = List[PlayerInterface](Player("Name1", emptyBoard), Player("Name2", emptyBoard))
+  //    val desk = Desk(players, Set[TileInterface](), setOfCorrectPairs)
+  //  "be true when setOfCorrectPair" in {
+  //    for (set <- desk.table) {
+  //      desk.checkStreet(set) should be(false)
+  //      desk.checkPair(set) should be(true)
+  //    }
+  //  }
+  //  "be true when setOfWrongPair" in {
+  //    val desk1 = deskBaseImpl.Desk(players, Set[TileInterface](), setOfWrongPairs)
+  //    for (set <- desk.table) {
+  //      desk1.checkStreet(set) should be(false)
+  //      desk1.checkPair(set) should be(false)
+  //    }
+  //  }
+  //}
+  "one player puts last tile down" should {
+    val tile = Tile(1, Color.RED, 0)
+    val desk = deskBaseImpl.Desk(List[PlayerInterface](
+      Player("Name1", Board(SortedSet[TileInterface](tile)), hasTurn = true),
+      Player("Name2", emptyBoard)), Set[TileInterface](), emptyDesk)
+    desk.currentPlayerWon() should be(false)
+    val desk1 = desk.putDownTile(desk.getCurrentPlayer, tile)
+    "have that player win" in {
+      desk1.currentPlayerWon() should be(true)
+    }
+  }
+  "move a tile form one set to another" should {
+    val tile = Tile(4, Color.BLUE, 0)
+    val players = List[PlayerInterface](
+      Player("Name1", Board(SortedSet[TileInterface](tile)), hasTurn = true))
+    val desk = deskBaseImpl.Desk(players, Set[TileInterface](),
+      Set[SortedSet[TileInterface]](SortedSet(Tile(1, Color.BLUE, 0), Tile(2, Color.BLUE, 0), Tile(3, Color.BLUE, 0))))
+    "have 4 tiles in Set on Desk" in {
       val desk1 = desk.putDownTile(desk.getCurrentPlayer, tile)
-      "have that player win" in {
-        desk1.currentPlayerWon() should be(true)
-      }
+      val desk2 = desk1.tryToMoveTwoTilesOnDesk(tile, Tile(3, Color.BLUE, 0))
+      desk2.table.size should be(1)
     }
-    "move a tile form one set to another" should {
-      val tile = Tile(4, Color.BLUE, 0)
-      val tile2 = Tile(3, Color.BLUE, 0)
-      val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](tile)), true))
-      val desk = deskBaseImpl.Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]](SortedSet(Tile(1, Color.BLUE, 0), Tile(2, Color.BLUE, 0), tile2), SortedSet()))
+    "not change when tile not on desk" in {
+      println(desk.table)
       val desk1 = desk.putDownTile(desk.getCurrentPlayer, tile)
-      val desk2 = desk1.moveTwoTilesOnDesk(tile, tile2)
-      "have 4 tiles in Set on Deks" in {
-        desk2.table.size should be(1)
-      }
+      val desk2 = desk1.tryToMoveTwoTilesOnDesk(tile, Tile(9, Color.BLUE, 0))
+      desk2.table.size should be(2)
     }
-    "taking up a tile" should {
-      val tile = Tile(4, Color.BLUE, 0)
-      val tile2 = Tile(3, Color.BLUE, 0)
-      val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](tile)), true))
-      val desk = deskBaseImpl.Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]](SortedSet(tile2), SortedSet()))
-      val desk1 = desk.takeUpTile(desk.getCurrentPlayer, tile2)
-      "have 4 tiles in Set on Deks" in {
-        desk1.table.head.isEmpty should be(true)
-      }
+    "not change when tiles in same set" in {
+      val desk2 = desk.tryToMoveTwoTilesOnDesk(Tile(1, Color.BLUE, 0), Tile(2, Color.BLUE, 0))
+      desk2.table.size should be(1)
     }
-    "adding to bag" should {
-      val tile = Tile(4, Color.BLUE, 0)
-      val players = List[PlayerInterface](Player("Name1", emptyBoard, true))
-      val desk = deskBaseImpl.Desk(players, Set[TileInterface](), emptyDesk)
-      val desk1 = desk.addToBag(tile)
-      "have 4 tiles in Set on Deks" in {
-        desk1.bagOfTiles.size should be(1)
-      }
+
+  }
+  "taking up a tile" should {
+    val tile = Tile(4, Color.BLUE, 0)
+    val tile2 = Tile(3, Color.BLUE, 0)
+    val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](tile)), hasTurn = true))
+    val desk = deskBaseImpl.Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]](SortedSet(tile2), SortedSet()))
+    val desk1 = desk.takeUpTile(desk.getCurrentPlayer, tile2)
+    "have 4 tiles in Set on Deks" in {
+      desk1.table.head.isEmpty should be(true)
     }
-    "taking a tile from player to bag" should {
-      val tile = Tile(4, Color.BLUE, 0)
-      val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](tile)), true))
-      val desk = deskBaseImpl.Desk(players, Set[TileInterface](), emptyDesk)
-      val desk1 = desk.takeTileFromPlayerToBag(desk.getCurrentPlayer, tile)
-      "have one less on players board and one more in bag" in {
-        desk1.bagOfTiles.size should be(1)
-        desk1.players.head.tiles.size should be(0)
-      }
+  }
+  "adding to bag" should {
+    val tile = Tile(4, Color.BLUE, 0)
+    val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true))
+    val desk = deskBaseImpl.Desk(players, Set[TileInterface](), emptyDesk)
+    val desk1 = desk.addToBag(tile)
+    "have 4 tiles in Set on Deks" in {
+      desk1.bagOfTiles.size should be(1)
     }
-    "player won" should {
-      val tile = Tile(4, Color.BLUE, 0)
-      val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](tile)), true))
-      val desk = deskBaseImpl.Desk(players, Set[TileInterface](), emptyDesk)
-      val desk1 = desk.takeTileFromPlayerToBag(desk.getCurrentPlayer, tile)
-      "be wrong" in {
-        desk1.currentPlayerWon() should be(true)
-      }
+  }
+  "taking a tile from player to bag" should {
+    val tile = Tile(4, Color.BLUE, 0)
+    val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](tile)), hasTurn = true))
+    val desk = deskBaseImpl.Desk(players, Set[TileInterface](), emptyDesk)
+    val desk1 = desk.takeTileFromPlayerToBag(desk.getCurrentPlayer, tile)
+    "have one less on players board and one more in bag" in {
+      desk1.bagOfTiles.size should be(1)
+      desk1.players.head.tiles.size should be(0)
     }
-    "has bag with tiles with same colors" should {
-      val players = List[PlayerInterface](Player("Name1", emptyBoard, true))
-      val desk = deskBaseImpl.Desk(players,
-        Set[TileInterface](Tile(4, Color.BLUE, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.BLUE, 0)),
-        emptyDesk)
-      "return false" in {
-        desk.allTilesHaveDifferentColor(desk.bagOfTiles) should be(false)
-      }
+  }
+  "player won" should {
+    val tile = Tile(4, Color.BLUE, 0)
+    val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](tile)), hasTurn = true))
+    val desk = deskBaseImpl.Desk(players, Set[TileInterface](), emptyDesk)
+    val desk1 = desk.takeTileFromPlayerToBag(desk.getCurrentPlayer, tile)
+    "be wrong" in {
+      desk1.currentPlayerWon() should be(true)
     }
-    "has bag with tiles with different colors" should {
-      val players = List[PlayerInterface](Player("Name1", emptyBoard, true))
-      val desk = deskBaseImpl.Desk(players,
-        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
-        emptyDesk)
-      "return true" in {
-        desk.allTilesHaveDifferentColor(desk.bagOfTiles) should be(true)
-      }
+  }
+  "has bag with tiles with same colors" should {
+    val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true))
+    val desk = deskBaseImpl.Desk(players,
+      Set[TileInterface](Tile(4, Color.BLUE, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.BLUE, 0)),
+      emptyDesk)
+    "return false" in {
+      desk.allTilesHaveDifferentColor(desk.bagOfTiles) should be(false)
     }
-    "with a correct street" should {
-      val players = List[PlayerInterface](Player("Name1", emptyBoard, true))
-      val desk = deskBaseImpl.Desk(players,
-        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
-        emptyDesk)
-      "have a valid street" in {
-        desk.allTilesHaveValidStreetValues( SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(true)
-      }
+  }
+  "has bag with tiles with different colors" should {
+    val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true))
+    val desk = deskBaseImpl.Desk(players,
+      Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
+      emptyDesk)
+    "return true" in {
+      desk.allTilesHaveDifferentColor(desk.bagOfTiles) should be(true)
     }
-    "with a wrong street" should {
-      val players = List[PlayerInterface](Player("Name1", emptyBoard, true))
-      val desk = deskBaseImpl.Desk(players,
-        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(4, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
-        emptyDesk)
-      "have a false street" in {
-        desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(false)
-      }
+  }
+  "with a correct street" should {
+    val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true))
+    val desk = deskBaseImpl.Desk(players,
+      Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
+      emptyDesk)
+    "have a valid street" in {
+      desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(true)
     }
-    "with a wrong street1" should {
-      val players = List[PlayerInterface](Player("Name1", emptyBoard, true))
-      val desk = deskBaseImpl.Desk(players,
-        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(7, Color.YELLOW, 0)),
-        emptyDesk)
-      "have a false street1" in {
-        desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(false)
-      }
+  }
+  "with a wrong street" should {
+    val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true))
+    val desk = deskBaseImpl.Desk(players,
+      Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(4, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
+      emptyDesk)
+    "have a false street" in {
+      desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(false)
     }
-    "with a wrong street2" should {
-      val players = List[PlayerInterface](Player("Name1", emptyBoard, true))
-      val desk = deskBaseImpl.Desk(players,
-        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(5, Color.YELLOW, 0)),
-        emptyDesk)
-//      "have a false street2" in {
-//        desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(false)
-//      }
+  }
+  "with a wrong street1" should {
+    val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true))
+    val desk = deskBaseImpl.Desk(players,
+      Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(7, Color.YELLOW, 0)),
+      emptyDesk)
+    "have a false street1" in {
+      desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(false)
     }
+  }
+  "with a wrong street2" should {
+    val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true))
+    val desk = deskBaseImpl.Desk(players,
+      Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(5, Color.YELLOW, 0)),
+      emptyDesk)
+    //      "have a false street2" in {
+    //        desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(false)
+    //      }
+  }
 }

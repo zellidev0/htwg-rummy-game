@@ -28,14 +28,14 @@ class BoardSpec extends WordSpec with Matchers {
       }
     }
     "gets added a tile" should {
-      var board: BoardInterface = Board(SortedSet[TileInterface]())
+      val board: BoardInterface = Board(SortedSet[TileInterface]())
       val tile = Tile(1, Color.RED, 0)
-      board = board add tile
+      val newBoard = board add tile
       "have 1 more tile" in {
-        val opt = board.tiles.find(t => tile.equals(t))
+        val opt = newBoard .tiles.find(t => tile.equals(t))
         if (opt.isDefined) {
-          board.amountOfTiles() should be(1)
-          board.contains(tile) should be(true)
+          newBoard .amountOfTiles() should be(1)
+          newBoard .contains(tile) should be(true)
           (opt.get.equals(tile)) should be(true)
         } else {
           1 should be(0)
@@ -44,15 +44,15 @@ class BoardSpec extends WordSpec with Matchers {
     }
     "gets removed a tile" should {
       val tile = Tile(1, Color.RED, 0)
-      var board: BoardInterface = Board(SortedSet[TileInterface](tile))
+      val board: BoardInterface = Board(SortedSet[TileInterface](tile))
       board.amountOfTiles() should be(1)
       board.contains(tile) should be(true)
-      board = board remove tile
+      val newBoard = board remove tile
       "have 0 tiles" in {
-        val opt = board.tiles.find(t => tile.equals(t))
+        val opt = newBoard.tiles.find(t => tile.equals(t))
         if (opt.isEmpty) {
-          board.contains(tile) should be(false)
-          board.amountOfTiles() should be(0)
+          newBoard.contains(tile) should be(false)
+          newBoard.amountOfTiles() should be(0)
         } else {
           1 should be(0)
         }

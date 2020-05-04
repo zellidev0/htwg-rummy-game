@@ -13,7 +13,7 @@ class MoveTileCommand(fromTile: TileInterface, toTile: TileInterface, controller
   private var savedDesk: Option[DeskInterface] = None
 
   override def doStep(): Unit = {
-    val desk = controller.desk.moveTwoTilesOnDesk(fromTile, toTile)
+    val desk = controller.desk.tryToMoveTwoTilesOnDesk(fromTile, toTile)
     savedDesk = if (controller.desk != desk) Some(desk) else None
     controller.desk = desk
     controller.switchState(AnswerState.MOVED_TILE, P_TURN)

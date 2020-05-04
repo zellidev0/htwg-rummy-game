@@ -18,7 +18,7 @@ trait DeskInterface {
   def getPreviousPlayer: PlayerInterface
   def getCurrentPlayer: PlayerInterface
   def getNextPlayer: PlayerInterface
-  def moveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk
+  def tryToMoveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk
   def tableContains(t: TileInterface): Boolean
   def getTileFromBag: TileInterface
   def addPlayer(p: PlayerInterface): Desk

@@ -9,28 +9,28 @@ class CommandSpec extends WordSpec with Matchers {
     "have a do step" in {
       val command = new IncrementCommand
       command.state should be(0)
-      command.doStep
+      command.doStep()
       command.state should be(1)
-      command.doStep
+      command.doStep()
       command.state should be(2)
 
     }
     "have an undo step" in {
       val command = new IncrementCommand
       command.state should be(0)
-      command.doStep
+      command.doStep()
       command.state should be(1)
-      command.undoStep
+      command.undoStep()
       command.state should be(0)
     }
     "have a redo step" in {
       val command = new IncrementCommand
       command.state should be(0)
-      command.doStep
+      command.doStep()
       command.state should be(1)
-      command.undoStep
+      command.undoStep()
       command.state should be(0)
-      command.redoStep
+      command.redoStep()
       command.state should be(1)
     }
   }
@@ -39,10 +39,10 @@ class CommandSpec extends WordSpec with Matchers {
 
 class IncrementCommand extends Command {
   var state: Int = 0
-  override def doStep: Unit = state += 1
+  override def doStep(): Unit = state += 1
 
-  override def undoStep: Unit = state -= 1
+  override def undoStep(): Unit = state -= 1
 
-  override def redoStep: Unit = state += 1
+  override def redoStep(): Unit = state += 1
 }
 
