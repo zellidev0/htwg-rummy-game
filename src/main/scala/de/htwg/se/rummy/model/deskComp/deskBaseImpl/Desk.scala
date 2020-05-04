@@ -25,9 +25,11 @@ case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], 
   override def addPlayer(p: PlayerInterface): Desk =
     copy(players = players :+ p)
 
-  override def switchToNextPlayer: Desk =
-    replacePlayer(getCurrentPlayer, getCurrentPlayer change (turn = false))
-      .replacePlayer(getNextPlayer, getNextPlayer change (turn = true))
+  override def switchToNextPlayer: Desk = {
+    println(players)
+    replacePlayer(getNextPlayer, getNextPlayer change (turn = true))
+      .replacePlayer(getCurrentPlayer, getCurrentPlayer change (turn = false))
+  }
 
   override def getNextPlayer: PlayerInterface = players size match {
     case num if Range(2, 5) contains num => players(((players indexOf getCurrentPlayer) + 1) % num)
@@ -40,16 +42,12 @@ case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], 
 
   override def getPreviousPlayer: PlayerInterface = if ((players.indexOf(getCurrentPlayer) - 1) < 0)
     players.last else players(players.indexOf(getCurrentPlayer) - 1)
-
+  override def getCurrentPlayer: PlayerInterface =
+    players.find(p => p.hasTurn).get
   override def removePlayer(p: PlayerInterface): Desk =
     copy(players = players.filterNot(pl => pl == p))
-
   override def takeTileFromBagToPlayer(p: PlayerInterface, t: TileInterface): Desk =
     addToPlayer(p, t).removeFromBag(t)
-
-  private[model] def addToPlayer(p: PlayerInterface, t: TileInterface): Desk =
-    replacePlayer(oldPlayer = p, newPlayer = getPlayerByName(p.name).get add t)
-
   private[model] def removeFromBag(t: TileInterface): Desk =
     copy(bagOfTiles = bagOfTiles - t)
 
@@ -61,37 +59,26 @@ case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], 
 
   private[model] def removeTileFromPlayer(t: TileInterface, p: PlayerInterface): Desk =
     replacePlayer(oldPlayer = p, newPlayer = getPlayerByName(p.name).get remove t)
-
-  override def getPlayerByName(name: String): Option[PlayerInterface] =
-    players.find(_.name == name)
-
-  private[model] def replacePlayer(oldPlayer: PlayerInterface, newPlayer: PlayerInterface): Desk =
-    copy(players = players.filterNot(_ == oldPlayer) :+ newPlayer)
-
   override def lessThan4P: Boolean =
     players.size < 4
-
   override def correctAmountOfPlayers: Boolean =
     moreThan1P && players.size <= 4
-
   private[model] def moreThan1P: Boolean =
     players.size >= 2
-
   override def currentPlayerWon(): Boolean =
     getCurrentPlayer.won()
-
   override def boardView: SortedSet[TileInterface] =
     getCurrentPlayer.tiles
-
-  override def getCurrentPlayer: PlayerInterface =
-    players.find(p => p.hasTurn).get
-
   override def tableView: Set[SortedSet[TileInterface]] =
     table
-
   override def takeUpTile(p: PlayerInterface, t: TileInterface): Desk =
     removeFromTable(t).addToPlayer(p, t)
-
+  private[model] def addToPlayer(p: PlayerInterface, t: TileInterface): Desk =
+    replacePlayer(oldPlayer = p, newPlayer = getPlayerByName(p.name).get add t)
+  override def getPlayerByName(name: String): Option[PlayerInterface] =
+    players.find(_.name == name)
+  private[model] def replacePlayer(oldPlayer: PlayerInterface, newPlayer: PlayerInterface): Desk =
+    copy(players = players.filterNot(_ == oldPlayer) :+ newPlayer)
   override def removeFromTable(t: TileInterface): Desk =
     copy(table = table - table.find(_.contains(t)).get + (table.find(_.contains(t)).get - t))
 
