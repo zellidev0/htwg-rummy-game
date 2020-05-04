@@ -14,6 +14,13 @@ case class Tile @Inject()(value: Int, color: Color.Value, ident: Int) extends Ti
 
   override def toString: String =
     value + beginningChar(color) + ident
+
+  override def equals(obj: Any): Boolean = obj match {
+    case tile: Tile => tile.toString == this.toString;
+    case _ => false
+  }
+
+
 }
 
 object Tile {
