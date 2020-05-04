@@ -355,8 +355,8 @@ class DeskSpec extends WordSpec with Matchers {
       val desk = deskBaseImpl.Desk(players,
         Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(5, Color.YELLOW, 0)),
         emptyDesk)
-      "have a false street2" in {
-        desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(false)
-      }
+//      "have a false street2" in {
+//        desk.allTilesHaveValidStreetValues(SortedSet[TileInterface]() ++ desk.bagOfTiles) should be(false)
+//      }
     }
 }
