@@ -22,27 +22,17 @@ import scala.util.Random
 class Controller(var desk: DeskInterface) extends ControllerInterface {
 
   val injector: Injector = Guice.createInjector(new RummyModule)
-
   private val undoManager = new UndoManager
   private val fileIO = injector.instance[FileIOInterface]
 
-  override def userFinishedPlay(): Unit = {
-    if (userPutTileDown == 0) {
-      if (desk.bagOfTiles.isEmpty) {
-        switchState(AnswerState.BAG_IS_EMPTY, ControllerState.P_TURN)
-      } else {
-        undoManager.doStep(new TakeTileCommand(this, desk.getTileFromBag))
-      }
+  override def userFinishedPlay(): Unit = if (userPutTileDown == 0) {
+      if (desk.bagOfTiles.isEmpty) switchState(AnswerState.BAG_IS_EMPTY, ControllerState.P_TURN)
+      else undoManager.doStep(new TakeTileCommand(this, desk.getTileFromBag))
     } else if (desk.checkTable()) {
-      if (desk.currentPlayerWon()) {
-        switchState(AnswerState.P_WON, ControllerState.KILL)
-      } else {
-        undoManager.doStep(new FinishedCommand(userPutTileDown, this))
-      }
-    } else {
-      switchState(AnswerState.TABLE_NOT_CORRECT, ControllerState.P_TURN)
-    }
-  }
+      if (desk.currentPlayerWon()) switchState(AnswerState.P_WON, ControllerState.KILL)
+      else undoManager.doStep(new FinishedCommand(userPutTileDown, this))
+    } else  switchState(AnswerState.TABLE_NOT_CORRECT, ControllerState.P_TURN)
+
 
   override def switchState(answer: AnswerState.Value, c: ControllerState.Value): Unit = {
     answerState = answer
@@ -50,22 +40,12 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     notifyObservers()
   }
 
-
-  override def moveTile(thisTile: TileInterface, toThisTile: TileInterface): Unit = {
-    if ((desk tableContains thisTile) && (desk tableContains toThisTile)) {
+  override def moveTile(thisTile: TileInterface, toThisTile: TileInterface): Unit =
       undoManager.doStep(new MoveTileCommand(thisTile, toThisTile, this))
-    } else {
-      switchState(AnswerState.CANT_MOVE_THIS_TILE, ControllerState.P_TURN)
-    }
-  }
 
-  override def layDownTile(tile: TileInterface): Unit = {
-    if (getCurrentPlayer has tile) {
-      undoManager.doStep(new LayDownCommand(tile, this))
-    } else {
+  override def layDownTile(tile: TileInterface): Unit = if (getCurrentPlayer has tile)
+      undoManager.doStep(new LayDownCommand(tile, this)) else
       switchState(AnswerState.P_DOES_NOT_OWN_TILE, ControllerState.P_TURN)
-    }
-  }
 
   override def getCurrentPlayer: PlayerInterface =
     desk.getCurrentPlayer
@@ -79,37 +59,28 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   override def getNextPlayer: PlayerInterface =
     desk.getNextPlayer
 
-  override def addPlayerAndInit(newName: String, max: Int): Unit = {
-    if (!hasLessThan4Players) {
+  override def addPlayerAndInit(newName: String, max: Int): Unit = if (!hasLessThan4Players)
       switchState(AnswerState.ENOUGH_PLAYER, ControllerState.INSERTING_NAMES)
-    } else {
-      undoManager.doStep(new NameCommand(newName, max, this))
-    }
-  }
+     else undoManager.doStep(new NameCommand(newName, max, this))
 
-  override def hasLessThan4Players: Boolean = desk.lessThan4P
+  override def hasLessThan4Players: Boolean =
+    desk.lessThan4P
 
   override def createDesk(amount: Int): Unit = {
     var bagOfTiles: Set[TileInterface] = Set[TileInterface]()
-    for (number <- 1 to amount;
-         color <- Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE);
-         ident <- 0 to 1) {
-      bagOfTiles += Tile(number, color, ident)
-    }
+    (1 to amount).foreach(value => Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
+      .foreach(color => (0 to 1).foreach(ident => bagOfTiles += Tile(value, color, ident))))
     desk = deskBaseImpl.Desk(List[PlayerInterface](), Random.shuffle(bagOfTiles), Set[SortedSet[TileInterface]]())
     switchState(AnswerState.CREATED_DESK, ControllerState.INSERTING_NAMES)
   }
 
-  override def switchToNextPlayer(): Unit = undoManager.doStep(new SwitchPlayerCommand(this))
+  override def switchToNextPlayer(): Unit =
+    undoManager.doStep(new SwitchPlayerCommand(this))
 
-  override def nameInputFinished(): Unit = {
-    if (desk.correctAmountOfPlayers) {
-      undoManager.emptyStack()
-      switchState(AnswerState.INSERTING_NAMES_FINISHED, P_TURN)
-    } else {
-      switchState(AnswerState.NOT_ENOUGH_PLAYERS, ControllerState.INSERTING_NAMES)
-    }
-  }
+  override def nameInputFinished(): Unit = if (desk.correctAmountOfPlayers) {
+    undoManager.emptyStack()
+    switchState(AnswerState.INSERTING_NAMES_FINISHED, P_TURN)
+  } else switchState(AnswerState.NOT_ENOUGH_PLAYERS, ControllerState.INSERTING_NAMES)
 
   override def getAmountOfPlayers: Int = desk.amountOfPlayers
 
@@ -126,7 +97,6 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     undoManager.redoStep()
     notifyObservers()
   }
-
 
   override def storeFile(): Unit = {
     fileIO.save(desk)
@@ -155,7 +125,7 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   override def currentAnswerState: AnswerState.Value =
     answerState
 
-  override def toJson(): JsObject =
+  override def toJson: JsObject =
     fileIO.toJson(desk)
 
 
