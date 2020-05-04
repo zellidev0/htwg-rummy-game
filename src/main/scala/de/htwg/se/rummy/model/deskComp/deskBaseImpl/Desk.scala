@@ -42,7 +42,7 @@ case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], 
   }
 
   override def tableContains(t: TileInterface): Boolean =
-    table.exists(_.contains(t))
+    table.exists(sortedSet => sortedSet.exists(t1 => t1 == t))// leave like that, otherwise it fails
 
   override def getTileFromBag: TileInterface =
     bagOfTiles.head
