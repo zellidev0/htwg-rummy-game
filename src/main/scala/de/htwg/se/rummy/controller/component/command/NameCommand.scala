@@ -28,7 +28,7 @@ class NameCommand(newName: String, max: Int, controller: Controller) extends Com
 
   /** Adds max tiles to the player. Works recursively. */
   def takeMaxTilesFromBagToPlayersBoard(desk: DeskInterface, count: Int = 0): DeskInterface = count match {
-    case x if this.max == x => desk
+    case count if this.max == count => desk
     case _ => takeMaxTilesFromBagToPlayersBoard(takeTileFromBagToPlayer(desk), count + 1)
   }
 
