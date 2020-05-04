@@ -5,13 +5,15 @@ import de.htwg.se.rummy.model.deskComp.deskBaseImpl._
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Player, _}
 import org.scalatest.{Matchers, WordSpec}
 
-import scala.collection.immutable.SortedSet
+import scala.collection.immutable.SortedSet;
+
 
 class DeskSpec extends WordSpec with Matchers {
+  val emptyBoard: Board = Board(SortedSet[TileInterface]());
 
   "A Desk" when {
     "created with 2 players and 2 tiles" should {
-      val desk = Desk(List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface]())), Player("Name2", Board(SortedSet[TileInterface]()))),
+      val desk = Desk(List[PlayerInterface](Player("Name1", emptyBoard), Player("Name2", emptyBoard)),
         Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[TileInterface]]())
       "have a player Set with 2 players and a tile set with 2 tiles" in {
         desk.amountOfPlayers should be(2)
@@ -37,7 +39,7 @@ class DeskSpec extends WordSpec with Matchers {
     }
   }
   "created with 2 and removes one player" should {
-    val desk = Desk(List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface]()), true), Player("Name2", Board(SortedSet[TileInterface]()))),
+    val desk = Desk(List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true), Player("Name2", Board(SortedSet[TileInterface]()))),
       Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[TileInterface]]())
     val desk1 = desk.removePlayer(desk.getNextPlayer)
     "have only one player left" in {
@@ -55,14 +57,14 @@ class DeskSpec extends WordSpec with Matchers {
     }
   }
   "layed down a tile on desk" should {
-    val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1))), true))
+    val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1))), hasTurn = true))
     val desk = Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]]())
     val amountOfTilesOnBoardOfPlayer1 = players.find(p => p.name == "Name1").get.tiles.size
     val desk1 = desk.putDownTile(desk.getCurrentPlayer, Tile(1, Color.RED, 0))
     "have one more tile on table" in {
       desk1.tableContains(Tile(1, Color.RED, 0)) should be(true)
-      //tableContains always true
-      //      desk1.tableContains(Tile(1, Color.BLUE, 1)) should be(false)
+      desk1.tableContains(Tile(5, Color.BLUE, 1)) should be(false)
+      desk1.tableContains(Tile(1, Color.BLUE, 1)) should be(false)
     }
     "Player 1 have one tile less" in {
       desk1.players.find(p => p.name == "Name1").get.tiles.size should be(amountOfTilesOnBoardOfPlayer1)
@@ -102,7 +104,7 @@ class DeskSpec extends WordSpec with Matchers {
 
   }
   "two players switch turn, -> its player" should {
-    val player1 = Player("Name1", Board(SortedSet[TileInterface]()), true)
+    val player1 = Player("Name1", emptyBoard, hasTurn = true)
     val player2 = Player("Name2", Board(SortedSet[TileInterface]()))
     val desk = Desk(List(player1, player2), Set[TileInterface](), Set[SortedSet[TileInterface]]())
     "have current player, which is player1)" in {
@@ -131,7 +133,7 @@ class DeskSpec extends WordSpec with Matchers {
     val setOfWrongStreets =
       Set(SortedSet[TileInterface](Tile(9, Color.BLUE, 1), Tile(11, Color.BLUE, 1), Tile(12, Color.BLUE, 1), Tile(13, Color.BLUE, 0)), // Street with missing one
         SortedSet[TileInterface](Tile(7, Color.RED, 0), Tile(8, Color.RED, 1))) // street with only 2
-    val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface]()), true), Player("Name2", Board(SortedSet[TileInterface]())))
+    val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true), Player("Name2", Board(SortedSet[TileInterface]())))
     val desk = Desk(players, Set[TileInterface](), setOfCorrectStreets)
     "be true when setOfCorrectStreets" in {
       desk.checkTable() should be(true)
@@ -158,7 +160,7 @@ class DeskSpec extends WordSpec with Matchers {
     val setOfWrongStreets =
       Set(SortedSet[TileInterface](Tile(9, Color.BLUE, 1), Tile(11, Color.BLUE, 1), Tile(12, Color.BLUE, 1), Tile(13, Color.BLUE, 0)), // Street with missing one
         SortedSet[TileInterface](Tile(7, Color.RED, 0), Tile(8, Color.RED, 1))) // street with only 2
-    val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface]()), true), Player("Name2", Board(SortedSet[TileInterface]())))
+    val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true), Player("Name2", Board(SortedSet[TileInterface]())))
     val desk = Desk(players, Set[TileInterface](), setOfCorrectStreets)
     "be true when setOfCorrectStreets" in {
       for (set <- desk.table) {
@@ -231,7 +233,7 @@ class DeskSpec extends WordSpec with Matchers {
   //    }
   //    "adding to bag" should {
   //      val tile = Tile(4, Color.BLUE, 0)
-  //      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = PlayerState.TURN))
+  //      val players = Set[PlayerInterface](Player("Name1", 0, emptyBoard, state = PlayerState.TURN))
   //      var desk = deskBaseImpl.Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]]())
   //      desk = desk.addToBag(tile)
   //      "have 4 tiles in Set on Deks" in {
@@ -258,7 +260,7 @@ class DeskSpec extends WordSpec with Matchers {
   //      }
   //    }
   //    "has bag with tiles with same colors" should {
-  //      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = PlayerState.TURN))
+  //      val players = Set[PlayerInterface](Player("Name1", 0, emptyBoard, state = PlayerState.TURN))
   //      var desk = deskBaseImpl.Desk(players,
   //        Set[TileInterface](Tile(4, Color.BLUE, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.BLUE, 0)),
   //        Set[SortedSet[TileInterface]]())
@@ -267,7 +269,7 @@ class DeskSpec extends WordSpec with Matchers {
   //      }
   //    }
   //    "has bag with tiles with different colors" should {
-  //      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = PlayerState.TURN))
+  //      val players = Set[PlayerInterface](Player("Name1", 0, emptyBoard, state = PlayerState.TURN))
   //      val desk = deskBaseImpl.Desk(players,
   //        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
   //        Set[SortedSet[TileInterface]]())
@@ -276,7 +278,7 @@ class DeskSpec extends WordSpec with Matchers {
   //      }
   //    }
   //    "with a correct street" should {
-  //      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = PlayerState.TURN))
+  //      val players = Set[PlayerInterface](Player("Name1", 0, emptyBoard, state = PlayerState.TURN))
   //      val desk = deskBaseImpl.Desk(players,
   //        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
   //        Set[SortedSet[TileInterface]]())
@@ -285,7 +287,7 @@ class DeskSpec extends WordSpec with Matchers {
   //      }
   //    }
   //    "with a wrong street" should {
-  //      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = PlayerState.TURN))
+  //      val players = Set[PlayerInterface](Player("Name1", 0, emptyBoard, state = PlayerState.TURN))
   //      val desk = deskBaseImpl.Desk(players,
   //        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(4, Color.BLUE, 0), Tile(6, Color.YELLOW, 0)),
   //        Set[SortedSet[TileInterface]]())
@@ -294,7 +296,7 @@ class DeskSpec extends WordSpec with Matchers {
   //      }
   //    }
   //    "with a wrong street1" should {
-  //      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = PlayerState.TURN))
+  //      val players = Set[PlayerInterface](Player("Name1", 0, emptyBoard, state = PlayerState.TURN))
   //      val desk = deskBaseImpl.Desk(players,
   //        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(7, Color.YELLOW, 0)),
   //        Set[SortedSet[TileInterface]]())
@@ -303,7 +305,7 @@ class DeskSpec extends WordSpec with Matchers {
   //      }
   //    }
   //    "with a wrong street2" should {
-  //      val players = Set[PlayerInterface](Player("Name1", 0, Board(SortedSet[TileInterface]()), state = PlayerState.TURN))
+  //      val players = Set[PlayerInterface](Player("Name1", 0, emptyBoard, state = PlayerState.TURN))
   //      val desk = deskBaseImpl.Desk(players,
   //        Set[TileInterface](Tile(4, Color.GREEN, 0), Tile(5, Color.BLUE, 0), Tile(5, Color.YELLOW, 0)),
   //        Set[SortedSet[TileInterface]]())
