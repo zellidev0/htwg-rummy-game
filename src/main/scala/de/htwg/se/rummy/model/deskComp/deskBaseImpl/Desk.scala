@@ -95,7 +95,7 @@ case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], 
     players.size
 
   override def checkTable(): Boolean =
-    true //table.forall(set => checkStreet(set) || checkPair(set))
+    true//todo change back in production to => table.forall(set => checkStreet(set) || checkPair(set))
 
 
   private[model] def addToTable(t: TileInterface): Desk =
