@@ -14,9 +14,6 @@ class Tui(controller: ControllerInterface) extends UIInterface {
   controller.add(this)
 
   override def processInput(input: String): Unit = {
-    if (input.equals("q")) {
-      System.exit(0)
-    }
     controller.currentControllerState match {
       case MENU => handleMenuInput(input)
       case INSERTING_NAMES => handleNameInput(input)

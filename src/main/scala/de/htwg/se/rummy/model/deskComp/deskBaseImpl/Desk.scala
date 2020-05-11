@@ -11,7 +11,7 @@ case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], 
   override def tryToMoveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk =
     if (tableContains(t1) && tableContains(t2)) moveTwoTilesOnDesk(t1, t2) else this
 
-  def moveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk = copy(table =
+  private def moveTwoTilesOnDesk(t1: TileInterface, t2: TileInterface): Desk = copy(table =
     table.map(sortedSet => if (sortedSet.contains(t1)) sortedSet - t1 else sortedSet)
       .map(sortedSet => if (sortedSet.contains(t2)) sortedSet + t1 else sortedSet)
       .filter(sortedSet => sortedSet.nonEmpty))
@@ -25,11 +25,10 @@ case class Desk(players: List[PlayerInterface], bagOfTiles: Set[TileInterface], 
   override def addPlayer(p: PlayerInterface): Desk =
     copy(players = players :+ p)
 
-  override def switchToNextPlayer: Desk = {
-    println(players)
+  override def switchToNextPlayer: Desk =
     replacePlayer(getNextPlayer, getNextPlayer change (turn = true))
       .replacePlayer(getCurrentPlayer, getCurrentPlayer change (turn = false))
-  }
+
 
   override def getNextPlayer: PlayerInterface = players size match {
     case num if Range(2, 5) contains num => players(((players indexOf getCurrentPlayer) + 1) % num)

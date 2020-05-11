@@ -8,7 +8,7 @@ import de.htwg.se.rummy.view.component.{Gui, Tui}
 
 import scala.collection.immutable.SortedSet
 
-object  Rummy {
+object Rummy {
 
   val injector: Injector = Guice.createInjector(new RummyModule)
 
@@ -22,16 +22,16 @@ object  Rummy {
   val gui = new Gui(controller)
 
 
-  def main(args: Array[String]): Unit =
-    try {
-      println("Type <c> to create a new desk or <l> to load a previous game")
-      val input = if (args.length > 0) args(0) else ""
-      if (!input.isEmpty) tui.processInput(input)
-      else do {
-        tui.processInput(readLine())
-      } while (input != "q")
-    } catch {
-      case e: Exception => e.printStackTrace()
+  def main(args: Array[String]): Unit = {
+    println("Type <c> to create a new desk or <l> to load a previous game")
+    while (true) {
+      val line = scala.io.StdIn.readLine();
+      line match {
+        case "" =>
+        case "q" => return
+        case x => tui.processInput(x);
+      }
     }
+  }
 
 }

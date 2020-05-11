@@ -7,7 +7,6 @@ import de.htwg.se.rummy.model.DeskInterface
 import de.htwg.se.rummy.model.deskComp.deskBaseImpl.{Desk, TileInterface}
 import de.htwg.se.rummy.util.Command
 
-import scala.collection.immutable.SortedSet
 
 class MoveTileCommand(fromTile: TileInterface, toTile: TileInterface, controller: Controller) extends Command {
   private var savedDesk: Option[DeskInterface] = None
@@ -20,17 +19,14 @@ class MoveTileCommand(fromTile: TileInterface, toTile: TileInterface, controller
   }
 
 
-  override def undoStep(): Unit = {
-    controller.switchState(savedDesk match {
+  override def undoStep(): Unit = controller.switchState(savedDesk match {
       case Some(x) =>
         controller.desk = x
         AnswerState.UNDO_MOVED_TILE
       case None =>
         AnswerState.UNDO_MOVED_TILE_NOT_DONE
     }, P_TURN)
-  }
 
-  override def redoStep(): Unit = {
-    doStep()
-  }
+  override def redoStep(): Unit = doStep()
+
 }
