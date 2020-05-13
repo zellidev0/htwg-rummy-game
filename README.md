@@ -18,3 +18,13 @@
 3. paste in root and rename
 4. sync project
 5. Notice: No need to add the module by hand into IntelliJ
+
+
+###TODO
+#Robin
+The controller has methods that require as first param the desk and always return the new desk on write operations.
+It can return something else if it's just a read operation
+Implement that Tui and Gui, regardless which of them triggers a command to the controller both get the newest updated desk (sth. like observer)
+#Julian
+Make the controller not depending Commands. Store the stack directly in the controller including all past objects.
+
