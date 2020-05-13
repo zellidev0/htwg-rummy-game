@@ -46,7 +46,7 @@ class FileIO @Inject() extends FileIOInterface {
         }
       }
     }
-    deskBaseImpl.Desk(players, bagOfTiles, ssets)
+    Some(deskBaseImpl.Desk(players, bagOfTiles, ssets))
   }
 
   override def save(grid: DeskInterface): Unit =

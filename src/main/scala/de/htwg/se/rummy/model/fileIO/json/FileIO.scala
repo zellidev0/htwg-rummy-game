@@ -48,7 +48,7 @@ class FileIO @Inject() extends FileIOInterface {
       }
       ssets = ssets + sortedSet
     }
-    deskBaseImpl.Desk(players, bagOfTiles, ssets)
+    Some(deskBaseImpl.Desk(players, bagOfTiles, ssets))
   }
 
 
