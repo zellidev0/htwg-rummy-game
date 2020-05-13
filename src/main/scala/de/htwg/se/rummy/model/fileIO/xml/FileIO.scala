@@ -9,15 +9,13 @@ import de.htwg.se.rummy.model.fileIO.FileIOInterface
 import play.api.libs.json.JsObject
 
 import scala.collection.immutable.SortedSet
+import scala.util.Try
 import scala.xml.PrettyPrinter
 
 class FileIO @Inject() extends FileIOInterface {
 
-  override def load: DeskInterface = {
-    val file = scala.xml.XML.loadFile("/target/desk.xml")
-    val t = Tile(-1, Color.RED, -1)
-    val amountOfPlayersAttr = (file \\ "desk" \ "@amountOfPlayers")
-    val amountOfPlayers = amountOfPlayersAttr.text.toInt
+  override def load: Option[DeskInterface] = {
+    val file = Try(scala.xml.XML.loadFile("/target/desk.xml")).getOrElse(return None);
     var players = List[PlayerInterface]()
     var bagOfTiles = Set[TileInterface]()
     var ssets = Set[SortedSet[TileInterface]]()
@@ -31,7 +29,6 @@ class FileIO @Inject() extends FileIOInterface {
         }
         players = players :+ Player(playerName, board, playerState)
       }
-
 
       for (tileNodes <- file \\ "desk" \\ "bagOfTiles") {
         for (tile <- tileNodes \\ "tile") {

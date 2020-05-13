@@ -10,16 +10,16 @@ import play.api.libs.json._
 
 import scala.collection.immutable.SortedSet
 import scala.io.Source
+import scala.util.Try
 
 class FileIO @Inject() extends FileIOInterface {
 
-  override def load: DeskInterface = {
-    val json: JsValue = Json.parse(Source.fromFile("target/desk.json").getLines.mkString)
+  override def load: Option[DeskInterface] = {
+    val json = Try(Json.parse(Source.fromFile("target/desk.json").getLines.mkString)).getOrElse(return None)
     var players = List[PlayerInterface]()
     var bagOfTiles = Set[TileInterface]()
     for (i <- 0 until (json \ "desk" \ "amountOfPlayers").get.toString.toInt) {
       val name = ((json \ "desk" \ "players") (i) \ "name").as[String]
-      val number = ((json \ "desk" \ "players") (i) \ "number").as[Int]
       val state = ((json \ "desk" \ "players") (i) \ "hasTurn").as[Boolean]
       var board: BoardInterface = Board(SortedSet[TileInterface]())
       for (j <- 0 until ((json \ "desk" \ "players") (i) \ "tilesOnBoard").as[Int]) {

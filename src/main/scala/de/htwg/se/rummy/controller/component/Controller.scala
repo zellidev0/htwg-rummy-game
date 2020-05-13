@@ -1,7 +1,5 @@
 package de.htwg.se.rummy.controller.component
 
-import java.nio.file.{Files, Paths}
-
 import com.google.inject.{Guice, Injector}
 import de.htwg.se.rummy.RummyModule
 import de.htwg.se.rummy.controller.ControllerInterface
@@ -26,31 +24,24 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
   private val fileIO = injector.instance[FileIOInterface]
 
   override def userFinishedPlay(): Unit = if (userPutTileDown == 0) {
-      if (desk.bagOfTiles.isEmpty) switchState(AnswerState.BAG_IS_EMPTY, ControllerState.P_TURN)
-      else undoManager.doStep(new TakeTileCommand(this, desk.getTileFromBag))
-    } else if (desk.checkTable()) {
-      if (desk.currentPlayerWon()) switchState(AnswerState.P_WON, ControllerState.KILL)
-      else undoManager.doStep(new FinishedCommand(userPutTileDown, this))
-    } else  switchState(AnswerState.TABLE_NOT_CORRECT, ControllerState.P_TURN)
-
-
-  override def switchState(answer: AnswerState.Value, c: ControllerState.Value): Unit = {
-    answerState = answer
-    controllerState = c
-    notifyObservers()
-  }
+    if (desk.bagOfTiles.isEmpty) switchState(AnswerState.BAG_IS_EMPTY, ControllerState.P_TURN)
+    else undoManager.doStep(new TakeTileCommand(this, desk.getTileFromBag))
+  } else if (desk.checkTable()) {
+    if (desk.currentPlayerWon()) switchState(AnswerState.P_WON, ControllerState.KILL)
+    else undoManager.doStep(new FinishedCommand(userPutTileDown, this))
+  } else switchState(AnswerState.TABLE_NOT_CORRECT, ControllerState.P_TURN)
 
   override def moveTile(thisTile: TileInterface, toThisTile: TileInterface): Unit =
-      undoManager.doStep(new MoveTileCommand(thisTile, toThisTile, this))
+    undoManager.doStep(new MoveTileCommand(thisTile, toThisTile, this))
 
   override def layDownTile(tile: TileInterface): Unit = if (getCurrentPlayer has tile)
-      undoManager.doStep(new LayDownCommand(tile, this)) else
-      switchState(AnswerState.P_DOES_NOT_OWN_TILE, ControllerState.P_TURN)
+    undoManager.doStep(new LayDownCommand(tile, this)) else
+    switchState(AnswerState.P_DOES_NOT_OWN_TILE, ControllerState.P_TURN)
 
   override def getCurrentPlayer: PlayerInterface =
     desk.getCurrentPlayer
 
-  override def getPlayerByName(name:String): Option[PlayerInterface] =
+  override def getPlayerByName(name: String): Option[PlayerInterface] =
     desk.getPlayerByName(name)
 
   override def getPreviousPlayer: PlayerInterface =
@@ -60,19 +51,11 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     desk.getNextPlayer
 
   override def addPlayerAndInit(newName: String, max: Int): Unit = if (!hasLessThan4Players)
-      switchState(AnswerState.ENOUGH_PLAYER, ControllerState.INSERTING_NAMES)
-     else undoManager.doStep(new NameCommand(newName, max, this))
+    switchState(AnswerState.ENOUGH_PLAYER, ControllerState.INSERTING_NAMES)
+  else undoManager.doStep(new NameCommand(newName, max, this))
 
   override def hasLessThan4Players: Boolean =
     desk.lessThan4P
-
-  override def createDesk(amount: Int): Unit = {
-    var bagOfTiles: Set[TileInterface] = Set[TileInterface]()
-    (1 to amount).foreach(value => Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
-      .foreach(color => (0 to 1).foreach(ident => bagOfTiles += Tile(value, color, ident))))
-    desk = deskBaseImpl.Desk(List[PlayerInterface](), Random.shuffle(bagOfTiles), Set[SortedSet[TileInterface]]())
-    switchState(AnswerState.CREATED_DESK, ControllerState.INSERTING_NAMES)
-  }
 
   override def switchToNextPlayer(): Unit =
     undoManager.doStep(new SwitchPlayerCommand(this))
@@ -103,14 +86,27 @@ class Controller(var desk: DeskInterface) extends ControllerInterface {
     switchState(AnswerState.STORED_FILE, controllerState)
   }
 
-  override def loadFile(): Unit = {
-    if (Files.exists(Paths.get("target/desk.json"))) {
-      desk = fileIO.load
+  override def switchState(answer: AnswerState.Value, c: ControllerState.Value): Unit = {
+    answerState = answer
+    controllerState = c
+    notifyObservers()
+  }
+
+  override def loadFile(): Unit = fileIO.load match {
+    case Some(value) =>
+      desk = value
       switchState(AnswerState.LOADED_FILE, P_TURN)
-    } else {
+    case None =>
       switchState(AnswerState.COULD_NOT_LOAD_FILE, MENU)
       createDesk(12)
-    }
+  }
+
+  override def createDesk(amount: Int): Unit = {
+    var bagOfTiles: Set[TileInterface] = Set[TileInterface]()
+    (1 to amount).foreach(value => Set(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
+      .foreach(color => (0 to 1).foreach(ident => bagOfTiles += Tile(value, color, ident))))
+    desk = deskBaseImpl.Desk(List[PlayerInterface](), Random.shuffle(bagOfTiles), Set[SortedSet[TileInterface]]())
+    switchState(AnswerState.CREATED_DESK, ControllerState.INSERTING_NAMES)
   }
 
   override def viewOfTable: Set[SortedSet[TileInterface]] =
