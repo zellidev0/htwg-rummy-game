@@ -1,5 +1,3 @@
-
-
 class SwitchPlayerCommand(controller: Controller) extends Command {
 
   override def undoStep(): Unit = {

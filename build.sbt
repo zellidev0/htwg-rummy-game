@@ -20,16 +20,15 @@ lazy val global = project
 lazy val gameModule = project
   .settings(name := "GameModule", settings, assemblySettings, libraryDependencies ++= mainModuleDependencies ++ Seq(
     dependencies.monocleCore, dependencies.monocleMacro))
-  .dependsOn(controllerModule)
+
 
 lazy val playerModule = project
   .settings(name := "PlayerModule", settings, assemblySettings, libraryDependencies ++= mainModuleDependencies ++ Seq(
     dependencies.pureconfig))
-  .dependsOn(controllerModule)
 
 lazy val controllerModule = project
   .settings(name := "ControllerModule", settings, libraryDependencies ++= mainModuleDependencies)
-  .dependsOn(controllerModule)
+  .dependsOn(playerModule, gameModule)
 
 lazy val mainModule = project
   .settings(name := "MainModule", settings, libraryDependencies ++= mainModuleDependencies, unmanagedBase := baseDirectory.value / "lib")

@@ -1,5 +1,3 @@
-
-
 class FinishedCommand(userPutTileDown: Int, controller: Controller) extends Command {
 
   override def undoStep(): Unit = {

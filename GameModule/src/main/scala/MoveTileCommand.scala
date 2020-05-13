@@ -1,5 +1,3 @@
-
-
 class MoveTileCommand(fromTile: TileInterface, toTile: TileInterface, controller: Controller) extends Command {
   private var savedDesk: Option[DeskInterface] = None
 

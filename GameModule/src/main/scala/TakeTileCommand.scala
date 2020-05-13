@@ -1,4 +1,3 @@
-
 import model.deskComp.deskBaseImpl.TileInterface
 
 class TakeTileCommand(private val controller: Controller, private val randomTile: TileInterface) extends Command {
