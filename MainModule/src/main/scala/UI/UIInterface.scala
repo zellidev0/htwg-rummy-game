@@ -1,3 +1,5 @@
+package UI
+
 import scala.util.matching.Regex
 
 trait UIInterface extends Observer {

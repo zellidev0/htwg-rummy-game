@@ -1,3 +1,4 @@
+import UI.{Gui, Tui}
 import model.DeskInterface
 import model.deskComp.deskBaseImpl.{Desk, PlayerInterface, TileInterface}
 
