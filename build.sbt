@@ -21,7 +21,6 @@ lazy val gameModule = project
   .settings(name := "GameModule", settings, assemblySettings, libraryDependencies ++= mainModuleDependencies ++ Seq(
     dependencies.monocleCore, dependencies.monocleMacro))
 
-
 lazy val playerModule = project
   .settings(name := "PlayerModule", settings, assemblySettings, libraryDependencies ++= mainModuleDependencies ++ Seq(
     dependencies.pureconfig))
