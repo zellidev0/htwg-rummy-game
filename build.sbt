@@ -29,11 +29,13 @@ lazy val playerModule = project
 lazy val controllerModule = project
   .settings(name := "ControllerModule", settings, libraryDependencies ++= mainModuleDependencies)
   .dependsOn(playerModule, gameModule)
+  .aggregate(playerModule, gameModule)
 
 lazy val mainModule = project
   .settings(name := "MainModule", settings, libraryDependencies ++= mainModuleDependencies, unmanagedBase := baseDirectory.value / "lib")
   .disablePlugins(AssemblyPlugin)
   .dependsOn(controllerModule)
+  .aggregate(controllerModule)
 
 
 // DEPENDENCIES

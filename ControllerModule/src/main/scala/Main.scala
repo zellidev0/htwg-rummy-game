@@ -1,3 +1,1 @@
-object Main extends App {
-
-}
+object Main extends App {}

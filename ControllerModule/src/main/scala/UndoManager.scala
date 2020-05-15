@@ -1,32 +1,18 @@
-class UndoManager {
-  private var undoStack: List[Command] = Nil
-  private var redoStack: List[Command] = Nil
+import model.DeskInterface
 
-  def doStep(command: Command): Unit = {
-    undoStack = command :: undoStack
-    command.doStep()
+case class UndoManager(undoStack: List[DeskInterface] = List(), redoStack: List[DeskInterface] = List()) {
+
+  def putOnStack(desk: DeskInterface): UndoManager =
+    copy(undoStack = desk :: undoStack)
+
+  def undoStep(): (UndoManager, Option[DeskInterface]) = undoStack match {
+    case Nil           => (copy(), None)
+    case head :: stack => (copy(undoStack = stack, redoStack = head :: redoStack), Some(head))
   }
 
-  def undoStep(): Unit =
-    undoStack match {
-      case Nil =>
-      case head :: stack =>
-        head.undoStep()
-        undoStack = stack
-        redoStack = head :: redoStack
-    }
-
-  def redoStep(): Unit =
-    redoStack match {
-      case Nil =>
-      case head :: stack =>
-        head.redoStep()
-        redoStack = stack
-        undoStack = head :: undoStack
-    }
-
-  def emptyStack(): Unit = {
-    undoStack = Nil
-    redoStack = Nil
+  def redoStep(): (UndoManager, Option[DeskInterface]) = redoStack match {
+    case Nil           => (copy(), None)
+    case head :: stack => (copy(undoStack = head :: undoStack, redoStack = stack), Some(head))
   }
+
 }
