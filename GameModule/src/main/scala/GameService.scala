@@ -1,14 +1,14 @@
 import model.DeskInterface
-import model.deskComp.deskBaseImpl.deskImpl.{ Color, Tile }
-import model.deskComp.deskBaseImpl.{ Desk, PlayerInterface, TileInterface }
+import model.deskComp.deskBaseImpl.deskImpl.{Color, Tile}
+import model.deskComp.deskBaseImpl.{Desk, PlayerInterface, TileInterface}
 
 import scala.collection.immutable.SortedSet
 import scala.util.Random
 
 case class GameService() {
 
-  type TileI   = TileInterface
-  type DeskI   = DeskInterface
+  type TileI = TileInterface
+  type DeskI = DeskInterface
   type PlayerI = PlayerInterface
 
   def tableView(desk: DeskI): Set[SortedSet[TileI]] =
