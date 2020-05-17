@@ -4,7 +4,8 @@ import model.deskComp.deskBaseImpl.deskImpl.Tile
 import scala.swing.event.ButtonClicked
 import scala.swing.{ Action, Button, Frame, GridPanel, Menu, MenuBar, MenuItem, ScrollPane, TextArea, TextField }
 
-class Gui(connector: UIConnector.type) extends Frame with UIInterface {
+class Gui(connector: UIConnector.type) extends Frame with UIInterface with Observer {
+  connector.add(this)
 
   val newsTestView: TextArea = new TextArea() {
     editable = false
@@ -59,25 +60,25 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface {
         text = "Confirm"
         reactions += {
           case ButtonClicked(_) =>
-            connector.contr = update(connector.contr.addPlayerAndInit(nameInputField.text, elements))
+            connector.updateController(connector.contr.addPlayerAndInit(nameInputField.text, elements))
         }
       }
       contents += new Button {
         text = "Finished"
         reactions += {
-          case ButtonClicked(_) => connector.contr = update(connector.contr.nameInputFinished())
+          case ButtonClicked(_) => connector.updateController(connector.contr.nameInputFinished())
         }
       }
       contents += new Button {
         text = "Undo"
         reactions += {
-          case ButtonClicked(_) => connector.contr = update(connector.contr.undo())
+          case ButtonClicked(_) => connector.updateController(connector.contr.undo())
         }
       }
       contents += new Button {
         text = "Redo"
         reactions += {
-          case ButtonClicked(_) => connector.contr = update(connector.contr.redo())
+          case ButtonClicked(_) => connector.updateController(connector.contr.redo())
         }
       }
     }
@@ -98,7 +99,7 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface {
       contents += new Button() {
         text = "next Player"
         reactions += {
-          case ButtonClicked(_) => connector.contr = update(connector.contr.switchToNextPlayer())
+          case ButtonClicked(_) => connector.updateController(connector.contr.switchToNextPlayer())
         }
       }
     }
@@ -119,19 +120,19 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface {
       contents += new Button() {
         text = "Redo"
         reactions += {
-          case ButtonClicked(_) => connector.contr = update(connector.contr.redo())
+          case ButtonClicked(_) => connector.updateController(connector.contr.redo())
         }
       }
       contents += new Button() {
         text = "Undo"
         reactions += {
-          case ButtonClicked(_) => connector.contr = update(connector.contr.undo())
+          case ButtonClicked(_) => connector.updateController(connector.contr.undo())
         }
       }
       contents += new Button() {
         text = "Finished"
         reactions += {
-          case ButtonClicked(_) => connector.contr = update(connector.contr.userFinishedPlay())
+          case ButtonClicked(_) => connector.updateController(connector.contr.userFinishedPlay())
         }
       }
     }
@@ -148,13 +149,13 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface {
     buttonPanel.contents += new Button {
       text = "Create new Desk"
       reactions += {
-        case ButtonClicked(_) => connector.contr = update(connector.contr.createDesk(13))
+        case ButtonClicked(_) => connector.updateController(connector.contr.createDesk(13))
       }
     }
     buttonPanel.contents += new Button {
       text = "Load stored game"
       reactions += {
-        case ButtonClicked(_) => connector.contr = update(connector.contr.loadFile())
+        case ButtonClicked(_) => connector.updateController(connector.contr.loadFile())
       }
     }
     contents = new GridPanel(4, 1) {
@@ -166,11 +167,10 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface {
     connector.contr
   }
 
-  def update(controllerI: ControllerInterface): ControllerInterface = {
-
-    newsTestView.text += controllerI.answer + "\n"
-    newsTestView.text += controllerI.state + "\n"
-    controllerI.state match {
+  override def updated(controller: ControllerInterface): Unit = {
+    newsTestView.text += controller.answer + "\n"
+    newsTestView.text += controller.state + "\n"
+    controller.state match {
       case ControllerState.INSERTING_NAMES => handleNameInput()
       case ControllerState.NEXT_TYPE_N     => handleOnTurnFinished()
       case ControllerState.P_TURN =>
@@ -179,7 +179,6 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface {
         printTable()
       case _ =>
     }
-    controllerI
   }
 
   def printUserBoard(): Unit = {
@@ -209,7 +208,8 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface {
       contents += new Button() {
         text = "Select"
         reactions += {
-          case ButtonClicked(_) => update(connector.contr.layDownTile(Tile.stringToTile(tile.toString).get))
+          case ButtonClicked(_) =>
+            connector.updateController(connector.contr.layDownTile(Tile.stringToTile(tile.toString).get))
         }
       }
     }

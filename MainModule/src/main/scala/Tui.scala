@@ -3,18 +3,18 @@ import model.deskComp.deskBaseImpl.deskImpl.Tile
 
 import scala.collection.immutable.SortedSet
 
-class Tui(var connector: UIConnector.type) extends UIInterface {
+class Tui(var connector: UIConnector.type) extends UIInterface with Observer {
+  connector.add(this)
 
-  override def processInput(input: String): Unit = {
-    val x = connector.contr.state match {
+  override def updated(controller: ControllerInterface): Unit =
+    printOut(controller)
+  override def processInput(input: String): Unit =
+    connector.updateController(connector.contr.state match {
       case ControllerState.MENU            => handleMenuInput(input)
       case ControllerState.INSERTING_NAMES => handleNameInput(input)
       case ControllerState.P_TURN          => handleOnTurn(input)
       case ControllerState.NEXT_TYPE_N     => handleOnTurnFinished(input)
-    }
-    printOut(x)
-    connector.contr = x
-  }
+    })
 
   override def handleNameInput(name: String): ControllerInterface = name match {
     case "f"                 => connector.contr.nameInputFinished()
@@ -28,6 +28,10 @@ class Tui(var connector: UIConnector.type) extends UIInterface {
     case "s" => connector.contr.storeFile()
     case _   => wrongInput()
   }
+  private def wrongInput(): ControllerInterface = {
+    println("Could not identify your input. Are you sure it was correct'?")
+    connector.contr
+  }
   override def handleOnTurn(input: String): ControllerInterface = input match {
     case LayDownTilePattern(c) => connector.contr.layDownTile(Tile.stringToTile(c.split(" ").apply(1)).get);
     case MoveTilePattern(c) =>
@@ -38,15 +42,12 @@ class Tui(var connector: UIConnector.type) extends UIInterface {
     case "r" => connector.contr.redo()
     case _   => wrongInput()
   }
-  private def wrongInput(): ControllerInterface = {
-    println("Could not identify your input. Are you sure it was correct'?")
-    connector.contr
-  }
   override def handleMenuInput(input: String): ControllerInterface = input match {
     case "c" => connector.contr.createDesk(elements + 1)
     case "l" => connector.contr.loadFile()
     case _   => wrongInput()
   }
+
   private def printOut(controller: ControllerInterface): ControllerInterface = {
     printAnswerState(controller.answer)
     printCurrentStateView(controller.state)
@@ -104,7 +105,6 @@ class Tui(var connector: UIConnector.type) extends UIInterface {
       case AnswerState.TOOK_TILE                => "Auto took a tile"
       case z                                    => "ERROR" + z.toString
     })
-
   private def printCurrentTableView(desk: Set[SortedSet[TileInterface]]): Unit = {
     var s =
     """
@@ -138,9 +138,9 @@ class Tui(var connector: UIConnector.type) extends UIInterface {
   def printCurrentBoardView(board: SortedSet[TileInterface]): Unit = {
     var s =
     s"""
-       |---------------------------------------------------------------------------------------|
-       | ${connector.contr.currentPlayerName} thats on your board.${" " * (65 - connector.contr.currentPlayerName.length)}|
-       |---------------------------------------------------------------------------------------|""" + "\n"
+         |---------------------------------------------------------------------------------------|
+         | ${connector.contr.currentPlayerName} thats on your board.${" " * (65 - connector.contr.currentPlayerName.length)}|
+         |---------------------------------------------------------------------------------------|""" + "\n"
     for (_ <- board) {
       s += "____ "
     }
