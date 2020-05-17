@@ -11,30 +11,30 @@ lazy val global = project
   .settings(settings)
   .disablePlugins(AssemblyPlugin)
   .aggregate(
-    mainModule,
-    gameModule,
-    playerModule,
-    controllerModule
+    MainModule,
+    GameModule,
+    PlayerModule,
+    ControllerModule
   )
 
-lazy val gameModule = project
+lazy val GameModule = project
   .settings(name := "GameModule", settings, assemblySettings, libraryDependencies ++= mainModuleDependencies ++ Seq(
     dependencies.monocleCore, dependencies.monocleMacro))
 
-lazy val playerModule = project
+lazy val PlayerModule = project
   .settings(name := "PlayerModule", settings, assemblySettings, libraryDependencies ++= mainModuleDependencies ++ Seq(
     dependencies.pureconfig))
 
-lazy val controllerModule = project
+lazy val ControllerModule = project
   .settings(name := "ControllerModule", settings, libraryDependencies ++= mainModuleDependencies)
-  .dependsOn(playerModule, gameModule)
-  .aggregate(playerModule, gameModule)
+  .dependsOn(PlayerModule, GameModule)
+  .aggregate(PlayerModule, GameModule)
 
-lazy val mainModule = project
+lazy val MainModule = project
   .settings(name := "MainModule", settings, libraryDependencies ++= mainModuleDependencies, unmanagedBase := baseDirectory.value / "lib")
   .disablePlugins(AssemblyPlugin)
-  .dependsOn(controllerModule)
-  .aggregate(controllerModule)
+  .dependsOn(ControllerModule)
+  .aggregate(ControllerModule)
 
 
 // DEPENDENCIES

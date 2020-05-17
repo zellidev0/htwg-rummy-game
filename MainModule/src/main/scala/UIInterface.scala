@@ -7,6 +7,13 @@ trait UIInterface {
     "(m [1-9][RBGY][01] t [1-9][RBGY][01]|m 1[0123][RBGY][01] t [1-9][RBYG][01]|m 1[0-3][RBGY][01] t 1[0-3][RBGY][01]|m [1-9][RBGY][01] t 1[0-3][RBYG][01])".r
   val elements = 12
 
-  def processInput(input: String): ControllerInterface
+  def processInput(input: String): Unit
 
+  def handleNameInput(name: String): ControllerInterface
+
+  def handleOnTurnFinished(input: String): ControllerInterface
+
+  def handleOnTurn(input: String): ControllerInterface
+
+  def handleMenuInput(input: String): ControllerInterface
 }

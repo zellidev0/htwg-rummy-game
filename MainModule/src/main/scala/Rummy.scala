@@ -9,8 +9,10 @@ object Rummy {
     Desk(players = List[PlayerInterface](), bagOfTiles = Set[TileInterface](), table = Set[SortedSet[TileInterface]]())
 
   var controller: ControllerInterface = Controller(desk, AnswerState.CREATE_DESK, ControllerState.MENU)
-  var tui                             = new Tui(controller)
-//  val gui                             = new Gui(controller)
+  val uic                             = UIConnector
+  uic.contr = controller
+  var tui = new Tui(uic)
+  val gui = new Gui(uic)
 
   def main(args: Array[String]): Unit = {
     println("Type <c> to create a new desk or <l> to load a previous game")
@@ -19,7 +21,7 @@ object Rummy {
       line match {
         case ""  =>
         case "q" => return
-        case x   => tui = new Tui(tui.processInput(x));
+        case x   => tui.processInput(x);
       }
     }
   }
