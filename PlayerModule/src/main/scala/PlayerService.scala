@@ -1,13 +1,13 @@
 import model.DeskInterface
-import model.deskComp.deskBaseImpl.deskImpl.{Board, Player}
-import model.deskComp.deskBaseImpl.{PlayerInterface, TileInterface}
+import model.deskComp.deskBaseImpl.deskImpl.{ Board, Player }
+import model.deskComp.deskBaseImpl.{ PlayerInterface, TileInterface }
 
 import scala.collection.immutable.SortedSet
 
 case class PlayerService() {
 
-  type TileI = TileInterface
-  type DeskI = DeskInterface
+  type TileI   = TileInterface
+  type DeskI   = DeskInterface
   type PlayerI = PlayerInterface
 
   def previousPlayer(desk: DeskI): PlayerI =
@@ -27,7 +27,10 @@ case class PlayerService() {
       name = name)
 
   @scala.annotation.tailrec
-  private def takeMaxTilesFromBagToPlayersBoard(desk: DeskInterface, amountOfTiles: Int, count: Int, name: String): DeskI =
+  private def takeMaxTilesFromBagToPlayersBoard(desk: DeskInterface,
+                                                amountOfTiles: Int,
+                                                count: Int,
+                                                name: String): DeskI =
     count match {
       case count if amountOfTiles == count => desk
       case _ =>
