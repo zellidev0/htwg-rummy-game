@@ -43,8 +43,9 @@ case class Controller(private val desk: DeskInterface,
 
   // todo add tiles put down
   override def userFinishedPlay(): ControllerI =
-    if (desk.bagOfTiles.isEmpty) copy(desk, answer = BAG_IS_EMPTY, state = P_TURN)
-    else if (desk.checkTable() && desk.currentPlayerWon()) copy(desk, answer = P_WON, state = KILL)
+    if (desk.checkTable() && desk.currentPlayerWon()) copy(desk, answer = P_WON, state = KILL)
+    else if (desk.bagOfTiles.isEmpty) copy(desk, answer = BAG_IS_EMPTY, state = P_TURN)
+    //else if (desk.checkTable() && desk.currentPlayerWon()) copy(desk, answer = P_WON, state = KILL)
     else
       copy(desk = desk.takeTileFromBagToPlayer(desk.getCurrentPlayer, desk.getTileFromBag),
            answer = TOOK_TILE,
@@ -92,7 +93,7 @@ case class Controller(private val desk: DeskInterface,
 
   override def redo(): ControllerI = {
     val tuple = undoMgr.redoStep()
-    copy(desk = tuple._2.getOrElse(desk), answer = UNDO, state, undoMgr = tuple._1)
+    copy(desk = tuple._2.getOrElse(desk), answer = REDO, state, undoMgr = tuple._1)
   }
 
   // FileIo
