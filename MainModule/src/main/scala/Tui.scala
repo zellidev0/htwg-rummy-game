@@ -8,46 +8,6 @@ class Tui(var connector: UIConnector.type) extends UIInterface with Observer {
 
   override def updated(controller: ControllerInterface): Unit =
     printOut(controller)
-  override def processInput(input: String): Unit =
-    connector.updateController(connector.contr.state match {
-      case ControllerState.MENU            => handleMenuInput(input)
-      case ControllerState.INSERTING_NAMES => handleNameInput(input)
-      case ControllerState.P_TURN          => handleOnTurn(input)
-      case ControllerState.NEXT_TYPE_N     => handleOnTurnFinished(input)
-    })
-
-  override def handleNameInput(name: String): ControllerInterface = name match {
-    case "f"                 => connector.contr.nameInputFinished()
-    case "z"                 => connector.contr.undo()
-    case "r"                 => connector.contr.redo()
-    case PlayerNamePattern() => connector.contr.addPlayerAndInit(name.substring(4).trim, elements)
-    case _                   => wrongInput()
-  }
-  override def handleOnTurnFinished(input: String): ControllerInterface = input match {
-    case "n" => connector.contr.switchToNextPlayer()
-    case "s" => connector.contr.storeFile()
-    case _   => wrongInput()
-  }
-  private def wrongInput(): ControllerInterface = {
-    println("Could not identify your input. Are you sure it was correct'?")
-    connector.contr
-  }
-  override def handleOnTurn(input: String): ControllerInterface = input match {
-    case LayDownTilePattern(c) => connector.contr.layDownTile(Tile.stringToTile(c.split(" ").apply(1)).get);
-    case MoveTilePattern(c) =>
-      connector.contr.moveTile(Tile.stringToTile(c.split(" t ").apply(0).split(" ").apply(1)).get,
-                               Tile.stringToTile(c.split(" t ").apply(1)).get);
-    case "f" => connector.contr.userFinishedPlay()
-    case "z" => connector.contr.undo()
-    case "r" => connector.contr.redo()
-    case _   => wrongInput()
-  }
-  override def handleMenuInput(input: String): ControllerInterface = input match {
-    case "c" => connector.contr.createDesk(elements + 1)
-    case "l" => connector.contr.loadFile()
-    case _   => wrongInput()
-  }
-
   private def printOut(controller: ControllerInterface): ControllerInterface = {
     printAnswerState(controller.answer)
     printCurrentStateView(controller.state)
@@ -103,6 +63,7 @@ class Tui(var connector: UIConnector.type) extends UIInterface with Observer {
       case AnswerState.UNDO_MOVED_TILE_NOT_DONE => "Undo the move of the tile unnecessary. Nothing did happen."
       case AnswerState.P_FINISHED_UNDO          => "Its is again your turn. "
       case AnswerState.TOOK_TILE                => "Auto took a tile"
+      case AnswerState.UNDO                     => "Undid the last operation"
       case z                                    => "ERROR" + z.toString
     })
   private def printCurrentTableView(desk: Set[SortedSet[TileInterface]]): Unit = {
@@ -162,6 +123,44 @@ class Tui(var connector: UIConnector.type) extends UIInterface with Observer {
     }
     s += "\n"
     println(s)
+  }
+  override def processInput(input: String): Unit =
+    connector.updateController(connector.contr.state match {
+      case ControllerState.MENU            => handleMenuInput(input)
+      case ControllerState.INSERTING_NAMES => handleNameInput(input)
+      case ControllerState.P_TURN          => handleOnTurn(input)
+      case ControllerState.NEXT_TYPE_N     => handleOnTurnFinished(input)
+    })
+  override def handleNameInput(name: String): ControllerInterface = name match {
+    case "f"                 => connector.contr.nameInputFinished()
+    case "z"                 => connector.contr.undo()
+    case "r"                 => connector.contr.redo()
+    case PlayerNamePattern() => connector.contr.addPlayerAndInit(name.substring(4).trim, elements)
+    case _                   => wrongInput()
+  }
+  override def handleOnTurnFinished(input: String): ControllerInterface = input match {
+    case "n" => connector.contr.switchToNextPlayer()
+    case "s" => connector.contr.storeFile()
+    case _   => wrongInput()
+  }
+  private def wrongInput(): ControllerInterface = {
+    println("Could not identify your input. Are you sure it was correct'?")
+    connector.contr
+  }
+  override def handleOnTurn(input: String): ControllerInterface = input match {
+    case LayDownTilePattern(c) => connector.contr.layDownTile(Tile.stringToTile(c.split(" ").apply(1)).get);
+    case MoveTilePattern(c) =>
+      connector.contr.moveTile(Tile.stringToTile(c.split(" t ").apply(0).split(" ").apply(1)).get,
+                               Tile.stringToTile(c.split(" t ").apply(1)).get);
+    case "f" => connector.contr.userFinishedPlay()
+    case "z" => connector.contr.undo()
+    case "r" => connector.contr.redo()
+    case _   => wrongInput()
+  }
+  override def handleMenuInput(input: String): ControllerInterface = input match {
+    case "c" => connector.contr.createDesk(elements + 1)
+    case "l" => connector.contr.loadFile()
+    case _   => wrongInput()
   }
 
 }

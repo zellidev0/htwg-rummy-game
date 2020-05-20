@@ -1,5 +1,5 @@
 object UIConnector {
-  var controller: ControllerInterface = null
+  var controller: ControllerInterface = _
   var subscribers: Vector[Observer]   = Vector()
   def contr: ControllerInterface =
     controller

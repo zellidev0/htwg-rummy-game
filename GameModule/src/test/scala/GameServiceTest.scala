@@ -12,10 +12,7 @@ class GameServiceTest extends WordSpec with Matchers {
     val gameService = GameService()
     "creating an new desk with 1 Player" should {
       val desk: DeskInterface = Desk(
-        List(
-          Player("Mike",
-                 Board(SortedSet[TileInterface](Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))),
-                 hasTurn = true)),
+        List(Player("Mike", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))))),
         Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)),
         Set[SortedSet[TileInterface]]()
       )
@@ -36,7 +33,6 @@ class GameServiceTest extends WordSpec with Matchers {
         gameService.tableView(desk3) should be(
           Set(SortedSet[TileInterface](Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))))
       }
-
     }
     "creating default bagOfTiles" should {
       val table = gameService.createDefaultTable(2)

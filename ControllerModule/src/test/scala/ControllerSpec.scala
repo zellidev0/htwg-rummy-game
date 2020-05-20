@@ -12,7 +12,7 @@ class ControllerSpec extends WordSpec with Matchers {
 
   "A Controller" when {
     "user finishes play" should {
-      val player1    = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), hasTurn = true)
+      val player1    = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))))
       val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
       val player3    = Player("Name2", emptyBoard)
       val player4    = Player("Name3", emptyBoard)
@@ -25,7 +25,7 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "user finishes play" should {
-      val player1    = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), hasTurn = true)
+      val player1    = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))))
       val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
       val player3    = Player("Name2", emptyBoard)
       val player4    = Player("Name3", emptyBoard)
@@ -40,7 +40,7 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
     "usr finishes play and wins" should {
-      val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(2, Color.BLUE, 1))), hasTurn = true)
+      val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(2, Color.BLUE, 1))))
       val player2 = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
       val players = List[PlayerInterface](player1, player2)
       val desk = Desk(players,
@@ -55,7 +55,7 @@ class ControllerSpec extends WordSpec with Matchers {
     }
     "user finished play and bag is empty" should {
       val player1 =
-        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))), hasTurn = true)
+        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))))
       val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
       val players    = List[PlayerInterface](player1, player2)
       val desk       = Desk(players, Set(), Set[SortedSet[TileInterface]]())
@@ -67,7 +67,7 @@ class ControllerSpec extends WordSpec with Matchers {
     }
     "Switch to the next Player" should {
       val player1 =
-        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))), hasTurn = true)
+        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))))
       val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
       val players    = List[PlayerInterface](player1, player2)
       val desk       = Desk(players, Set(), Set[SortedSet[TileInterface]]())
@@ -79,7 +79,7 @@ class ControllerSpec extends WordSpec with Matchers {
     }
     "finished inserting names" should {
       val player1 =
-        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))), hasTurn = true)
+        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))))
       val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
       val players    = List[PlayerInterface](player1, player2)
       val desk       = Desk(players, Set(), Set[SortedSet[TileInterface]]())
@@ -93,7 +93,7 @@ class ControllerSpec extends WordSpec with Matchers {
     // --> addPlayerAndInit dose not work
     //    "add a Player and init the Player" should {
     //      val player1 =
-    //        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))), hasTurn = true)
+    //        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))))
     //      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
     //      val players    = List[PlayerInterface](player1, player2)
     //      val desk       = Desk(players, Set(), Set[SortedSet[TileInterface]]())
@@ -105,7 +105,7 @@ class ControllerSpec extends WordSpec with Matchers {
     //    }
     "User finished play" should {
       val player1 =
-        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))), hasTurn = true)
+        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))))
       val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
       val players    = List[PlayerInterface](player1, player2)
       val desk       = Desk(players, Set(Tile(9, Color.YELLOW, 0), Tile(7, Color.GREEN, 1)), Set[SortedSet[TileInterface]]())
@@ -118,8 +118,7 @@ class ControllerSpec extends WordSpec with Matchers {
     "User moved a tile" should {
       val player1 =
         Player("Name0",
-               Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(4, Color.RED, 1), Tile(8, Color.RED, 0))),
-               hasTurn = true)
+               Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(4, Color.RED, 1), Tile(8, Color.RED, 0))))
       val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
       val players    = List[PlayerInterface](player1, player2)
       val desk       = Desk(players, Set(Tile(9, Color.YELLOW, 0), Tile(7, Color.GREEN, 1)), Set[SortedSet[TileInterface]]())
@@ -134,8 +133,7 @@ class ControllerSpec extends WordSpec with Matchers {
     "Undo and Redo checking" should {
       val player1 =
         Player("Name0",
-               Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(4, Color.RED, 1), Tile(8, Color.RED, 0))),
-               hasTurn = true)
+               Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(4, Color.RED, 1), Tile(8, Color.RED, 0))))
       val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
       val players    = List[PlayerInterface](player1, player2)
       val desk       = Desk(players, Set(Tile(9, Color.YELLOW, 0), Tile(7, Color.GREEN, 1)), Set[SortedSet[TileInterface]]())
@@ -172,8 +170,7 @@ class ControllerSpec extends WordSpec with Matchers {
     "store and load file" should {
       val player1 =
         Player("Name0",
-               Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(4, Color.RED, 1), Tile(8, Color.RED, 0))),
-               hasTurn = true)
+               Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(4, Color.RED, 1), Tile(8, Color.RED, 0))))
       val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
       val players    = List[PlayerInterface](player1, player2)
       val desk       = Desk(players, Set(Tile(9, Color.YELLOW, 0), Tile(7, Color.GREEN, 1)), Set[SortedSet[TileInterface]]())
@@ -190,7 +187,7 @@ class ControllerSpec extends WordSpec with Matchers {
 }
 
 //    "should move two correct and movable tiles" should {
-//      val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true), Player("Name2", emptyBoard))
+//      val players = List[PlayerInterface](Player("Name1", emptyBoard), Player("Name2", emptyBoard))
 //      val desk = Desk(players, Set(), Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0))))
 //      val controller = new Controller(desk)
 //      controller.moveTile(Tile.stringToTile("2R0").get, Tile.stringToTile("1R0").get)
@@ -205,7 +202,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //      }
 //    }
 //    "lay Down a tile the user really has" should {
-//      val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), hasTurn = true), Player("Name2", emptyBoard))
+//      val players = List[PlayerInterface](Player("Name1", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0)))), Player("Name2", emptyBoard))
 //      val desk = Desk(players, Set(), Set[SortedSet[TileInterface]]())
 //      val controller = new Controller(desk)
 //      controller.layDownTile(Tile.stringToTile("1R0").get)
@@ -222,7 +219,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //      }
 //    }
 //    "adding a player and have less than 4" should {
-//      val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true))
+//      val players = List[PlayerInterface](Player("Name1", emptyBoard))
 //      val desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(2, Color.RED, 0)), Set[SortedSet[TileInterface]]())
 //      val controller = new Controller(desk)
 //      controller.createDesk(12) // must create or you cant init all players
@@ -257,7 +254,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //      }
 //    }
 //    "getting tile sets" should {
-//      val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true))
+//      val players = List[PlayerInterface](Player("Name1", emptyBoard))
 //      val sets = Set[SortedSet[TileInterface]](SortedSet(Tile(2, Color.RED, 0)), SortedSet(Tile(1, Color.RED, 0)))
 //      val desk = Desk(players, Set(), sets)
 //      val controller = new Controller(desk)
@@ -267,7 +264,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //      }
 //    }
 //    "switching players" should {
-//      val player0 = Player("Name0", emptyBoard, hasTurn = true)
+//      val player0 = Player("Name0", emptyBoard)
 //      val player1 = Player("Name1", emptyBoard)
 //      val player2 = Player("Name2", emptyBoard)
 //      val player3 = Player("Name3", emptyBoard)
@@ -364,7 +361,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //      val setOfWrongStreets =
 //        Set(SortedSet[TileInterface](Tile(9, Color.BLUE, 1), Tile(11, Color.BLUE, 1), Tile(12, Color.BLUE, 1), Tile(13, Color.BLUE, 0)), // Street with missing one
 //          SortedSet[TileInterface](Tile(7, Color.RED, 0), Tile(8, Color.RED, 1))) // street with only 2
-//      val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true), Player("Name2", emptyBoard))
+//      val players = List[PlayerInterface](Player("Name1", emptyBoard), Player("Name2", emptyBoard))
 //      val desk = Desk(players, Set[TileInterface](), setOfCorrectStreets)
 //      val controller = new Controller(Desk(List[PlayerInterface](), Set(), setOfCorrectStreets))
 //      "be true when setOfCorrectStreets" in {
@@ -386,7 +383,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //      }
 //    }
 //    "removing tile from table" should {
-//      val players = List[PlayerInterface](Player("Name1", emptyBoard, hasTurn = true), Player("Name2", emptyBoard))
+//      val players = List[PlayerInterface](Player("Name1", emptyBoard), Player("Name2", emptyBoard))
 //      val desk = Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]](SortedSet(Tile(1, Color.RED, 0))))
 //      val controller = new Controller(desk)
 //      controller.removeTileFromSet(Tile(1, Color.RED, 0))
@@ -396,7 +393,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //    }
 //    "calling undo redo when laying down" should {
 //      val tile1 = Tile(1, Color.RED, 0)
-//      val player1 = Player("Name1", Board(SortedSet[TileInterface](tile1)), hasTurn = true)
+//      val player1 = Player("Name1", Board(SortedSet[TileInterface](tile1)))
 //      val players = List[PlayerInterface](player1)
 //      val desk = Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]]())
 //      val controller = new Controller(desk)
@@ -417,7 +414,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //    "calling undo redo when moving tile" should {
 //      val tile1 = Tile(1, Color.RED, 0)
 //      val tile2 = Tile(2, Color.RED, 0)
-//      val player1 = Player("Name1", emptyBoard, hasTurn = true)
+//      val player1 = Player("Name1", emptyBoard)
 //      val players = List[PlayerInterface](player1)
 //      val desk = Desk(players, Set[TileInterface](), Set[SortedSet[TileInterface]](SortedSet[TileInterface](tile1), SortedSet[TileInterface](tile2)))
 //      val controller = new Controller(desk)
@@ -452,7 +449,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //      }
 //    }
 //    "calling undo redo when user finishes play" should {
-//      val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), hasTurn = true)
+//      val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))))
 //      val player2 = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
 //      val player3 = Player("Name2", emptyBoard)
 //      val player4 = Player("Name3", emptyBoard)
@@ -474,7 +471,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //      }
 //    }
 //    "calling undo redo when switching player" should {
-//      val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))), hasTurn = true)
+//      val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))))
 //      val player2 = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
 //      val player3 = Player("Name2", emptyBoard)
 //      val player4 = Player("Name3", emptyBoard)
@@ -499,7 +496,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //      }
 //    }
 //    "calling undo redo when taking a tile" should {
-//      val player1 = Player("Name0", emptyBoard, hasTurn = true)
+//      val player1 = Player("Name0", emptyBoard)
 //      val players = List[PlayerInterface](player1)
 //      val desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
 //      val controller = new Controller(desk)
@@ -518,7 +515,7 @@ class ControllerSpec extends WordSpec with Matchers {
 //      }
 //    }
 //    "accessing view of board" should {
-//      val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.BLUE, 0))), hasTurn = true)
+//      val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.BLUE, 0))))
 //      val players = List[PlayerInterface](player1)
 //      val desk = Desk(players, Set(Tile(1, Color.RED, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
 //      val controller = new Controller(desk)
@@ -528,8 +525,8 @@ class ControllerSpec extends WordSpec with Matchers {
 //    }
 //    "reading a file" should {
 //      //ATTENTION, will fail if file desk.xml exists. please remove file before running test
-//      val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))), hasTurn = true)
-//      val player2 = Player("Name1", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))), hasTurn = true)
+//      val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))))
+//      val player2 = Player("Name1", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0), Tile(1, Color.RED, 1), Tile(2, Color.RED, 0))))
 //      val players = List[PlayerInterface](player1, player2)
 //      val desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]](SortedSet(Tile(10, Color.BLUE, 0), Tile(10, Color.RED, 0), Tile(10, Color.GREEN, 0))))
 //      val controller = new Controller(desk)

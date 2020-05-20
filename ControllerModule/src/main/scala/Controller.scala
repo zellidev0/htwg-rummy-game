@@ -47,7 +47,7 @@ case class Controller(private val desk: DeskInterface,
     else if (desk.bagOfTiles.isEmpty) copy(desk, answer = BAG_IS_EMPTY, state = P_TURN)
     //else if (desk.checkTable() && desk.currentPlayerWon()) copy(desk, answer = P_WON, state = KILL)
     else
-      copy(desk = desk.takeTileFromBagToPlayer(desk.getCurrentPlayer, desk.getTileFromBag),
+      copy(desk = desk.takeTileFromBagToPlayer(desk.getCurrentPlayer, desk.getTileFromBag.get),
            answer = TOOK_TILE,
            state = NEXT_TYPE_N,
            undoMgr.putOnStack(desk))

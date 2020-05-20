@@ -18,7 +18,7 @@ case class GameService() {
     desk.boardView
 
   def moveTile(desk: DeskI, tile: TileI, toTile: TileI): DeskI =
-    desk.tryToMoveTwoTilesOnDesk(tile, toTile)
+    desk.tryToMoveTwoTilesOnDesk(tile, toTile).get
 
   def putTileDown(desk: DeskI, tile: TileI): DeskI =
     if (desk.getCurrentPlayer.has(tile)) {
