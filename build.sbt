@@ -18,7 +18,7 @@ lazy val global = project
   )
 
 lazy val GameModule = project
-  .settings(name := "GameModule", settings, assemblySettings, libraryDependencies ++= mainModuleDependencies )
+  .settings(name := "GameModule", settings, assemblySettings, libraryDependencies ++= mainModuleDependencies)
 
 lazy val PlayerModule = project
   .settings(name := "PlayerModule", settings, assemblySettings, libraryDependencies ++= mainModuleDependencies)
@@ -34,11 +34,14 @@ lazy val MainModule = project
   .dependsOn(ControllerModule)
   .aggregate(ControllerModule)
 
+lazy val akkaVersion = "2.3.14"
+lazy val akkaStreamVersion = "1.0"
+
 
 
 lazy val mainModuleDependencies = Seq(
-  "com.typesafe.akka" %% "akka-stream" % "2.5.6",
-  "com.typesafe.akka" %% "akka-http"   % "10.1.12",
+  "com.typesafe.akka" %% "akka-http" % "10.1.12",
+  "com.typesafe.akka" %% "akka-stream" % "2.5.26",
   "org.scalactic" %% "scalactic" % "3.0.5",
   "org.scalatest" %% "scalatest" % "3.0.5" % "test",
   "com.google.inject" % "guice" % "4.1.0",
