@@ -90,19 +90,6 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
 
-    // --> addPlayerAndInit dose not work
-    //    "add a Player and init the Player" should {
-    //      val player1 =
-    //        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))))
-    //      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
-    //      val players    = List[PlayerInterface](player1, player2)
-    //      val desk       = Desk(players, Set(), Set[SortedSet[TileInterface]]())
-    //      val controller = Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
-    //      val contr      = controller.addPlayerAndInit("Julian", 3)
-    //      "Player should be initialzized" in {
-    //        controller.currentPlayerName should be("Julian")
-    //      }
-    //    }
     "User finished play" should {
       val player1 =
         Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))))
@@ -147,26 +134,6 @@ class ControllerSpec extends WordSpec with Matchers {
       }
     }
 
-    //REDO funktioniert nicht
-    //    "Undo and Redo checking" should {
-    //      val player1 =
-    //        Player("Name0",
-    //               Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(4, Color.RED, 1), Tile(8, Color.RED, 0))),
-    //               hasTurn = true)
-    //      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
-    //      val players    = List[PlayerInterface](player1, player2)
-    //      val desk       = Desk(players, Set(Tile(9, Color.YELLOW, 0), Tile(7, Color.GREEN, 1)), Set[SortedSet[TileInterface]]())
-    //      val controller = Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
-    //      val contr      = controller.layDownTile(Tile(3, Color.RED, 0))
-    //      val contr1     = contr.layDownTile(Tile(4, Color.RED, 0))
-    //      val contr2     = contr1.undo()
-    //      val contr3     = contr2.redo()
-    //      "Table should look like before undo" in {
-    //        contr3.answer should be(AnswerState.REDO)
-    //        contr3.viewOfTable.size should be(2)
-    //      }
-    //    }
-
     "store and load file" should {
       val player1 =
         Player("Name0",
@@ -185,6 +152,39 @@ class ControllerSpec extends WordSpec with Matchers {
     }
   }
 }
+//REDO funktioniert nicht
+//    "Undo and Redo checking" should {
+//      val player1 =
+//        Player("Name0",
+//               Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(4, Color.RED, 1), Tile(8, Color.RED, 0))),
+//               hasTurn = true)
+//      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
+//      val players    = List[PlayerInterface](player1, player2)
+//      val desk       = Desk(players, Set(Tile(9, Color.YELLOW, 0), Tile(7, Color.GREEN, 1)), Set[SortedSet[TileInterface]]())
+//      val controller = Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val contr      = controller.layDownTile(Tile(3, Color.RED, 0))
+//      val contr1     = contr.layDownTile(Tile(4, Color.RED, 0))
+//      val contr2     = contr1.undo()
+//      val contr3     = contr2.redo()
+//      "Table should look like before undo" in {
+//        contr3.answer should be(AnswerState.REDO)
+//        contr3.viewOfTable.size should be(2)
+//      }
+//    }
+
+// --> addPlayerAndInit dose not work
+//    "add a Player and init the Player" should {
+//      val player1 =
+//        Player("Name0", Board(SortedSet[TileInterface](Tile(3, Color.RED, 0), Tile(3, Color.RED, 1))))
+//      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
+//      val players    = List[PlayerInterface](player1, player2)
+//      val desk       = Desk(players, Set(), Set[SortedSet[TileInterface]]())
+//      val controller = Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val contr      = controller.addPlayerAndInit("Julian", 3)
+//      "Player should be initialzized" in {
+//        controller.currentPlayerName should be("Julian")
+//      }
+//    }
 
 //    "should move two correct and movable tiles" should {
 //      val players = List[PlayerInterface](Player("Name1", emptyBoard), Player("Name2", emptyBoard))

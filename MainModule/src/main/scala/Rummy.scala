@@ -9,8 +9,9 @@ object Rummy {
     Desk(players = List[PlayerInterface](), bagOfTiles = Set[TileInterface](), table = Set[SortedSet[TileInterface]]())
   UIConnector.updateController(Controller(desk, AnswerState.CREATE_DESK, ControllerState.MENU))
 
-  val gui = new Gui(UIConnector)
-  var tui = new Tui(UIConnector)
+  val gui  = new Gui(UIConnector)
+  var tui  = new Tui(UIConnector)
+  val akka = new Akka(UIConnector)
 
   def main(args: Array[String]): Unit = {
     println("Type <c> to create a new desk or <l> to load a previous game")
