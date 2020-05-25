@@ -39,33 +39,8 @@ class Tui(var connector: UIConnector.type) extends UIInterface with Observer {
       case _ => ""
     })
   private def printAnswerState(answerState: AnswerState.Value): Unit =
-    println(answerState match {
-      case AnswerState.CREATE_DESK              => "Create a desk"
-      case AnswerState.P_FINISHED               => "You are finished."
-      case AnswerState.TABLE_NOT_CORRECT        => "Table looks not correct, move tiles to match the rules"
-      case AnswerState.P_WON                    => s"${connector.contr.currentPlayerName} is the winner."
-      case AnswerState.UNDO_TAKE_TILE           => "The tile has been put back in the bag"
-      case AnswerState.BAG_IS_EMPTY             => "No more tiles in the bag. You must lay a tile down"
-      case AnswerState.CANT_MOVE_THIS_TILE      => "You can not move this tile."
-      case AnswerState.UNDO_MOVED_TILE          => "You undid the move of a specific tile."
-      case AnswerState.MOVED_TILE               => "Moved tile if allowed."
-      case AnswerState.UNDO_LAY_DOWN_TILE       => "You undid the lay down you took the tile up."
-      case AnswerState.ADDED_PLAYER             => "You added a player."
-      case AnswerState.PUT_TILE_DOWN            => "You put down a tile"
-      case AnswerState.REMOVED_PLAYER           => "You removed the player you inserted."
-      case AnswerState.INSERTING_NAMES_FINISHED => "You finished inserting the names."
-      case AnswerState.STORED_FILE              => "You stored the game in a file"
-      case AnswerState.ENOUGH_PLAYER            => "The Maximum amount of players is set. Type 'f' to finish inserting names"
-      case AnswerState.NOT_ENOUGH_PLAYERS       => "Not enough Players. Add some more."
-      case AnswerState.COULD_NOT_LOAD_FILE      => "Could not load the file. Created a new game instead."
-      case AnswerState.LOADED_FILE              => "You loaded a file"
-      case AnswerState.CREATED_DESK             => "You started the game by creating a desk"
-      case AnswerState.UNDO_MOVED_TILE_NOT_DONE => "Undo the move of the tile unnecessary. Nothing did happen."
-      case AnswerState.P_FINISHED_UNDO          => "Its is again your turn. "
-      case AnswerState.TOOK_TILE                => "Auto took a tile"
-      case AnswerState.UNDO                     => "Undid the last operation"
-      case z                                    => "ERROR" + z.toString
-    })
+    println(answerState.toString)
+
   private def printCurrentTableView(desk: Set[SortedSet[TileInterface]]): Unit = {
     var s =
     """

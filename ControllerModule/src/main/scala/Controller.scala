@@ -25,7 +25,7 @@ case class Controller(private val desk: DeskInterface,
 
   override def switchToNextPlayer(): ControllerI = copy(
     desk = playerService.switchToNextPlayer(desk),
-    answer = NONE,
+    answer = SWITCHED_TO_NEXT,
     state = P_TURN
   )
 
