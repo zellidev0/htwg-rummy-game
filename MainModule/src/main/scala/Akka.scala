@@ -1,9 +1,9 @@
-import ControllerState.INSERTING_NAMES
+import ControllerState.{ INSERTING_NAMES, MENU, NEXT_TYPE_N, P_TURN }
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.StatusCodes._
-import akka.http.scaladsl.server.Directives.{ entity, _ }
+import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import model.deskComp.deskBaseImpl.deskImpl.Tile
@@ -18,83 +18,50 @@ class Akka(var connector: UIConnector.type) extends UIInterface with Observer {
   private implicit val materializer: ActorMaterializer            = ActorMaterializer()
   private implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
-  val playerRoute: Route = pathPrefix("player") {
-    path("finish")(get(complete(handlePlayer(connector.contr.nameInputFinished()))))
-      .~(path("undo")(get(complete(handlePlayer(connector.contr.undo())))))
-      .~(path("redo")(get(complete(handlePlayer(connector.contr.redo())))))
-      .~(path("add")(post(entity(as[String]) { name =>
-        println(name)
-        complete(handlePlayer(connector.contr.addPlayerAndInit(name, 12)))
-      })))
-  }
-  val nextRoute: Route = pathPrefix("next") {
-    path("switch")(get(complete {
-      if (connector.contr.state == ControllerState.NEXT_TYPE_N) {
-        connector.updateController(connector.contr.switchToNextPlayer())
-      }
-      HttpResponse(OK, entity = connector.controller.toJson.toString())
-    })) ~
-    path("store")(get(complete {
-      if (connector.contr.state == ControllerState.NEXT_TYPE_N) {
-        connector.updateController(connector.contr.storeFile())
-      }
-      HttpResponse(OK, entity = connector.controller.toJson.toString())
+  val playerRoute: Route = pathPrefix("players") {
+    path("finish")(get(complete(handle(connector.contr.nameInputFinished(), INSERTING_NAMES)))) ~
+    path("undo")(get(complete(handle(connector.contr.undo(), INSERTING_NAMES)))) ~
+    path("redo")(get(complete(handle(connector.contr.redo(), INSERTING_NAMES)))) ~
+    path("add")(get(parameter('name) { name =>
+      println(name)
+      complete(handle(connector.contr.addPlayerAndInit(name, 12), INSERTING_NAMES))
     }))
   }
+  val nextRoute: Route = pathPrefix("next") {
+    path("switch")(get(complete(handle(connector.contr.switchToNextPlayer(), NEXT_TYPE_N)))) ~
+    path("store")(get(complete(handle(connector.contr.storeFile(), NEXT_TYPE_N))))
+  }
   val gameRoute: Route = pathPrefix("game") {
-    path("done")(get(complete {
-      if (connector.contr.state == ControllerState.P_TURN) {
-        connector.updateController(connector.contr.userFinishedPlay())
-      }
-      HttpResponse(OK, entity = connector.controller.toJson.toString())
+    path("done")(get(complete(handle(connector.contr.userFinishedPlay(), P_TURN)))) ~
+    path("layDown")(get(parameter('tile) { t =>
+      val tile = Tile.stringToTile(t)
+      complete(if (tile.isDefined) {
+        handle(connector.contr.layDownTile(tile.get), P_TURN)
+      } else {
+        HttpResponse(BadRequest, entity = s"tile has not valid format")
+      })
     })) ~
-    path("layDown")(get(entity(as[String]) { tile =>
-      complete {
-        if (connector.contr.state == ControllerState.P_TURN) {
-          connector.updateController(connector.contr.layDownTile(Tile.stringToTile(tile.split(" ").apply(1)).get))
-        }
-        HttpResponse(OK, entity = connector.controller.toJson.toString())
-      }
-    })) ~
-    path("moveTiles")(get(entity(as[String]) { tiles =>
-      complete {
-        if (connector.contr.state == ControllerState.P_TURN) {
-          connector.updateController(
-            connector.contr.moveTile(Tile.stringToTile(tiles.split(" t ").apply(0).split(" ").apply(1)).get,
-                                     Tile.stringToTile(tiles.split(" t ").apply(1)).get))
-        }
-        HttpResponse(OK, entity = connector.controller.toJson.toString())
-      }
-    })) ~
-    path("undo")(get(complete {
-      if (connector.contr.state == ControllerState.P_TURN) {
-        connector.updateController(connector.contr.undo())
-      }
-      HttpResponse(OK, entity = connector.controller.toJson.toString())
-    })) ~
-    path("redo")(get(complete {
-      if (connector.contr.state == ControllerState.P_TURN) {
-        connector.updateController(connector.contr.redo())
-      }
-      HttpResponse(OK, entity = connector.controller.toJson.toString())
+    path("undo")(get(complete(handle(connector.contr.undo(), P_TURN)))) ~
+    path("redo")(get(complete(handle(connector.contr.redo(), P_TURN)))) ~
+    path("moveTile")(get(parameter('from, 'to) { (from, to) =>
+      val tile1 = Tile.stringToTile(from)
+      val tile2 = Tile.stringToTile(to)
+      complete(if (tile1.isDefined && tile2.isDefined) {
+        handle(connector.contr.moveTile(tile1.get, tile2.get), P_TURN)
+      } else {
+        HttpResponse(BadRequest, entity = s"tile has not valid format")
+      })
     }))
   }
   val menuRoute: Route = pathPrefix("menu") {
-    path("create")(get(complete {
-      if (connector.contr.state == ControllerState.MENU) {
-        connector.updateController(connector.contr.createDesk(elements + 1))
-      }
-      HttpResponse(OK, entity = connector.controller.toJson.toString())
-    })) ~
-    path("load")(get(complete {
-      if (connector.contr.state == ControllerState.MENU) {
-        connector.updateController(connector.contr.loadFile())
-      }
-      HttpResponse(OK, entity = connector.controller.toJson.toString())
-    }))
+    path("create")(get(complete(handle(connector.contr.createDesk(elements + 1), MENU)))) ~
+    path("load")(get(complete(handle(connector.contr.loadFile(), MENU))))
+  }
+  val state: Route = pathPrefix("state") {
+    complete(HttpResponse(OK, entity = connector.controller.toJson.toString()))
   }
 
-  val route: Route = concat(playerRoute, nextRoute, gameRoute, menuRoute)
+  val route: Route = concat(playerRoute, nextRoute, gameRoute, menuRoute, state)
 
   val bindingFuture: Future[Http.ServerBinding] =
     Http().bindAndHandle(route, "localhost", 9000)
@@ -109,12 +76,12 @@ class Akka(var connector: UIConnector.type) extends UIInterface with Observer {
 
   override def updated(controller: ControllerInterface): Unit = {}
 
-  private def handlePlayer(controller: ControllerInterface): HttpResponse = connector.contr.state match {
-    case INSERTING_NAMES =>
+  private def handle(controller: ControllerInterface, state: ControllerState.Value): HttpResponse =
+    if (state == connector.contr.state) {
       connector.updateController(controller)
       HttpResponse(OK, entity = connector.controller.toJson.toString())
-    case _ =>
-      HttpResponse(InternalServerError, entity = "Wrong server state. Use endpoint only when in INSERTING_NAMES state")
-  }
+    } else {
+      HttpResponse(InternalServerError, entity = s"Wrong server state. Use endpoint only when in ${state} state")
+    }
 
 }
