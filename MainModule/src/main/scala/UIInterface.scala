@@ -9,11 +9,4 @@ trait UIInterface {
 
   def processInput(input: String): Unit
 
-  def handleNameInput(name: String): ControllerInterface
-
-  def handleOnTurnFinished(input: String): ControllerInterface
-
-  def handleOnTurn(input: String): ControllerInterface
-
-  def handleMenuInput(input: String): ControllerInterface
 }

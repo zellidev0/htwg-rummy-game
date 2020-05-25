@@ -3,7 +3,7 @@ import ControllerState._
 import model.DeskInterface
 import model.deskComp.deskBaseImpl.TileInterface
 import model.fileIO.json.FileIO
-import play.api.libs.json.JsObject
+import play.api.libs.json.{ JsNumber, JsObject, Json }
 
 import scala.collection.immutable.SortedSet
 
@@ -108,6 +108,5 @@ case class Controller(private val desk: DeskInterface,
     case None       => copy(desk = gameService.createDefaultTable(12), answer = CREATED_DESK, state = INSERTING_NAMES)
   }
 
-  override def toJson: JsObject =
-    fileIO.toJson(desk)
+  override def toJson: JsObject = Json.obj("state" -> state, "answer" -> answer, "desk" -> fileIO.toJson(desk))
 }

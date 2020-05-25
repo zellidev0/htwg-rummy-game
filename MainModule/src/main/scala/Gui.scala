@@ -53,7 +53,7 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface with Obser
       case ControllerState.NEXT_TYPE_N     => handleOnTurnFinished()
     }
 
-  override def handleNameInput(name: String = ""): ControllerInterface = {
+  private def handleNameInput(name: String = ""): ControllerInterface = {
     val nameInputField = new TextField("Insert Name here")
     buttonPanel = new GridPanel(1, 5) {
       contents += new Button {
@@ -94,7 +94,7 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface with Obser
     connector.contr
   }
 
-  override def handleOnTurnFinished(input: String = ""): ControllerInterface = {
+  private def handleOnTurnFinished(input: String = ""): ControllerInterface = {
     buttonPanel = new GridPanel(1, 5) {
       contents += new Button() {
         text = "next Player"
@@ -115,7 +115,7 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface with Obser
     connector.contr
   }
 
-  override def handleOnTurn(input: String = ""): ControllerInterface = {
+  private def handleOnTurn(input: String = ""): ControllerInterface = {
     buttonPanel = new GridPanel(1, 5) {
       contents += new Button() {
         text = "Redo"
@@ -145,7 +145,7 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface with Obser
     connector.contr
   }
 
-  override def handleMenuInput(in: String = ""): ControllerInterface = {
+  private def handleMenuInput(in: String = ""): ControllerInterface = {
     buttonPanel.contents += new Button {
       text = "Create new Desk"
       reactions += {
@@ -181,7 +181,7 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface with Obser
     }
   }
 
-  def printUserBoard(): Unit = {
+  private def printUserBoard(): Unit = {
     userBoard = new ScrollPane() {
       contents = new GridPanel(2, 12) {
         for (tile <- connector.contr.viewOfBoard) {
@@ -197,7 +197,7 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface with Obser
     }
   }
 
-  def tileAsViewForBoard(tile: TileInterface): GridPanel =
+  private def tileAsViewForBoard(tile: TileInterface): GridPanel =
     new GridPanel(3, 1) {
       val value = new TextField(tile.value.toString)
       value.editable = false
@@ -214,7 +214,7 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface with Obser
       }
     }
 
-  def printTable(): Unit = {
+  private def printTable(): Unit = {
     deskPanel = new ScrollPane() {
       contents = new GridPanel(20, 1) {
         for (sortedSet <- connector.contr.viewOfTable) {
@@ -233,7 +233,7 @@ class Gui(connector: UIConnector.type) extends Frame with UIInterface with Obser
     }
   }
 
-  def tileAsViewForDesk(tile: TileInterface): GridPanel =
+  private def tileAsViewForDesk(tile: TileInterface): GridPanel =
     new GridPanel(3, 1) {
       val value = new TextField(tile.value.toString)
       value.editable = false
