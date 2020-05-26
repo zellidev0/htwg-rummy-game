@@ -66,14 +66,12 @@ class Akka(var connector: UIConnector.type) extends UIInterface with Observer {
   val bindingFuture: Future[Http.ServerBinding] =
     Http().bindAndHandle(route, "localhost", 9000)
 
-  println(s"Server online at http://localhost:9000/\nPress RETURN to stop...")
-  StdIn.readLine() // let it run until user presses return
-  bindingFuture
-    .flatMap(_.unbind()) // trigger unbinding from the port
-    .onComplete(_ => system.terminate()) // and shutdown when done
+//  StdIn.readLine() // let it run until user presses return
+//  bindingFuture
+//    .flatMap(_.unbind()) // trigger unbinding from the port
+//    .onComplete(_ => system.terminate()) // and shutdown when done
 
-  override def processInput(input: String): Unit = {}
-
+  override def processInput(input: String): Unit              = {}
   override def updated(controller: ControllerInterface): Unit = {}
 
   private def handle(controller: ControllerInterface, state: ControllerState.Value): HttpResponse =
@@ -83,5 +81,4 @@ class Akka(var connector: UIConnector.type) extends UIInterface with Observer {
     } else {
       HttpResponse(InternalServerError, entity = s"Wrong server state. Use endpoint only when in ${state} state")
     }
-
 }
