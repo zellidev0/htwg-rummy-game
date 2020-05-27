@@ -5,9 +5,12 @@ import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
+import model.deskComp.deskBaseImpl.deskImpl.Tile
+import model.deskComp.deskBaseImpl.{Desk, PlayerInterface, TileInterface}
 import model.fileIO.FileIOJson
 import play.api.libs.json._
 
+import scala.collection.immutable.SortedSet
 import scala.concurrent.ExecutionContextExecutor
 
 
@@ -60,8 +63,30 @@ object ControllerService {
       })) ~
       path("createDesk")(post(entity(as[String]) { input =>
         complete(
-          handleCorrect(Controller(desk, answer.get, state.get).userFinishedPlay())
-        )
+          handleCorrect(Controller(
+            Desk(players = List[PlayerInterface](), bagOfTiles = Set[TileInterface](), table = Set[SortedSet[TileInterface]]()),
+            AnswerState.CREATE_DESK, ControllerState.MENU).userFinishedPlay()))
+      })) ~
+      path("moveTile")(post(entity(as[String]) { input =>
+        val answer = checkCorrectAnswer(input)
+        val state = checkCorrectState(input)
+        val from = checkCorrectTile(input, "from")
+        val to = checkCorrectTile(input, "to")
+        complete(checkCorrectDesk(input) match {
+          case Some(desk) if answer.isDefined && state.isDefined && from.isDefined && to.isDefined=>
+            handleCorrect(Controller(desk, answer.get, state.get).moveTile(from.get,to.get))
+          case None => handleWrong()
+        })
+      })) ~
+      path("layDownTile")(post(entity(as[String]) { input =>
+        val answer = checkCorrectAnswer(input)
+        val state = checkCorrectState(input)
+        val tile = checkCorrectTile(input, "tile")
+        complete(checkCorrectDesk(input) match {
+          case Some(desk) if answer.isDefined && state.isDefined && tile.isDefined=>
+            handleCorrect(Controller(desk, answer.get, state.get).layDownTile(tile.get))
+          case None => handleWrong()
+        })
       }))
   }
 
@@ -78,6 +103,12 @@ object ControllerService {
   private def checkCorrectAnswer(input: String): Option[AnswerState.Value] =
     Json.parse(input).\("answer").toOption match {
       case Some(answer) => Some(AnswerState.from(answer.toString()))
+      case None => None
+    }
+
+  private def checkCorrectTile(input: String, what:String): Option[TileInterface] =
+    Json.parse(input).\(what).toOption match {
+      case Some(answer) => Tile.stringToTile(answer.toString())
       case None => None
     }
 

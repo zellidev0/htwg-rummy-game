@@ -27,8 +27,6 @@ case class Controller(private val desk: DeskInterface,
   private val URL_GAME = "http://localhost:9002/"
 
   private val fileIO = new FileIOJson()
-  private val playerService = PlayerService()
-  private val gameService = GameService()
   private implicit val system: ActorSystem = ActorSystem()
   private implicit val materializer: ActorMaterializer = ActorMaterializer()
 
@@ -78,29 +76,37 @@ case class Controller(private val desk: DeskInterface,
       controllerState = ControllerState.INSERTING_NAMES)
 
 
-  override def moveTile(tile: TileI, to: TileI): ControllerI = copy(
-    desk = gameService.moveTile(desk, tile, to),
-    answer = MOVED_TILE,
-    state = P_TURN,
-    undoMgr = undoMgr.putOnStack(desk)
-  )
+  override def moveTile(tile: TileI, to: TileI): ControllerI = {
+    sendRequest(
+      formerDesk = fileIO.deskToJson(desk)
+        .+("from", Json.toJson(tile.toString))
+        .+("to", Json.toJson(to.toString)),
+      url = URL_GAME + "moveTile",
+      answerState = MOVED_TILE,
+      answerStateWrong = COULD_NOT_PARSE,
+      controllerState = ControllerState.P_TURN)
+    //todo undoMgr = undoMgr.putOnStack(desk)
+  }
 
-  override def layDownTile(tile: TileI): ControllerI = copy(
-    desk = gameService.putTileDown(desk, tile),
-    answer = PUT_TILE_DOWN,
-    state = P_TURN,
-    undoMgr = undoMgr.putOnStack(desk)
-  )
+  override def layDownTile(tile: TileI): ControllerI = {
+    sendRequest(
+      formerDesk = fileIO.deskToJson(desk).+("tile", Json.toJson(tile.toString)),
+      url = URL_GAME + "putTileDown",
+      answerState = PUT_TILE_DOWN,
+      answerStateWrong = COULD_NOT_PARSE,
+      controllerState = ControllerState.P_TURN)
+    //todo  undoMgr = undoMgr.putOnStack(desk)
+  }
 
   override def currentPlayerName: String =
-    playerService.currentPlayerName(desk)
+    desk.getCurrentPlayer.name
 
   // Views
   override def viewOfTable: Set[SortedSet[TileI]] =
-    gameService.tableView(desk)
+    desk.tableView
 
   override def viewOfBoard: SortedSet[TileI] =
-    gameService.boardView(desk)
+    desk.boardView
 
   //UndoManager
 
@@ -123,7 +129,7 @@ case class Controller(private val desk: DeskInterface,
 
   override def loadFile(): ControllerI = fileIO.load match {
     case Some(desk) => copy(desk, answer = LOADED_FILE, state = P_TURN)
-    case None => copy(desk = gameService.createDefaultTable(12), answer = CREATED_DESK, state = INSERTING_NAMES)
+    case None => createDesk(12)
   }
 
   override def toJson: JsObject = Json.obj("state" -> state, "answer" -> answer, "desk" -> fileIO.toJson(desk))
