@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="rummymodel_2.12">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/rummymodel_2.12.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

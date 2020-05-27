@@ -1,0 +1,1100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="rummy:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e20cf935-9ebe-482f-b6bd-030f5a3173eb" name="Default Changelist" comment="Added killing possibility of akka">
+      <change beforePath="$PROJECT_DIR$/../.scalafmt.conf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.travis.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControllerModule/src/main/scala/Controller.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControllerModule/src/main/scala/ControllerInterface.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControllerModule/src/main/scala/States.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControllerModule/src/main/scala/UndoManager.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControllerModule/src/test/scala/ControllerSpec.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ControllerModule/src/test/scala/UndoManagerSpec.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GameModule/lib/rummymodel_2.12-0.1-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GameModule/lib/rummymodel_2.12-0.1-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GameModule/lib/rummymodel_2.12-0.1.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GameModule/lib/rummymodel_2.12-0.1.pom" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GameModule/src/main/scala/GameService.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GameModule/src/test/scala/GameServiceTest.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainModule/src/main/scala/Akka.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainModule/src/main/scala/Gui.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainModule/src/main/scala/Observer.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainModule/src/main/scala/Rummy.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainModule/src/main/scala/Tui.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainModule/src/main/scala/UIConnector.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainModule/src/main/scala/UIInterface.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainModule/src/test/scala/AkkaTest.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PlayerModule/lib/rummymodel_2.12-0.1-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PlayerModule/lib/rummymodel_2.12-0.1-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PlayerModule/lib/rummymodel_2.12-0.1.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PlayerModule/lib/rummymodel_2.12-0.1.pom" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PlayerModule/src/main/scala/PlayerService.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PlayerModule/src/test/scala/PlayerSpec.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build.sbt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project/build.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project/plugins.sbt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tut.sh" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$USER_HOME$/Documents">
+      <ProjectState />
+    </projectState>
+    <projectState path="$USER_HOME$/Documents/rummy-player-service">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/playermodule">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/rummy-player-service">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/../rummy-model">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/../rummy-player-service">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="SBT">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Scala Trait" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="SA_microservice_1_julian" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="se5uco8o" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1TAHBDW8iGRyKoJekimZK7xpfMY" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Markdown" />
+    <property name="jdk.selected.PYTHON_MODULE" value="Python 3.7" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.13476562" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Scala" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/PlayerModule/lib" />
+      <recent name="$PROJECT_DIR$/GameModule/lib" />
+      <recent name="$PROJECT_DIR$/GameModule/src/test/scala" />
+      <recent name="$PROJECT_DIR$/PlayerModule" />
+      <recent name="$PROJECT_DIR$/MainModule" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/GameModule/lib" />
+      <recent name="$PROJECT_DIR$/MainModule/src/main/scala" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Rummy">
+    <configuration default="true" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
+      <setting name="replType" value="NREPL" />
+      <setting name="execution" value="LEININGEN" />
+      <module name="" />
+      <setting name="jvmArgs" value="" />
+      <setting name="parameters" value="" />
+      <setting name="workingDir" value="" />
+      <setting name="profiles" value="" />
+      <setting name="aliases" value="" />
+      <setting name="fixLineNumbers" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="ClojureREPL" factoryName="Remote" activateToolWindowBeforeRun="false">
+      <setting name="host" value="" />
+      <setting name="port" value="0" />
+      <setting name="replType" value="SOCKET" />
+      <setting name="configType" value="SPECIFY" />
+      <setting name="fixLineNumbers" value="false" />
+      <module name="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Rummy" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="Rummy" />
+      <module name="MainModule" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="DjangoTestsConfigurationType">
+      <module name="rummy-game" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="TARGET" value="" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="rummy-game" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="rummy-game" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
+      <module name="rummy-game" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PyLettuceRunConfigurationType" factoryName="Lettuce">
+      <module name="rummy-game" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="rummy-game" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Python.FlaskServer">
+      <module name="rummy-game" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="AkkaTest.Main service when creating a game should return the game&#10;Main service when creating a game should when accessing the player route" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="MainModule" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Test name" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="shortenClasspath" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="AkkaTest" />
+      <option name="testName" value="Main service when creating a game should return the game&#10;Main service when creating a game should when accessing the player route" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BSP.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AkkaTest.Main service when creating a game should return the game&#10;Main service when creating a game should when accessing the player route&#10;Main service when creating a game should return a MethodNotAllowed error for PUT requests to the root path" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="MainModule" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Test name" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="shortenClasspath" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="AkkaTest" />
+      <option name="testName" value="Main service when creating a game should return the game&#10;Main service when creating a game should when accessing the player route&#10;Main service when creating a game should return a MethodNotAllowed error for PUT requests to the root path" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BSP.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AkkaTest.Main service when creating a game when return the game&#10;Main service when state should return the state&#10;Main service when player route accessing should playerinput not finished" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="MainModule" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Test name" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="shortenClasspath" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="AkkaTest" />
+      <option name="testName" value="Main service when creating a game when return the game&#10;Main service when state should return the state&#10;Main service when player route accessing should playerinput not finished" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BSP.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AkkaTest.Main service when player route accessing should player input not finished" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="MainModule" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Test name" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="shortenClasspath" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="AkkaTest" />
+      <option name="testName" value="Main service when player route accessing should player input not finished" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BSP.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ScalaTestRunConfiguration" factoryName="ScalaTest" show_console_on_std_err="false" show_console_on_std_out="false">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Class" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="shortenClasspath" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BSP.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="rummy-game" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <module name="rummy-game" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <module name="rummy-game" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Rummy" />
+        <item itemvalue="ScalaTest.AkkaTest.Main service when player route accessing should player input not finished" />
+        <item itemvalue="ScalaTest.AkkaTest.Main service when creating a game when return the game&#10;Main service when state should return the state&#10;Main service when player route accessing should playerinput not finished" />
+        <item itemvalue="ScalaTest.AkkaTest.Main service when creating a game should return the game&#10;Main service when creating a game should when accessing the player route" />
+        <item itemvalue="ScalaTest.AkkaTest.Main service when creating a game should return the game&#10;Main service when creating a game should when accessing the player route&#10;Main service when creating a game should return a MethodNotAllowed error for PUT requests to the root path" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SuggestScalaFmt">
+    <option name="enableForCurrentProject" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e20cf935-9ebe-482f-b6bd-030f5a3173eb" name="Default Changelist" comment="" />
+      <created>1572895841309</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1572895841309</updated>
+      <workItem from="1572895842630" duration="111000" />
+      <workItem from="1572895997019" duration="1244000" />
+      <workItem from="1572897263663" duration="5755000" />
+      <workItem from="1573848791571" duration="754000" />
+      <workItem from="1573849556692" duration="2163000" />
+      <workItem from="1574430922481" duration="8000" />
+      <workItem from="1576369490229" duration="167000" />
+      <workItem from="1576494582153" duration="947000" />
+      <workItem from="1576495820994" duration="395000" />
+      <workItem from="1578253336030" duration="1145000" />
+      <workItem from="1579071631232" duration="1428000" />
+      <workItem from="1579390019898" duration="2001000" />
+      <workItem from="1579533831892" duration="827000" />
+      <workItem from="1579535568560" duration="1840000" />
+      <workItem from="1579542617011" duration="184000" />
+      <workItem from="1588101669040" duration="8222000" />
+      <workItem from="1588144171613" duration="38084000" />
+      <workItem from="1588227294135" duration="4412000" />
+      <workItem from="1588431854244" duration="1487000" />
+      <workItem from="1588578820672" duration="3203000" />
+      <workItem from="1588582537109" duration="2679000" />
+      <workItem from="1588610348233" duration="8876000" />
+      <workItem from="1588667963272" duration="27000" />
+      <workItem from="1588673131305" duration="1449000" />
+      <workItem from="1588748265680" duration="455000" />
+      <workItem from="1588749194727" duration="2545000" />
+      <workItem from="1589185866081" duration="2422000" />
+      <workItem from="1589355182316" duration="3799000" />
+      <workItem from="1589362588164" duration="5000" />
+      <workItem from="1589385456340" duration="1000" />
+      <workItem from="1589385492280" duration="2151000" />
+      <workItem from="1589388124844" duration="12096000" />
+      <workItem from="1589437667053" duration="116000" />
+      <workItem from="1589449823431" duration="23000" />
+      <workItem from="1589454797743" duration="25000" />
+      <workItem from="1589485806921" duration="4048000" />
+      <workItem from="1589489903030" duration="9605000" />
+      <workItem from="1589548371829" duration="2520000" />
+      <workItem from="1589551537889" duration="13000" />
+      <workItem from="1589648363165" duration="83000" />
+      <workItem from="1589709058794" duration="7103000" />
+      <workItem from="1589803912927" duration="1375000" />
+      <workItem from="1589806568988" duration="82000" />
+      <workItem from="1589810180185" duration="823000" />
+      <workItem from="1589901171901" duration="1487000" />
+      <workItem from="1589920098820" duration="4420000" />
+      <workItem from="1589930561638" duration="100000" />
+      <workItem from="1589960056512" duration="2529000" />
+      <workItem from="1589962665542" duration="97000" />
+      <workItem from="1590053758890" duration="2049000" />
+      <workItem from="1590055854210" duration="2430000" />
+      <workItem from="1590335327962" duration="132000" />
+      <workItem from="1590400568242" duration="463000" />
+      <workItem from="1590402348164" duration="8814000" />
+      <workItem from="1590414436757" duration="7000" />
+      <workItem from="1590415698113" duration="407000" />
+      <workItem from="1590505044505" duration="2981000" />
+      <workItem from="1590559554375" duration="7078000" />
+      <workItem from="1590570569813" duration="263000" />
+      <workItem from="1590570839689" duration="554000" />
+    </task>
+    <task id="LOCAL-00001" summary="- small bugfixes">
+      <created>1572910704774</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1572910704774</updated>
+    </task>
+    <task id="LOCAL-00002" summary="- small bugfixes">
+      <created>1579542699110</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1579542699110</updated>
+    </task>
+    <task id="LOCAL-00003" summary="- performance increases and added tests">
+      <created>1588109836269</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1588109836269</updated>
+    </task>
+    <task id="LOCAL-00004" summary="- small reading improvements">
+      <created>1588144423762</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1588144423762</updated>
+    </task>
+    <task id="LOCAL-00005" summary="removed var">
+      <created>1588144877200</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1588144877200</updated>
+    </task>
+    <task id="LOCAL-00006" summary="removed null">
+      <created>1588144958717</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1588144958717</updated>
+    </task>
+    <task id="LOCAL-00007" summary="removed var">
+      <created>1588145351439</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1588145351439</updated>
+    </task>
+    <task id="LOCAL-00008" summary="replaced stirng concatenation with nicer way">
+      <created>1588145549481</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1588145549481</updated>
+    </task>
+    <task id="LOCAL-00009" summary="small refactoring of tile class">
+      <created>1588147215139</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1588147215139</updated>
+    </task>
+    <task id="LOCAL-00010" summary="changed classes to more scala-esque style">
+      <created>1588188156724</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1588188156724</updated>
+    </task>
+    <task id="LOCAL-00011" summary="removed unnecessary vals">
+      <created>1588188334783</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1588188334783</updated>
+    </task>
+    <task id="LOCAL-00012" summary="small code improvements to more scala-esque way">
+      <created>1588188913171</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1588188913171</updated>
+    </task>
+    <task id="LOCAL-00013" summary="small refactoring, so that fileIo returns the saved desk">
+      <created>1588189217193</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1588189217193</updated>
+    </task>
+    <task id="LOCAL-00014" summary="make Commands more scalaesque">
+      <created>1588198329001</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1588198329001</updated>
+    </task>
+    <task id="LOCAL-00015" summary="small Controller change to make it more scala-esque">
+      <created>1588198557649</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1588198557649</updated>
+    </task>
+    <task id="LOCAL-00016" summary="bugfix nameCommand">
+      <created>1588202323618</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1588202323618</updated>
+    </task>
+    <task id="LOCAL-00017" summary="refactoring and replacing of unnecessary stuff">
+      <created>1588232402043</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1588232402043</updated>
+    </task>
+    <task id="LOCAL-00018" summary="fixing table contains method">
+      <created>1588581935150</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1588581935150</updated>
+    </task>
+    <task id="LOCAL-00019" summary="small test beautifying">
+      <created>1588581954237</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1588581954237</updated>
+    </task>
+    <task id="LOCAL-00020" summary="added equals method, because automatic created wont work as expected">
+      <created>1588581972960</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1588581972960</updated>
+    </task>
+    <task id="LOCAL-00021" summary="added todo comemnt to change back desk.checkTable to correct implementation&#10;&#10;fixed test">
+      <created>1588584240602</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1588584240602</updated>
+    </task>
+    <task id="LOCAL-00022" summary="changed some vars to vals, fixed tests and made desk methods more scalaesque">
+      <created>1588630138749</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1588630138749</updated>
+    </task>
+    <task id="LOCAL-00023" summary="code format and cleanup">
+      <created>1588630923485</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1588630923485</updated>
+    </task>
+    <task id="LOCAL-00024" summary="fixed small bug">
+      <created>1588631188442</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1588631188442</updated>
+    </task>
+    <task id="LOCAL-00025" summary="fixed small bug">
+      <created>1588631809636</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1588631809636</updated>
+    </task>
+    <task id="LOCAL-00026" summary="replaced try catch and small code cleanups">
+      <created>1589187109471</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1589187109471</updated>
+    </task>
+    <task id="LOCAL-00027" summary="small UI changes">
+      <created>1589355382905</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1589355382905</updated>
+    </task>
+    <task id="LOCAL-00028" summary="modularised">
+      <created>1589398573164</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1589398573164</updated>
+    </task>
+    <task id="LOCAL-00029" summary="added UI folder for main module">
+      <created>1589398630717</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1589398630717</updated>
+    </task>
+    <task id="LOCAL-00030" summary="refactored and imported stuff from library">
+      <created>1589399008443</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1589399008443</updated>
+    </task>
+    <task id="LOCAL-00031" summary="added todo in readme">
+      <created>1589399594446</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1589399594446</updated>
+    </task>
+    <task id="LOCAL-00032" summary="refactored controller into playermodule and game module. Created nice controller interface on which tui and Gui can work on.">
+      <created>1589549193840</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1589549193840</updated>
+    </task>
+    <task id="LOCAL-00033" summary="added files that are idea independant">
+      <created>1589550370622</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1589550370622</updated>
+    </task>
+    <task id="LOCAL-00034" summary="removed template tests classes and formated code">
+      <created>1589709311897</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1589709311897</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Added test for game service">
+      <created>1589721125234</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1589721125234</updated>
+    </task>
+    <task id="LOCAL-00036" summary="added observer to update tui and gui again">
+      <created>1589722581814</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1589722581814</updated>
+    </task>
+    <task id="LOCAL-00037" summary="added player spec">
+      <created>1589902554211</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1589902554211</updated>
+    </task>
+    <task id="LOCAL-00038" summary="added new lib">
+      <created>1589960136361</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1589960136361</updated>
+    </task>
+    <task id="LOCAL-00039" summary="init akka">
+      <created>1590054292113</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1590054292113</updated>
+    </task>
+    <task id="LOCAL-00040" summary="added player akka">
+      <created>1590058526902</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1590058526902</updated>
+    </task>
+    <task id="LOCAL-00041" summary="added todo for robin">
+      <created>1590335429330</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1590335429331</updated>
+    </task>
+    <task id="LOCAL-00042" summary="reformated akka and removed overriding methods in ui interface">
+      <created>1590405097694</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1590405097694</updated>
+    </task>
+    <task id="LOCAL-00043" summary="reformated akka player">
+      <created>1590406107441</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1590406107441</updated>
+    </task>
+    <task id="LOCAL-00044" summary="moved description of state to state itself">
+      <created>1590407955953</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1590407955953</updated>
+    </task>
+    <task id="LOCAL-00045" summary="reformatting">
+      <created>1590413040069</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1590413040069</updated>
+    </task>
+    <task id="LOCAL-00046" summary="added akka test">
+      <created>1590517872308</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1590517872308</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Added killing possibility of akka">
+      <created>1590560021717</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1590560021717</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <option name="RELOAD_CONTEXT" value="false" />
+    <MESSAGE value="changed some vars to vals, fixed tests and made desk methods more scalaesque" />
+    <MESSAGE value="code format and cleanup" />
+    <MESSAGE value="fixed small bug" />
+    <MESSAGE value="replaced try catch and small code cleanups" />
+    <MESSAGE value="small UI changes" />
+    <MESSAGE value="modularised" />
+    <MESSAGE value="added UI folder for main module" />
+    <MESSAGE value="refactored and imported stuff from library" />
+    <MESSAGE value="added todo in readme" />
+    <MESSAGE value="refactored controller into playermodule and game module. Created nice controller interface on which tui and Gui can work on." />
+    <MESSAGE value="added files that are idea independant" />
+    <MESSAGE value="removed template tests classes and formated code" />
+    <MESSAGE value="Added test for game service" />
+    <MESSAGE value="added observer to update tui and gui again" />
+    <MESSAGE value="added player spec" />
+    <MESSAGE value="added new lib" />
+    <MESSAGE value="init akka" />
+    <MESSAGE value="added player akka" />
+    <MESSAGE value="added todo for robin" />
+    <MESSAGE value="reformated akka and removed overriding methods in ui interface" />
+    <MESSAGE value="reformated akka player" />
+    <MESSAGE value="moved description of state to state itself" />
+    <MESSAGE value="reformatting" />
+    <MESSAGE value="added akka test" />
+    <MESSAGE value="Added killing possibility of akka" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added killing possibility of akka" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="440" y="184" key="#Plugins" timestamp="1589387369725">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="440" y="184" key="#Plugins/0.23.1680.1027@0.23.1680.1027" timestamp="1589387369725" />
+    <state x="328" y="118" key="#Project_Structure" timestamp="1590570638049">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="328" y="118" key="#Project_Structure/0.23.1680.1027@0.23.1680.1027" timestamp="1590570638049" />
+    <state x="578" y="309" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog" timestamp="1590562599987">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="578" y="309" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1590562599987" />
+    <state x="304" y="198" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589810271604">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="304" y="198" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1589810271604" />
+    <state x="100" y="123" width="1480" height="827" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog" timestamp="1590517408322">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="100" y="123" width="1480" height="827" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1590517408322" />
+    <state x="575" y="458" key="#com.intellij.framework.addSupport.AddSupportForSingleFrameworkDialog" timestamp="1589485884415">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="575" y="458" key="#com.intellij.framework.addSupport.AddSupportForSingleFrameworkDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1589485884415" />
+    <state x="849" y="194" key="#com.intellij.ide.util.MemberChooser" timestamp="1590054046452">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="849" y="194" key="#com.intellij.ide.util.MemberChooser/0.23.1680.1027@0.23.1680.1027" timestamp="1590054046452" />
+    <state x="456" y="232" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1590570877096">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="456" y="232" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1590570877096" />
+    <state x="319" y="242" width="685" height="598" key="#com.intellij.openapi.roots.ui.configuration.libraryEditor.LibraryEditorDialog" timestamp="1589929325332">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="319" y="242" width="685" height="598" key="#com.intellij.openapi.roots.ui.configuration.libraryEditor.LibraryEditorDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1589929325332" />
+    <state x="528" y="279" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1588622635629">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="528" y="279" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1588622635629" />
+    <state x="606" y="408" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1589397798085">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="606" y="408" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.23.1680.1027@0.23.1680.1027" timestamp="1589397798085" />
+    <state x="545" y="193" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1588156864681">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="545" y="193" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1588156864681" />
+    <state x="219" y="303" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog" timestamp="1589396462647">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="219" y="303" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1589396462647" />
+    <state x="336" y="115" width="1344" height="821" key="DiffContextDialog" timestamp="1590054319170">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="336" y="115" width="1344" height="821" key="DiffContextDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1590054319170" />
+    <state width="1638" height="245" key="GridCell.Tab.0.bottom" timestamp="1590570405401">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state width="1638" height="245" key="GridCell.Tab.0.bottom/0.23.1680.1027@0.23.1680.1027" timestamp="1590570405401" />
+    <state width="1638" height="245" key="GridCell.Tab.0.center" timestamp="1590570405400">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state width="1638" height="245" key="GridCell.Tab.0.center/0.23.1680.1027@0.23.1680.1027" timestamp="1590570405400" />
+    <state width="1638" height="245" key="GridCell.Tab.0.left" timestamp="1590570405400">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state width="1638" height="245" key="GridCell.Tab.0.left/0.23.1680.1027@0.23.1680.1027" timestamp="1590570405400" />
+    <state width="1638" height="245" key="GridCell.Tab.0.right" timestamp="1590570405400">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state width="1638" height="245" key="GridCell.Tab.0.right/0.23.1680.1027@0.23.1680.1027" timestamp="1590570405400" />
+    <state width="1638" height="355" key="GridCell.Tab.1.bottom" timestamp="1588631815672">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state width="1638" height="355" key="GridCell.Tab.1.bottom/0.23.1680.1027@0.23.1680.1027" timestamp="1588631815672" />
+    <state width="1638" height="355" key="GridCell.Tab.1.center" timestamp="1588631815672">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state width="1638" height="355" key="GridCell.Tab.1.center/0.23.1680.1027@0.23.1680.1027" timestamp="1588631815672" />
+    <state width="1638" height="355" key="GridCell.Tab.1.left" timestamp="1588631815671">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state width="1638" height="355" key="GridCell.Tab.1.left/0.23.1680.1027@0.23.1680.1027" timestamp="1588631815671" />
+    <state width="1638" height="355" key="GridCell.Tab.1.right" timestamp="1588631815672">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state width="1638" height="355" key="GridCell.Tab.1.right/0.23.1680.1027@0.23.1680.1027" timestamp="1588631815672" />
+    <state x="462" y="246" width="734" height="503" key="NewModule_or_Project.wizard" timestamp="1590571242607">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="462" y="246" width="734" height="503" key="NewModule_or_Project.wizard/0.23.1680.1027@0.23.1680.1027" timestamp="1590571242607" />
+    <state x="633" y="246" key="RollbackChangesDialog" timestamp="1590054320412">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="633" y="246" key="RollbackChangesDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1590054320412" />
+    <state x="208" y="105" width="1074" height="837" key="SettingsEditor" timestamp="1590571345068">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="208" y="105" width="1074" height="837" key="SettingsEditor/0.23.1680.1027@0.23.1680.1027" timestamp="1590571345068" />
+    <state x="440" y="276" key="Vcs.Push.Dialog.v2" timestamp="1590562451383">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="440" y="276" key="Vcs.Push.Dialog.v2/0.23.1680.1027@0.23.1680.1027" timestamp="1590562451383" />
+    <state x="667" y="277" key="VcsDiffUtil.ChangesDialog" timestamp="1588579348992">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="667" y="277" key="VcsDiffUtil.ChangesDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1588579348992" />
+    <state x="463" y="154" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1590405801941">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="463" y="154" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.23.1680.1027@0.23.1680.1027" timestamp="1590405801941" />
+    <state x="628" y="457" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1590402749566">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="628" y="457" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1680.1027@0.23.1680.1027" timestamp="1590402749565" />
+    <state x="201" y="277" width="788" height="584" key="find.popup" timestamp="1590408015766">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="201" y="277" width="788" height="584" key="find.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1590408015766" />
+    <state x="204" y="442" key="git4idea.ui.GitStashDialog" timestamp="1590564777609">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="204" y="442" key="git4idea.ui.GitStashDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1590564777609" />
+    <state width="600" height="428" key="javadoc.popup" timestamp="1588749341673">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state width="600" height="428" key="javadoc.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1588749341673" />
+    <state x="215" y="225" width="1291" height="629" key="new project wizard" timestamp="1590571324570">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="215" y="225" width="1291" height="629" key="new project wizard/0.23.1680.1027@0.23.1680.1027" timestamp="1590571324570" />
+    <state x="505" y="250" width="670" height="676" key="search.everywhere.popup" timestamp="1590559991347">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="505" y="250" width="670" height="676" key="search.everywhere.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1590559991347" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/src/main/scala/de/htwg/se/rummy/model/fileIO/json/FileIO.scala</url>
+          <line>52</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/rummy$TileSpec.ic" NAME="TileSpec Coverage Results" MODIFIED="1588156420553" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/rummy$ScalaTests_in__scala_.ic" NAME="ScalaTests in 'scala' Coverage Results" MODIFIED="1588614474798" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>

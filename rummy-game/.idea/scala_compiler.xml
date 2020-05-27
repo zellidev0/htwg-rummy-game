@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <profile name="sbt 1" modules="rummy_7708">
+      <option name="postfixOps" value="true" />
+    </profile>
+    <profile name="sbt 2" modules="playermodule_332,playermodule_5133,rummy-game_101,rummy-model_3005,rummy-model_7972,rummy-player-service_5467,rummy-player-service_6096,rummy-player-service_7833" />
+    <profile name="sbt 3" modules="ControllerModule,GameModule,MainModule,PlayerModule,common,multi1,multi2,rummy,rummy-game">
+      <option name="postfixOps" value="true" />
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="existentials" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+      </parameters>
+      <plugins>
+        <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/wartremover/wartremover_2.12/2.2.1/wartremover_2.12-2.2.1.jar" />
+      </plugins>
+    </profile>
+  </component>
+</project>
