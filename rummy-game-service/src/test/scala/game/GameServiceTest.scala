@@ -9,7 +9,7 @@
 //  val emptyBoard: Board = Board(SortedSet[TileInterface]())
 //
 //  "A GameService" when {
-//    val gameService = GameController()
+//    val gameService = game.GameController()
 //    "creating an new desk with 1 Player" should {
 //      val desk: DeskInterface = Desk(
 //        List(Player("Mike", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))))),
