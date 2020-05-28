@@ -14,7 +14,7 @@
 //    val mike          = Player("Mike", Board(SortedSet[TileInterface]()))
 //    val desk: DeskInterface = Desk(
 //      List(mike, john),
-//      Set(
+//      Set(k
 //        Tile(1, Color.RED, 0),
 //        Tile(2, Color.RED, 0),
 //        Tile(3, Color.RED, 0),
