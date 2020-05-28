@@ -15,7 +15,7 @@ import play.api.libs.json.Json
 
 import scala.concurrent.ExecutionContextExecutor
 
-object PlayerService {
+case class PlayerService(initAmountOfTiles:Int = 12) {
   private val INTERFACE = "localhost"
   private val PORT = 9002
 
@@ -26,32 +26,32 @@ object PlayerService {
   private val playerController = new PlayerController
   private val fileIo = new FileIOJson()
   private val bindingFuture = Http().bindAndHandle(
-    pathPrefix("players")(switchToNextPath() ~ addPath()),
+    pathPrefix("players")(path("switchToNext")(switchToNextPath()) ~ path("add")(addPath())),
     INTERFACE,
     PORT)
 
   def main(args: Array[String]): Unit = {}
 
-  private[player] def addPath(): Route = path("add")(post(entity(as[String]) { input =>
+  private[player] def addPath(): Route = post(entity(as[String]) { input =>
     val name = checkCorrectName(input)
     val deskOption = fileIo.jsonToDesk(Json.parse(input))
     val response = deskOption match {
       case Some(value) if name.isDefined =>
-        handleCorrect(playerController.addPlayerAndInit(value, name.get.toString(), 12))
+        handleCorrect(playerController.addPlayerAndInit(value, name.get.toString(), initAmountOfTiles))
       case None =>
         handleWrong("Name or desk are not correct")
     }
     complete(response)
-  }))
+  })
 
-  private[player] def switchToNextPath(): Route = path("switchToNext")(post(entity(as[String]) { input =>
+  private[player] def switchToNextPath(): Route = post(entity(as[String]) { input =>
     val deskOption = fileIo.jsonToDesk(Json.parse(input))
     val response = deskOption match {
       case Some(value) => handleCorrect(playerController.switchToNextPlayer(value))
       case None => handleWrong("Desk has wrong format")
     }
     complete(response)
-  }))
+  })
 
   private[player] def checkCorrectName(input: String) =
     Json.parse(input).\("name").toOption
