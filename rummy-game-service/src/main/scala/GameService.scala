@@ -25,22 +25,34 @@ object GameService {
   private val fileIo = new FileIOJson()
   private val gameRoute: Route = pathPrefix("game") {
     path("putTileDown")(post(entity(as[String]) { input =>
+      println("GameService - putTileDown: " + Json.prettyPrint(Json.parse(input)))
       val tile = checkCorrectTile(input, "tile")
-      complete(checkCorrectDesk(input) match {
-        case Some(desk) => handleCorrect(gameController.putTileDown(desk, tile.get))
-        case None => handleWrong()
-      })
+      println("GameService - tile: " + tile)
+      complete(
+        if (tile.isEmpty) {
+          handleWrong("tile not parsable")
+        } else {
+          fileIo.jsonToDesk(Json.parse(input)) match {
+            case Some(desk) =>
+              println("GameService - desk: " + desk)
+              handleCorrect(gameController.putTileDown(desk, tile.get))
+            case None =>
+              handleWrong("desk not parsable")
+          }
+        })
     })) ~
       path("moveTile")(post(entity(as[String]) { input =>
+        println("GameService - putTileDown: " + Json.prettyPrint(Json.parse(input)))
         val from = checkCorrectTile(input, "from")
-        val to = checkCorrectTile(input,"to")
-        complete(checkCorrectDesk(input) match {
+        val to = checkCorrectTile(input, "to")
+        complete(fileIo.jsonToDesk(Json.parse(input)) match {
           case Some(desk) if from.isDefined && to.isDefined =>
-              handleCorrect(gameController.moveTile(desk, from.get, to.get))
+            handleCorrect(gameController.moveTile(desk, from.get, to.get))
           case None => handleWrong()
         })
       })) ~
       path("create")(post(entity(as[String]) { _ =>
+        println("GameService - create: ")
         complete(handleCorrect(gameController.createDefaultTable(12)))
       }))
   }
@@ -49,23 +61,19 @@ object GameService {
 
   def main(args: Array[String]): Unit = {}
 
-  private def checkCorrectDesk(input: String) =
-    Json.parse(input).\("desk").toOption match {
-      case Some(value) => fileIo.jsonToDesk(value)
-      case None => None
-    }
-
-  private def checkCorrectTile(input: String, what:String) =
+  private def checkCorrectTile(input: String, what: String) =
     Json.parse(input).\(what).toOption match {
-      case Some(value) => Tile.stringToTile(value.toString())
+      case Some(value: JsValue) =>
+        println("checkCorrectTile-value", value.as[String], value.as[String].length)
+        Tile.stringToTile(value.as[String])
       case None => None
     }
 
   private def handleCorrect(c: DeskInterface) =
     HttpResponse(OK, entity = fileIo.deskToJson(c).toString())
 
-  private def handleWrong() =
-    HttpResponse(InternalServerError)
+  private def handleWrong(string: String = "") =
+    HttpResponse(InternalServerError, entity = string)
 
   private def kill() =
     bindingFuture.flatMap(_.unbind()).onComplete(_ => system.terminate())
