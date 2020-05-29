@@ -2,8 +2,8 @@
 //import model.deskComp.deskBaseImpl.{Desk, PlayerInterface, TileInterface}
 //import org.scalatest.{Matchers, WordSpec}
 //import rummy.controller.impl.Controller
-//import rummy.AnswerState
-//import rummy.util.{AnswerState, ControllerState}
+//import rummy.rummy.util.AnswerState
+//import rummy.util.{rummy.util.AnswerState, rummy.util.ControllerState}
 //
 //import scala.collection.immutable.SortedSet
 //
@@ -18,7 +18,7 @@
 //      val player4    = Player("Name3", emptyBoard)
 //      val players    = List[PlayerInterface](player1, player2, player3, player4)
 //      val desk       = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
-//      val controller = controller.Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val controller = controller.Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
 //      val cont       = controller.userFinishedPlay()
 //      "Size of Board from player1 should be 2 " in {
 //        cont.viewOfBoard.size should be(2)
@@ -31,7 +31,7 @@
 //      val player4    = Player("Name3", emptyBoard)
 //      val players    = List[PlayerInterface](player1, player2, player3, player4)
 //      val desk       = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
-//      val controller = controller.Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val controller = controller.Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
 //      val contr      = controller.layDownTile(Tile(1, Color.RED, 0))
 //      val contr1     = contr.userFinishedPlay()
 //
@@ -46,11 +46,11 @@
 //      val desk = Desk(players,
 //                      Set(Tile(9, Color.RED, 0), Tile(4, Color.RED, 0), Tile(2, Color.RED, 1)),
 //                      Set[SortedSet[TileInterface]]())
-//      val controller = controller.Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val controller = controller.Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
 //      val contr      = controller.layDownTile(Tile(2, Color.BLUE, 1))
 //      val contr1     = contr.userFinishedPlay()
 //      "user should win " in {
-//        contr1.answer should be(AnswerState.P_WON)
+//        contr1.answer should be(rummy.util.AnswerState.P_WON)
 //      }
 //    }
 //    "user finished play and bag is empty" should {
@@ -59,10 +59,10 @@
 //      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
 //      val players    = List[PlayerInterface](player1, player2)
 //      val desk       = Desk(players, Set(), Set[SortedSet[TileInterface]]())
-//      val controller = new Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val controller = new Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
 //      val contr      = controller.userFinishedPlay()
 //      "bag be empty " in {
-//        contr.answer should be(AnswerState.BAG_IS_EMPTY)
+//        contr.answer should be(rummy.util.AnswerState.BAG_IS_EMPTY)
 //      }
 //    }
 //    "Switch to the next Player" should {
@@ -71,7 +71,7 @@
 //      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
 //      val players    = List[PlayerInterface](player1, player2)
 //      val desk       = Desk(players, Set(), Set[SortedSet[TileInterface]]())
-//      val controller = controller.Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val controller = controller.Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
 //      val contr      = controller.switchToNextPlayer()
 //      "next player should be Name1 " in {
 //        contr.currentPlayerName should be("Name1")
@@ -83,10 +83,10 @@
 //      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
 //      val players    = List[PlayerInterface](player1, player2)
 //      val desk       = Desk(players, Set(), Set[SortedSet[TileInterface]]())
-//      val controller = controller.Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val controller = controller.Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
 //      val contr      = controller.nameInputFinished()
 //      "names should be inserted " in {
-//        contr.answer should be(AnswerState.INSERTING_NAMES_FINISHED)
+//        contr.answer should be(rummy.util.AnswerState.INSERTING_NAMES_FINISHED)
 //      }
 //    }
 //
@@ -96,10 +96,10 @@
 //      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
 //      val players    = List[PlayerInterface](player1, player2)
 //      val desk       = Desk(players, Set(Tile(9, Color.YELLOW, 0), Tile(7, Color.GREEN, 1)), Set[SortedSet[TileInterface]]())
-//      val controller = controller.Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val controller = controller.Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
 //      val contr      = controller.userFinishedPlay()
 //      "User should have taken a tile " in {
-//        contr.answer should be(AnswerState.TOOK_TILE)
+//        contr.answer should be(rummy.util.AnswerState.TOOK_TILE)
 //      }
 //    }
 //    "User moved a tile" should {
@@ -109,12 +109,12 @@
 //      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
 //      val players    = List[PlayerInterface](player1, player2)
 //      val desk       = Desk(players, Set(Tile(9, Color.YELLOW, 0), Tile(7, Color.GREEN, 1)), Set[SortedSet[TileInterface]]())
-//      val controller = controller.Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val controller = controller.Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
 //      val contr      = controller.layDownTile(Tile(3, Color.RED, 0))
 //      val contr1     = contr.layDownTile(Tile(4, Color.RED, 0))
 //      val contr2     = contr1.moveTile(Tile(3, Color.RED, 0), Tile(4, Color.RED, 0))
 //      "User should have taken a tile " in {
-//        contr2.answer should be(AnswerState.MOVED_TILE)
+//        contr2.answer should be(rummy.util.AnswerState.MOVED_TILE)
 //      }
 //    }
 //    "Undo and Redo checking" should {
@@ -124,12 +124,12 @@
 //      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
 //      val players    = List[PlayerInterface](player1, player2)
 //      val desk       = Desk(players, Set(Tile(9, Color.YELLOW, 0), Tile(7, Color.GREEN, 1)), Set[SortedSet[TileInterface]]())
-//      val controller = Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val controller = Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
 //      val contr      = controller.layDownTile(Tile(3, Color.RED, 0))
 //      val contr1     = contr.layDownTile(Tile(4, Color.RED, 0))
 //      val contr2     = contr1.undo()
 //      "Table should just have 1 tile" in {
-//        contr2.answer should be(AnswerState.UNDO)
+//        contr2.answer should be(rummy.util.AnswerState.UNDO)
 //        contr2.viewOfTable.size should be(1)
 //      }
 //    }
@@ -141,13 +141,13 @@
 //      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
 //      val players    = List[PlayerInterface](player1, player2)
 //      val desk       = Desk(players, Set(Tile(9, Color.YELLOW, 0), Tile(7, Color.GREEN, 1)), Set[SortedSet[TileInterface]]())
-//      val controller = controller.Controller(desk, AnswerState.CREATE_DESK, ControllerState.P_TURN)
+//      val controller = controller.Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
 //      val contr      = controller.layDownTile(Tile(3, Color.RED, 0))
 //      val contr1     = contr.layDownTile(Tile(4, Color.RED, 0))
 //      val contr2     = contr1.storeFile()
 //      val contr3     = contr2.loadFile()
 //      "file should be loaded" in {
-//        contr3.answer should be(AnswerState.LOADED_FILE)
+//        contr3.answer should be(rummy.util.AnswerState.LOADED_FILE)
 //      }
 //    }
 //  }
@@ -161,13 +161,13 @@
 ////      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
 ////      val players    = List[PlayerInterface](player1, player2)
 ////      val desk       = Desk(players, Set(Tile(9, Color.YELLOW, 0), Tile(7, Color.GREEN, 1)), Set[SortedSet[TileInterface]]())
-////      val rummy.controller = rummy.controller.impl.Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
+////      val rummy.controller = rummy.controller.impl.Controller(desk, rummy.util.rummy.util.AnswerState.CREATE_DESK, rummy.util.rummy.util.ControllerState.P_TURN)
 ////      val contr      = rummy.controller.layDownTile(Tile(3, Color.RED, 0))
 ////      val contr1     = contr.layDownTile(Tile(4, Color.RED, 0))
 ////      val contr2     = contr1.undo()
 ////      val contr3     = contr2.redo()
 ////      "Table should look like before undo" in {
-////        contr3.answer should be(rummy.util.AnswerState.REDO)
+////        contr3.answer should be(rummy.util.rummy.util.AnswerState.REDO)
 ////        contr3.viewOfTable.size should be(2)
 ////      }
 ////    }
@@ -179,7 +179,7 @@
 ////      val player2    = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
 ////      val players    = List[PlayerInterface](player1, player2)
 ////      val desk       = Desk(players, Set(), Set[SortedSet[TileInterface]]())
-////      val rummy.controller = rummy.controller.impl.Controller(desk, rummy.util.AnswerState.CREATE_DESK, rummy.util.ControllerState.P_TURN)
+////      val rummy.controller = rummy.controller.impl.Controller(desk, rummy.util.rummy.util.AnswerState.CREATE_DESK, rummy.util.rummy.util.ControllerState.P_TURN)
 ////      val contr      = rummy.controller.addPlayerAndInit("Julian", 3)
 ////      "Player should be initialzized" in {
 ////        rummy.controller.currentPlayerName should be("Julian")
@@ -309,14 +309,14 @@
 ////      rummy.controller.addPlayerAndInit("Name1", 12)
 ////      rummy.controller.nameInputFinished()
 ////      "when having not correct amount of players" in {
-////        oldState should be(rummy.util.ControllerState.INSERTING_NAMES)
-////        rummy.controller.currentControllerState should be(rummy.util.ControllerState.INSERTING_NAMES)
+////        oldState should be(rummy.util.rummy.util.ControllerState.INSERTING_NAMES)
+////        rummy.controller.currentControllerState should be(rummy.util.rummy.util.ControllerState.INSERTING_NAMES)
 ////        rummy.controller.addPlayerAndInit("Name2", 12)
 ////        rummy.controller.nameInputFinished()
 ////      }
 ////      "when having correct amount of players" in {
-////        oldState should be(rummy.util.ControllerState.INSERTING_NAMES)
-////        rummy.controller.currentControllerState should be(rummy.util.ControllerState.P_TURN)
+////        oldState should be(rummy.util.rummy.util.ControllerState.INSERTING_NAMES)
+////        rummy.controller.currentControllerState should be(rummy.util.rummy.util.ControllerState.P_TURN)
 ////      }
 ////    }
 ////    "get amount of players" should {
@@ -344,7 +344,7 @@
 ////        rummy.controller.addPlayerAndInit("Name4", 12)
 ////      }
 ////      "be also 4" in {
-////        rummy.controller.currentControllerState should be(rummy.util.ControllerState.INSERTING_NAMES)
+////        rummy.controller.currentControllerState should be(rummy.util.rummy.util.ControllerState.INSERTING_NAMES)
 ////        rummy.controller.addPlayerAndInit("Name5", 12)
 ////      }
 ////    }
