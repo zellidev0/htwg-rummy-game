@@ -17,7 +17,7 @@ import rummy.util.{AnswerState, ControllerState}
 import scala.collection.immutable.SortedSet
 import scala.concurrent.ExecutionContextExecutor
 
-case class Wui() {
+object Wui {
   private val INTERFACE = "localhost"
   private val PORT = 9000
 
@@ -86,6 +86,7 @@ case class Wui() {
 
   private val bindingFuture = Http().bindAndHandle(gameRoute, INTERFACE, PORT)
 
+  def main(args: Array[String]): Unit = {}
   private def unmarshallTile(input: String, what: String): Option[TileInterface] =
     Json.parse(input).\(what).toOption match {
       case Some(answer) => Tile.stringToTile(answer.toString())
