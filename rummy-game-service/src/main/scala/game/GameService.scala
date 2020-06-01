@@ -32,7 +32,7 @@ object GameService {
     INTERFACE,
     PORT)
 
-
+  println("Running GameService on port: " + PORT)
   def main(args: Array[String]): Unit = {}
 
   private[game] def moveTilePath(): Route = post(entity(as[String]) { input =>

@@ -30,6 +30,8 @@ case class PlayerService(initAmountOfTiles:Int = 12) {
     INTERFACE,
     PORT)
 
+  println("Running PlayerService on port: " + PORT)
+
   def main(args: Array[String]): Unit = {}
 
   private[player] def addPath(): Route = post(entity(as[String]) { input =>

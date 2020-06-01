@@ -82,6 +82,8 @@ case class Wui() {
       }))
   }
 
+  println("Running Wui on port: " + PORT)
+
   private val bindingFuture = Http().bindAndHandle(gameRoute, INTERFACE, PORT)
 
   private def unmarshallTile(input: String, what: String): Option[TileInterface] =
