@@ -18,7 +18,7 @@ import scala.collection.immutable.SortedSet
 import scala.concurrent.ExecutionContextExecutor
 
 object Wui {
-  private val INTERFACE = "0.0.0.0"
+  private val INTERFACE = "localhost"
   private val PORT = 9000
 
   private implicit val system: ActorSystem = ActorSystem("my-system")
@@ -27,6 +27,7 @@ object Wui {
 
   private[impl] val gameRoute: Route = pathPrefix("api") {
     path("createDesk")(post {
+      println(s"received post on createDesk")
       complete(
         handleCorrect(Controller(Desk(
           players = List[PlayerInterface](),
@@ -35,6 +36,7 @@ object Wui {
           AnswerState.CREATE_DESK, ControllerState.MENU).createDesk(12)))
     }) ~
       path("nextPlayer")(post(entity(as[String]) { input =>
+      println(s"received post on nextPlayer")
         val json = Json.parse(input)
         val controller = ControllerJson.jsonToController(json)
         complete(
@@ -42,6 +44,7 @@ object Wui {
         )
       })) ~
       path("nameInputFinished")(post(entity(as[String]) { input =>
+        println(s"received post on nameInputFinished")
         val json = Json.parse(input)
         val controller = ControllerJson.jsonToController(json)
         complete(
@@ -49,6 +52,7 @@ object Wui {
         )
       })) ~
       path("addPlayer")(post(entity(as[String]) { input =>
+        println(s"received post on addPlayer")
         val name = unmarshallName(input)
         val json = Json.parse(input)
         val controller = ControllerJson.jsonToController(json)
@@ -57,6 +61,7 @@ object Wui {
         )
       })) ~
       path("userFinishedPlay")(post(entity(as[String]) { input =>
+        println(s"received post on userFinishedPlay")
         val json = Json.parse(input)
         val controller = ControllerJson.jsonToController(json)
         complete(
@@ -64,6 +69,7 @@ object Wui {
         )
       })) ~
       path("moveTile")(post(entity(as[String]) { input =>
+        println(s"received post on moveTile")
         val from = unmarshallTile(input, "from").get
         val to = unmarshallTile(input, "to").get
         val json = Json.parse(input)
@@ -73,6 +79,7 @@ object Wui {
         )
       })) ~
       path("layDownTile")(post(entity(as[String]) { input =>
+        println(s"received post on layDownTile")
         val tile = unmarshallTile(input, "tile").get
         val json = Json.parse(input)
         val controller = ControllerJson.jsonToController(json)
@@ -82,7 +89,7 @@ object Wui {
       }))
   }
 
-  println("Running Wui on port: " + PORT)
+  println(s"Running Wui on port: $PORT with interface $INTERFACE")
 
   private val bindingFuture = Http().bindAndHandle(gameRoute, INTERFACE, PORT)
 
