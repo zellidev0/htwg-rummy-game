@@ -18,7 +18,8 @@ class PlayerServiceTest extends WordSpec with Matchers with ScalatestRouteTest {
     val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))))
     val player2 = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
     val players = List[PlayerInterface](player1, player2)
-    val service = PlayerService(2)
+    val service = PlayerService
+    service.initAmountOfTiles = 2
     val desk: Desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
     "return the new desk with added player" in {
       val body = fileIo.deskToJson(desk).+("name", Json.toJson("mike")).toString()

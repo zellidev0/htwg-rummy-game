@@ -1,3 +1,5 @@
+package player
+
 import model.DeskInterface
 import model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Player, Tile}
 import model.deskComp.deskBaseImpl.{Desk, TileInterface}

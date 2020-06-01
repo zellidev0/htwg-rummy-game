@@ -15,7 +15,8 @@ import play.api.libs.json.Json
 
 import scala.concurrent.ExecutionContextExecutor
 
-case class PlayerService(initAmountOfTiles:Int = 12) {
+object PlayerService {
+  var initAmountOfTiles: Int = 12
   private val INTERFACE = "localhost"
   private val PORT = 9002
 
