@@ -5,14 +5,14 @@ services:
     image: rummy-docker
     ports:
       - "9000:9000"
-    command: (cd ~/htwg-rummy-game/rummy-main-service/src/main/scala/rummy) && sbt run
+    command: bash -c "cd ~/htwg-rummy-game/rummy-main-service && sbt run"
   game:
     image: rummy-docker
     ports:
       - "9001:9001"
-    command: (cd ~/htwg-rummy-game/rummy-game-service/src/main/scala/game) && sbt run
+    command: bash -c "cd ~/htwg-rummy-game/rummy-game-service && sbt run"
   player:
     image: rummy-docker
     ports:
       - "9002:9002"
-    command: (cd ~/htwg-rummy-game/rummy-player-service/src/main/scala/player) && sbt run
+    command: bash -c "cd ~/htwg-rummy-game/rummy-player-service && sbt run"
