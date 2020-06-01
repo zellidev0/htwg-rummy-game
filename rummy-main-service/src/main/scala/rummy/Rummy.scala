@@ -20,7 +20,7 @@ object Rummy {
 
   //  val gui  = new Gui(UIConnector)
   val akka = Wui()
-  var tui = new Tui(UIConnector)
+//  var tui = new Tui(UIConnector)
 
   def main(args: Array[String]): Unit = {
     println("Type <c> to create a new desk or <l> to load a previous game")

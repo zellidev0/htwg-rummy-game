@@ -17,11 +17,12 @@ docker container ls -a
 # save current container state
 ```
 docker commit <containerId> rummy-docker
+
 ```
 
 # next time run docker from rummy
 ```
-docker run -it -rm rummy-docker
+docker run -it --rm rummy-docker
 ```
 
 # export as tar
