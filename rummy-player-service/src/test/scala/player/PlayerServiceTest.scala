@@ -1,6 +1,5 @@
 package player
 
-import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Player, Tile}
 import model.deskComp.deskBaseImpl.{Desk, PlayerInterface, TileInterface}
@@ -27,6 +26,17 @@ class PlayerServiceTest extends WordSpec with Matchers with ScalatestRouteTest {
         println(response.status)
         response.status.intValue() should be(200)
       }
+    }
+    "switch to the next player" in {
+      val body = fileIo.deskToJson(desk).toString()
+      Post().withEntity(body) ~> service.switchToNextPath() ~> check {
+        println(response.status)
+        response.status.intValue() should be(200)
+      }
+    }
+    "check correct name" in {
+      val obj = Json.obj("name" -> "mike")
+      service.checkCorrectName(obj.toString()).isDefined should be(true)
     }
   }
 }
