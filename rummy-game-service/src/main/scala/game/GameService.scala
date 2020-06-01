@@ -28,8 +28,7 @@ object GameService {
   private val bindingFuture = Http().bindAndHandle(pathPrefix("game")(
     path("putTileDown")(putTileDownPath()) ~
       path("moveTile")(moveTilePath()) ~
-      path("create")(createPath())
-  ),
+      path("create")(createPath())),
     INTERFACE,
     PORT)
 
@@ -39,7 +38,7 @@ object GameService {
   private[game] def moveTilePath(): Route = post(entity(as[String]) { input =>
     val from = checkCorrectTile(input, "from")
     val to = checkCorrectTile(input, "to")
-    val deskOption = fileIo.jsonToDesk(Json.parse(input)
+    val deskOption = fileIo.jsonToDesk(Json.parse(input))
     val result = deskOption match {
       case Some(desk) if from.isDefined && to.isDefined =>
         handleCorrect(gameController.moveTile(desk, from.get, to.get))
