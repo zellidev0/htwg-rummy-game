@@ -30,8 +30,8 @@ case class Controller(desk: DeskInterface,
   type DeskI = DeskInterface
   type ControllerI = ControllerInterface
 
-  private val URL_PLAYER = "http://localhost:9002/players/"
-  private val URL_GAME = "http://localhost:9001/game/"
+  private val URL_PLAYER = "http://player:9002/players/"
+  private val URL_GAME = "http://game:9001/game/"
 
   private val fileIO = new FileIOJson()
   private implicit val system: ActorSystem = ActorSystem()

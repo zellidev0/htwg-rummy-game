@@ -1,35 +1,31 @@
 version: '3.4'
-
 services:
   main:
     image: rummy-docker
     ports:
-      - target: 9000 #port inside container
-        published: 9000 # publicly exposed port
-        protocol: tcp
-        mode: host
-      - target: 9001 #port inside container
-        published: 9001 # publicly exposed port
-        protocol: tcp
-        mode: host
-      - target: 9002 #port inside container
-        published: 9002 # publicly exposed port
-        protocol: tcp
-        mode: host
+      - 9000:9000
     command: bash -c "cd ~/htwg-rummy-game/rummy-main-service && sbt run"
+    networks:
+      default:
+        aliases:
+          - main
+    stdin_open:
+      true
   game:
     image: rummy-docker
     ports:
-      - target: 9001 #port inside container
-        published: 9101 # publicly exposed port
-        protocol: tcp
-        mode: host
+      - 9001:9001
+    networks:
+      default:
+        aliases:
+          - game
     command: bash -c "cd ~/htwg-rummy-game/rummy-game-service && sbt run"
   player:
     image: rummy-docker
     ports:
-      - target: 9002 #port inside container
-        published: 9102 # publicly exposed port
-        protocol: tcp
-        mode: host
+      - 9002:9002
+    networks:
+      default:
+        aliases:
+          - player
     command: bash -c "cd ~/htwg-rummy-game/rummy-player-service && sbt run"

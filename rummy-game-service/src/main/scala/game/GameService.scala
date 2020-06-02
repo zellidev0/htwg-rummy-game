@@ -15,7 +15,7 @@ import play.api.libs.json.{JsValue, Json}
 import scala.concurrent.ExecutionContextExecutor
 
 object GameService {
-  private val INTERFACE = "localhost"
+  private val INTERFACE = "0.0.0.0"
   private val PORT = 9001
 
   private implicit val system: ActorSystem = ActorSystem("my-system")

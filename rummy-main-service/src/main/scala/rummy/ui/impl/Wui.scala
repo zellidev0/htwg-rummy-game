@@ -18,7 +18,7 @@ import scala.collection.immutable.SortedSet
 import scala.concurrent.ExecutionContextExecutor
 
 object Wui {
-  private val INTERFACE = "localhost"
+  private val INTERFACE = "0.0.0.0"
   private val PORT = 9000
 
   private implicit val system: ActorSystem = ActorSystem("my-system")

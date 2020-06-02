@@ -17,7 +17,7 @@ import scala.concurrent.ExecutionContextExecutor
 
 object PlayerService {
   var initAmountOfTiles: Int = 12
-  private val INTERFACE = "localhost"
+  private val INTERFACE = "0.0.0.0"
   private val PORT = 9002
 
   private implicit val system: ActorSystem = ActorSystem("my-system")

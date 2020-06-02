@@ -22,7 +22,7 @@ docker commit <containerId> rummy-docker
 
 # next time run docker from rummy
 ```
-docker run -it --rm rummy-docker
+docker run -it --rm -p 9000:9000 rummy-docker
 docker run -it --rm --net=rumnet rummy-docker
 ```
 
@@ -34,4 +34,10 @@ docker export rummy-docker > rummydocker.tar
 # create a network
 ```
 docker network create rumnet
+```
+
+
+# run docker compose (in dir of docker-compose file)
+```
+docker-compose up
 ```
