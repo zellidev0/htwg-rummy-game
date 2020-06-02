@@ -150,9 +150,9 @@ case class Controller(desk: DeskInterface,
 
     val request = HttpRequest(POST, uri = url, entity = formerDesk.toString())
     val response: HttpResponse =
-      Await.result(Http().singleRequest(request), Duration.fromNanos(1000000000))
+      Await.result(Http().singleRequest(request), Duration.fromNanos(20000000000L))
     val result: String =
-      Await.result(Unmarshal(response.entity).to[String], Duration.fromNanos(1000000000))
+      Await.result(Unmarshal(response.entity).to[String], Duration.fromNanos(20000000000L))
 
     println("Parsed ------", Json.parse(result))
 
