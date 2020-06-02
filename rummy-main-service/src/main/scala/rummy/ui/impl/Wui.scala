@@ -93,7 +93,9 @@ object Wui {
 
   private val bindingFuture = Http().bindAndHandle(gameRoute, INTERFACE, PORT)
 
-  def main(args: Array[String]): Unit = {}
+//  def main(args: Array[String]): Unit = {}
+
+
   private def unmarshallTile(input: String, what: String): Option[TileInterface] =
     Json.parse(input).\(what).toOption match {
       case Some(answer) => Tile.stringToTile(answer.toString())

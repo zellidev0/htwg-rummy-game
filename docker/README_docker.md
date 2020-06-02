@@ -22,6 +22,7 @@ docker commit <containerId> rummy-docker
 
 # next time run docker from rummy
 ```
+docker run -it --rm rummy-docker
 docker run -it --rm --net=rumnet rummy-docker
 ```
 
