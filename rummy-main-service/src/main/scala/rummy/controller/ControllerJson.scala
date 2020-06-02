@@ -18,7 +18,7 @@ object ControllerJson {
   } //todo add undomanager
 
   def jsonToController(json: JsValue): ControllerInterface = {
-    val desk = fileIo.jsonToDesk((json \ "desk").get).get
+    val desk = fileIo.jsonToDesk(json).get
     val answer = (json \ "answer").as[String]
     val state = (json \ "state").as[String]
     Controller(desk, AnswerState.from(answer), ControllerState.from(state))

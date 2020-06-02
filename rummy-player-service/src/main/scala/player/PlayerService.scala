@@ -36,6 +36,7 @@ object PlayerService {
   def main(args: Array[String]): Unit = {}
 
   private[player] def addPath(): Route = post(entity(as[String]) { input =>
+    println(s"PlayerService --- add request came in")
     val name = checkCorrectName(input)
     val deskOption = fileIo.jsonToDesk(Json.parse(input))
     val response = deskOption match {
@@ -48,6 +49,7 @@ object PlayerService {
   })
 
   private[player] def switchToNextPath(): Route = post(entity(as[String]) { input =>
+    println(s"PlayerService --- switchToNextPath came in")
     val deskOption = fileIo.jsonToDesk(Json.parse(input))
     val response = deskOption match {
       case Some(value) => handleCorrect(playerController.switchToNextPlayer(value))

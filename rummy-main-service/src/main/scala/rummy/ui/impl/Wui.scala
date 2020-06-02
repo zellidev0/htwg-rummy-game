@@ -57,7 +57,7 @@ object Wui {
         val json = Json.parse(input)
         val controller = ControllerJson.jsonToController(json)
         complete(
-          handleCorrect(controller.addPlayerAndInit(name.get.toString(), 12))
+          handleCorrect(controller.addPlayerAndInit(name, 12))
         )
       })) ~
       path("userFinishedPlay")(post(entity(as[String]) { input =>
@@ -101,7 +101,7 @@ object Wui {
     }
 
   private def unmarshallName(input: String) =
-    Json.parse(input).\("name").toOption
+    (Json.parse(input) \ "answer").as[String]
 
   private def handleCorrect(c: ControllerInterface) =
     HttpResponse(OK, entity = ControllerJson.controllerToJson(c).toString())

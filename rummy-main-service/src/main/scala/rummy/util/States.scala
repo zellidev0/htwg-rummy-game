@@ -34,33 +34,33 @@ object AnswerState extends Enumeration {
 
   def from(state: String): AnswerState.Value = {
     state match {
-      case "CREATE_DESK" => CREATE_DESK
-      case "P_FINISHED" => P_FINISHED
-      case "TABLE_NOT_CORRECT" => TABLE_NOT_CORRECT
-      case "P_WON" => P_WON
-      case "UNDO_TAKE_TILE" => UNDO_TAKE_TILE
-      case "BAG_IS_EMPTY" => BAG_IS_EMPTY
-      case "CANT_MOVE_THIS_TILE" => CANT_MOVE_THIS_TILE
-      case "UNDO_MOVED_TILE" => UNDO_MOVED_TILE
-      case "MOVED_TILE" => MOVED_TILE
-      case "UNDO_LAY_DOWN_TILE" => UNDO_LAY_DOWN_TILE
-      case "ADDED_PLAYER" => ADDED_PLAYER
-      case "PUT_TILE_DOWN" => PUT_TILE_DOWN
-      case "REMOVED_PLAYER" => REMOVED_PLAYER
-      case "INSERTING_NAMES_FINISHED" => INSERTING_NAMES_FINISHED
-      case "STORED_FILE" => STORED_FILE
-      case "ENOUGH_PLAYER" => ENOUGH_PLAYER
-      case "NOT_ENOUGH_PLAYERS" => NOT_ENOUGH_PLAYERS
-      case "COULD_NOT_LOAD_FILE" => COULD_NOT_LOAD_FILE
-      case "LOADED_FILE" => LOADED_FILE
-      case "CREATED_DESK" => CREATED_DESK
-      case "UNDO_MOVED_TILE_NOT_DONE" => UNDO_MOVED_TILE_NOT_DONE
-      case "P_FINISHED_UNDO" => P_FINISHED_UNDO
-      case "TOOK_TILE" => TOOK_TILE
-      case "UNDO" => UNDO
-      case "REDO" => REDO
-      case "SWITCHED_TO_NEXT" => SWITCHED_TO_NEXT
-      case "COULD_NOT_PARSE" => COULD_NOT_PARSE
+      case "Created a desk" => CREATE_DESK
+      case "You are finished." => P_FINISHED
+      case "Table looks not correct, move tiles to match the rules" => TABLE_NOT_CORRECT
+      case "One Player is the winner." => P_WON
+      case "The tile has been put back in the bag" => UNDO_TAKE_TILE
+      case "No more tiles in the bag. You must lay a tile down" => BAG_IS_EMPTY
+      case "You can not move this tile." => CANT_MOVE_THIS_TILE
+      case "You undid the move of a specific tile." => UNDO_MOVED_TILE
+      case "Moved tile if allowed." => MOVED_TILE
+      case "You undid the lay down you took the tile up." => UNDO_LAY_DOWN_TILE
+      case "You added a player." => ADDED_PLAYER
+      case "You put down a tile" => PUT_TILE_DOWN
+      case "You removed the player you inserted." => REMOVED_PLAYER
+      case "You finished inserting the names." => INSERTING_NAMES_FINISHED
+      case "You stored the game in a file" => STORED_FILE
+      case "The Maximum amount of players is set. Type 'f' to finish inserting names" => ENOUGH_PLAYER
+      case "Not enough Players. Add some more." => NOT_ENOUGH_PLAYERS
+      case "Could not load the file. Created a new game instead." => COULD_NOT_LOAD_FILE
+      case "You created a file" => LOADED_FILE
+      case "You started the game by creating a desk" => CREATED_DESK
+      case "Undo the move of the tile unnecessary. Nothing did happen." => UNDO_MOVED_TILE_NOT_DONE
+      case "Its is again your turn. " => P_FINISHED_UNDO
+      case "Auto took a tile" => TOOK_TILE
+      case "Undid the last operation" => UNDO
+      case "Undid the undo operation" => REDO
+      case "Switched to next" => SWITCHED_TO_NEXT
+      case "Could not parse data sent" => COULD_NOT_PARSE
     }
   }
 }

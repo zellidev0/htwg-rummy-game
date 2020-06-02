@@ -36,6 +36,7 @@ object GameService {
   def main(args: Array[String]): Unit = {}
 
   private[game] def moveTilePath(): Route = post(entity(as[String]) { input =>
+    println(s"GameService --- moveTile request came in")
     val from = checkCorrectTile(input, "from")
     val to = checkCorrectTile(input, "to")
     val deskOption = fileIo.jsonToDesk(Json.parse(input))
@@ -48,10 +49,12 @@ object GameService {
   })
 
   private[game] def createPath(): Route = post(entity(as[String]) { _ =>
+    println(s"GameService --- createPath request came in")
     complete(handleCorrect(gameController.createDefaultTable(12)))
   })
 
   private[game] def putTileDownPath(): Route = post(entity(as[String]) { input =>
+    println(s"GameService --- puTileDown request came in")
     val tile = checkCorrectTile(input, "tile")
     val deskOption = fileIo.jsonToDesk(Json.parse(input))
     val result = deskOption match {
