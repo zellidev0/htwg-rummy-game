@@ -16,6 +16,7 @@ import rummy.util.{AnswerState, ControllerState}
 
 import scala.collection.immutable.SortedSet
 import scala.concurrent.ExecutionContextExecutor
+import scala.util.Try
 
 object Wui {
   private val INTERFACE = "0.0.0.0"
@@ -36,64 +37,65 @@ object Wui {
           AnswerState.CREATE_DESK, ControllerState.MENU).createDesk(12)))
     }) ~
       path("nextPlayer")(post(entity(as[String]) { input =>
-      println(s"received post on nextPlayer")
-        val json = Json.parse(input)
-        val controller = ControllerJson.jsonToController(json)
-        complete(
-          handleCorrect(controller.switchToNextPlayer())
-        )
+        println(s"received post on nextPlayer")
+        complete(Try {
+          ControllerJson.jsonToController(Json.parse(input))
+        }.fold(ex => handleWrong("Could not parse body " + ex),
+          controller => handleCorrect(controller.switchToNextPlayer())))
       })) ~
       path("nameInputFinished")(post(entity(as[String]) { input =>
         println(s"received post on nameInputFinished")
-        val json = Json.parse(input)
-        val controller = ControllerJson.jsonToController(json)
-        complete(
-          handleCorrect(controller.nameInputFinished())
-        )
+        complete(Try {
+          ControllerJson.jsonToController(Json.parse(input))
+        }.fold(ex => handleWrong("Could not parse body " + ex),
+          controller => handleCorrect(controller.nameInputFinished())))
       })) ~
       path("addPlayer")(post(entity(as[String]) { input =>
         println(s"received post on addPlayer")
-        val name = unmarshallName(input)
-        val json = Json.parse(input)
-        val controller = ControllerJson.jsonToController(json)
-        complete(
-          handleCorrect(controller.addPlayerAndInit(name, 12))
-        )
+        complete(Try {
+          ControllerJson.jsonToController(Json.parse(input))
+        }.fold(ex => handleWrong("Could not parse body " + ex),
+          controller => {
+            val name = unmarshallName(input)
+            handleCorrect(controller.addPlayerAndInit(name, 12))
+          }))
       })) ~
       path("userFinishedPlay")(post(entity(as[String]) { input =>
         println(s"received post on userFinishedPlay")
-        val json = Json.parse(input)
-        val controller = ControllerJson.jsonToController(json)
-        complete(
-          handleCorrect(controller.userFinishedPlay())
-        )
+        complete(Try {
+          ControllerJson.jsonToController(Json.parse(input))
+        }.fold(ex => handleWrong("Could not parse body " + ex),
+          controller => handleCorrect(controller.userFinishedPlay())))
       })) ~
       path("moveTile")(post(entity(as[String]) { input =>
         println(s"received post on moveTile")
-        val from = unmarshallTile(input, "from").get
-        val to = unmarshallTile(input, "to").get
-        val json = Json.parse(input)
-        val controller = ControllerJson.jsonToController(json)
-        complete(
-          handleCorrect(controller.moveTile(from, to))
-        )
+        complete(Try {
+          ControllerJson.jsonToController(Json.parse(input))
+        }.fold(ex => handleWrong("Could not parse body " + ex),
+          controller => {
+            val from = unmarshallTile(input, "from").get
+            val to = unmarshallTile(input, "to").get
+            val name = unmarshallName(input)
+            handleCorrect(controller.moveTile(from, to))
+          }))
       })) ~
       path("layDownTile")(post(entity(as[String]) { input =>
         println(s"received post on layDownTile")
-        val tile = unmarshallTile(input, "tile").get
-        val json = Json.parse(input)
-        val controller = ControllerJson.jsonToController(json)
-        complete(
-          handleCorrect(controller.layDownTile(tile))
-        )
+        complete(Try {
+          ControllerJson.jsonToController(Json.parse(input))
+        }.fold(ex => handleWrong("Could not parse body " + ex),
+          controller => {
+            val tile = unmarshallTile(input, "tile").get
+            val json = Json.parse(input)
+            handleCorrect(controller.layDownTile(tile))
+          }))
       }))
   }
 
   println(s"Running Wui on port: $PORT with interface $INTERFACE")
-
   private val bindingFuture = Http().bindAndHandle(gameRoute, INTERFACE, PORT)
 
-//  def main(args: Array[String]): Unit = {}
+  //  def main(args: Array[String]): Unit = {}
 
 
   private def unmarshallTile(input: String, what: String): Option[TileInterface] =
