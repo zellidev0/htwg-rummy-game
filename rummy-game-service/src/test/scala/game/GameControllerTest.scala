@@ -1,9 +1,9 @@
 package game
 
 import model.DeskInterface
-import model.deskComp.deskBaseImpl.deskImpl.{ Board, Color, Player, Tile }
-import model.deskComp.deskBaseImpl.{ Desk, PlayerInterface, TileInterface }
-import org.scalatest.{ Matchers, WordSpec }
+import model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Player, Tile}
+import model.deskComp.deskBaseImpl.{Desk, PlayerInterface, TileInterface}
+import org.scalatest.{Matchers, WordSpec}
 
 import scala.collection.immutable.SortedSet
 
@@ -11,7 +11,7 @@ class GameControllerTest extends WordSpec with Matchers {
   val emptyBoard: Board = Board(SortedSet[TileInterface]())
 
   "A GameService" when {
-    val gameService = game.GameController()
+    val gameService = GameController()
     "creating an new desk with 1 Player" should {
       val desk: DeskInterface = Desk(
         List(Player("Mike", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0), Tile(1, Color.RED, 0))))),

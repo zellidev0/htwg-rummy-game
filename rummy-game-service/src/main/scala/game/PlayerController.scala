@@ -1,4 +1,4 @@
-package player
+package game
 
 import model.DeskInterface
 import model.deskComp.deskBaseImpl.deskImpl.{Board, Player}

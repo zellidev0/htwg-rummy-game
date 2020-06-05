@@ -1,4 +1,4 @@
-package database
+package database.relational
 
 import model.deskComp.deskBaseImpl.PlayerInterface
 import model.deskComp.deskBaseImpl.deskImpl.{Board, Player}
@@ -9,6 +9,11 @@ import scala.concurrent.duration.Duration
 import slick.driver.H2Driver.api._
 
 import scala.collection.immutable.SortedSet
+//todo add when intellij changes imports
+//import scala.concurrent.Await
+//import scala.concurrent.ExecutionContext.Implicits.global
+//import scala.concurrent.duration.Duration
+//import slick.driver.H2Driver.api._
 
 object CaseClassMapping {
 
@@ -74,3 +79,5 @@ class Players(tag: Tag) extends Table[DbPlayer](tag, "USERS") {
   // column values to / from a User
   def * = (name, id.?) <> (DbPlayer.tupled, DbPlayer.unapply)
 }
+
+

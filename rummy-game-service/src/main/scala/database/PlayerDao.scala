@@ -1,4 +1,4 @@
-package player.database
+package database
 
 import model.DeskInterface
 import model.deskComp.deskBaseImpl.PlayerInterface

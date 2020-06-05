@@ -1,10 +1,9 @@
-package player
+package game
 
 import model.DeskInterface
 import model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Player, Tile}
 import model.deskComp.deskBaseImpl.{Desk, TileInterface}
 import org.scalatest.{Matchers, WordSpec}
-import player.{PlayerController, PlayerService}
 
 import scala.collection.immutable.SortedSet
 

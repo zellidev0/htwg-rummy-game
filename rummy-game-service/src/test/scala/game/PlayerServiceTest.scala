@@ -1,4 +1,4 @@
-package player
+package game
 
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import model.deskComp.deskBaseImpl.deskImpl.{Board, Color, Player, Tile}
@@ -18,7 +18,7 @@ class PlayerServiceTest extends WordSpec with Matchers with ScalatestRouteTest {
     val player1 = Player("Name0", Board(SortedSet[TileInterface](Tile(1, Color.RED, 0))))
     val player2 = Player("Name1", Board(SortedSet[TileInterface](Tile(2, Color.RED, 0))))
     val players = List[PlayerInterface](player1, player2)
-    val service = PlayerService
+    val service = GameService
     service.initAmountOfTiles = 2
     val desk: Desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
     "return the new desk with added player" in {

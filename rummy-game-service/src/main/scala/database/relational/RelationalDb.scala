@@ -1,10 +1,8 @@
-package player.database.relational
+package database.relational
 
-
-import database.CaseClassMapping
+import database.PlayerDao
 import model.DeskInterface
 import model.deskComp.deskBaseImpl.PlayerInterface
-import player.database.PlayerDao
 
 object RelationalDb extends PlayerDao {
   private val mappings: CaseClassMapping.type = CaseClassMapping

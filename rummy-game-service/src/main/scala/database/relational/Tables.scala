@@ -1,3 +1,5 @@
+package database.relational
+
 //package player
 //
 //import slick.driver.H2Driver.api._
