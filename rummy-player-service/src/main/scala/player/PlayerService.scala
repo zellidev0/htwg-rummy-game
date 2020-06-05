@@ -4,6 +4,8 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.StatusCodes.{InternalServerError, OK}
+import player.database.PlayerDao
+import player.database.relational.RelationalDb
 // always replace this: import akka.http.scaladsl.server.Directives.{as, complete, entity, path, pathPrefix, post}
 // with           this: import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Directives._
@@ -19,6 +21,7 @@ object PlayerService {
   var initAmountOfTiles: Int = 12
   private val INTERFACE = "0.0.0.0"
   private val PORT = 9002
+  private val database: PlayerDao = RelationalDb;
 
   private implicit val system: ActorSystem = ActorSystem("my-system")
   private implicit val materializer: ActorMaterializer = ActorMaterializer()
@@ -45,7 +48,7 @@ object PlayerService {
     val deskOption = fileIo.jsonToDesk(Json.parse(input))
     val response = deskOption match {
       case Some(value) =>
-        val result = PlayerDao.create(value)
+        val result = database.create(value)
         result match {
           case Some(desk) => handleCorrect(desk)
           case None => handleWrong("Could not save desk in database")
@@ -58,9 +61,9 @@ object PlayerService {
 
   private[player] def loadPath(): Route = post({
     println(s"PlayerService --- load request came in")
-    complete(PlayerDao.read() match {
-      case Some(desk) => handleCorrect(desk)
-      case None => handleWrong("Could not find desk in database")
+    complete(database.read() match {
+      case Some(player) => HttpResponse(OK, entity = player.toString)
+      case None => handleWrong("Could not find player in database")
     })
   })
 
