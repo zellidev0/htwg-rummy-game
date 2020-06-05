@@ -27,13 +27,42 @@ object PlayerService {
   private val playerController = new PlayerController
   private val fileIo = new FileIOJson()
   private val bindingFuture = Http().bindAndHandle(
-    pathPrefix("players")(path("switchToNext")(switchToNextPath()) ~ path("add")(addPath())),
+    pathPrefix("players")(
+      path("switchToNext")(switchToNextPath())
+        ~ path("add")(addPath())
+        ~ path("save")(savePath())
+        ~ path("load")(loadPath())),
     INTERFACE,
     PORT)
 
   println("Running PlayerService on port: " + PORT)
 
   def main(args: Array[String]): Unit = {}
+
+
+  private[player] def savePath(): Route = post(entity(as[String]) { input =>
+    println(s"PlayerService --- save request came in")
+    val deskOption = fileIo.jsonToDesk(Json.parse(input))
+    val response = deskOption match {
+      case Some(value) =>
+        val result = PlayerDao.create(value)
+        result match {
+          case Some(desk) => handleCorrect(desk)
+          case None => handleWrong("Could not save desk in database")
+        }
+      case None =>
+        handleWrong("Desk are not correct")
+    }
+    complete(response)
+  })
+
+  private[player] def loadPath(): Route = post({
+    println(s"PlayerService --- load request came in")
+    complete(PlayerDao.read() match {
+      case Some(desk) => handleCorrect(desk)
+      case None => handleWrong("Could not find desk in database")
+    })
+  })
 
   private[player] def addPath(): Route = post(entity(as[String]) { input =>
     println(s"PlayerService --- add request came in")
