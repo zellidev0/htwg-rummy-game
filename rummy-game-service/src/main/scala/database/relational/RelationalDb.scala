@@ -5,11 +5,12 @@ import model.DeskInterface
 import model.deskComp.deskBaseImpl.PlayerInterface
 
 object RelationalDb extends PlayerDao {
-  private val mappings: CaseClassMapping.type = CaseClassMapping
+  private val playerMappings: PlayerMappings.type = PlayerMappings
+  private val gameMappings: GameMappings.type = GameMappings
 
   def createPlayer(desk: DeskInterface): Option[DeskInterface] = {
     try {
-      val worked = mappings.createPlayer(desk.players.head)
+      val worked = playerMappings.createPlayer(desk.players.head)
       if (worked) {
         println("Saved player in database")
         Some(desk)
@@ -24,7 +25,7 @@ object RelationalDb extends PlayerDao {
 
   def readPlayer(): Option[PlayerInterface] = {
     try {
-      mappings.readPlayer()
+      playerMappings.readPlayer()
     } catch {
       case _: Throwable => None
     }
@@ -32,7 +33,7 @@ object RelationalDb extends PlayerDao {
 
   override def createGame(deskAsJosnString: String): Boolean = {
     try {
-      val worked = mappings.createDesk(deskAsJosnString)
+      val worked = gameMappings.createDesk(deskAsJosnString)
       if (worked) {
         println("Saved desk in database")
         true
@@ -48,17 +49,10 @@ object RelationalDb extends PlayerDao {
 
   override def readGame(): Option[String] = {
     try {
-      mappings.readGame()
+      gameMappings.readGame()
     } catch {
       case _: Throwable => None
     }
   }
 
-  def update(): Unit = {
-    ???
-  }
-
-  def delete(): Unit = {
-    ???
-  }
 }

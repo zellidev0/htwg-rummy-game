@@ -13,7 +13,4 @@ trait PlayerDao {
 
   def readGame(): Option[String]
 
-  def update(): Unit
-
-  def delete(): Unit
 }
