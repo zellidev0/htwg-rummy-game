@@ -7,9 +7,9 @@ import model.deskComp.deskBaseImpl.PlayerInterface
 object RelationalDb extends PlayerDao {
   private val mappings: CaseClassMapping.type = CaseClassMapping
 
-  def create(desk: DeskInterface): Option[DeskInterface] = {
+  def createPlayer(desk: DeskInterface): Option[DeskInterface] = {
     try {
-      val worked = mappings.create(desk.players.head)
+      val worked = mappings.createPlayer(desk.players.head)
       if (worked) {
         println("Saved player in database")
         Some(desk)
@@ -22,9 +22,33 @@ object RelationalDb extends PlayerDao {
     }
   }
 
-  def read(): Option[PlayerInterface] = {
+  def readPlayer(): Option[PlayerInterface] = {
     try {
-      mappings.read()
+      mappings.readPlayer()
+    } catch {
+      case _: Throwable => None
+    }
+  }
+
+  override def createGame(deskAsJosnString: String): Boolean = {
+    try {
+      val worked = mappings.createDesk(deskAsJosnString)
+      if (worked) {
+        println("Saved desk in database")
+        true
+      } else {
+        println("Error saving desk in database")
+        false
+      }
+    } catch {
+      case _: Throwable => false
+    }
+
+  }
+
+  override def readGame(): Option[String] = {
+    try {
+      mappings.readGame()
     } catch {
       case _: Throwable => None
     }

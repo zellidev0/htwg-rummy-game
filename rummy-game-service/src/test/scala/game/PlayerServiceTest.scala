@@ -23,7 +23,7 @@ class PlayerServiceTest extends WordSpec with Matchers with ScalatestRouteTest {
     val desk: Desk = Desk(players, Set(Tile(3, Color.BLUE, 0), Tile(5, Color.RED, 0)), Set[SortedSet[TileInterface]]())
     "return the new desk with added player" in {
       val body = fileIo.deskToJson(desk).+("name", Json.toJson("mike")).toString()
-      Post().withEntity(body) ~> service.addPath() ~> check {
+      Post().withEntity(body) ~> service.addPlayerPath() ~> check {
         println(response.status)
         response.status.intValue() should be(200)
       }

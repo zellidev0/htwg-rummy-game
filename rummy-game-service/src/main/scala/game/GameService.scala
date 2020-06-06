@@ -31,19 +31,23 @@ object GameService {
   private val playerController = new PlayerController
   private val fileIo = new FileIOJson()
 
-  private val bindingFuture = Http().bindAndHandle(pathPrefix("game")(
-    path("putTileDown")(putTileDownPath()) ~
-      path("moveTile")(moveTilePath()) ~
-      path("create")(createPath())) ~
+  private val bindingFuture = Http().bindAndHandle(
+    pathPrefix("game")(
+      path("putTileDown")(putTileDownPath()) ~
+        path("moveTile")(moveTilePath()) ~
+        path("create")(createPath())
+        ~ path("save")(saveGamePath())
+        ~ path("load")(loadGamePath())) ~
     pathPrefix("players")(
-    path("switchToNext")(switchToNextPath())
-      ~ path("add")(addPath())
-      ~ path("save")(savePath())
-      ~ path("load")(loadPath())) ,
+        path("switchToNext")(switchToNextPath())
+          ~ path("add")(addPlayerPath())
+          ~ path("save")(savePlayerPath())
+          ~ path("load")(loadPlayerPath())),
     INTERFACE,
     PORT)
 
   println("Running GameService on port: " + PORT)
+
   def main(args: Array[String]): Unit = {}
 
   private[game] def moveTilePath(): Route = post(entity(as[String]) { input =>
@@ -85,15 +89,31 @@ object GameService {
       case None => None
     }
 
-  private[game] def savePath(): Route = post(entity(as[String]) { input =>
+  private[game] def savePlayerPath(): Route = post(entity(as[String]) { input =>
     println(s"PlayerService --- save request came in")
     val deskOption = fileIo.jsonToDesk(Json.parse(input))
     val response = deskOption match {
       case Some(value) =>
-        val result = database.create(value)
+        val result = database.createPlayer(value)
         result match {
           case Some(desk) => handleCorrect(desk)
-          case None => handleWrong("Could not save desk in database")
+          case None => handleWrong("Could not save player in database")
+        }
+      case None =>
+        handleWrong("Desk are not correct")
+    }
+    complete(response)
+  })
+  private[game] def saveGamePath(): Route = post(entity(as[String]) { input =>
+    println(s"GameService --- save request came in")
+    val deskOption = fileIo.jsonToDesk(Json.parse(input))
+    val response = deskOption match {
+      case Some(value) =>
+        val result = database.createGame(fileIo.deskToJson(value).toString())
+        if (result) {
+          handleCorrect(value)
+        } else {
+          handleWrong("Could not save game in database")
         }
       case None =>
         handleWrong("Desk are not correct")
@@ -101,15 +121,22 @@ object GameService {
     complete(response)
   })
 
-  private[game] def loadPath(): Route = post({
+  private[game] def loadPlayerPath(): Route = post({
     println(s"PlayerService --- load request came in")
-    complete(database.read() match {
+    complete(database.readPlayer() match {
       case Some(player) => HttpResponse(OK, entity = player.toString)
       case None => handleWrong("Could not find player in database")
     })
   })
+  private[game] def loadGamePath(): Route = post({
+    println(s"GameService --- load request came in")
+    complete(database.readGame() match {
+      case Some(desk) => HttpResponse(OK, entity = desk)
+      case None => handleWrong("Could not find desk in database")
+    })
+  })
 
-  private[game] def addPath(): Route = post(entity(as[String]) { input =>
+  private[game] def addPlayerPath(): Route = post(entity(as[String]) { input =>
     println(s"PlayerService --- add request came in")
     val name = checkCorrectName(input)
     val deskOption = fileIo.jsonToDesk(Json.parse(input))
@@ -133,10 +160,8 @@ object GameService {
   })
 
 
-
   private[game] def checkCorrectName(input: String) =
     Json.parse(input).\("name").toOption
-
 
 
   private[game] def handleCorrect(c: DeskInterface) =

@@ -5,9 +5,13 @@ import model.deskComp.deskBaseImpl.PlayerInterface
 
 trait PlayerDao {
 
-  def create(desk: DeskInterface): Option[DeskInterface]
+  def createPlayer(desk: DeskInterface): Option[DeskInterface]
 
-  def read(): Option[PlayerInterface]
+  def readPlayer(): Option[PlayerInterface]
+
+  def createGame(deskAsJsonString: String): Boolean
+
+  def readGame(): Option[String]
 
   def update(): Unit
 
