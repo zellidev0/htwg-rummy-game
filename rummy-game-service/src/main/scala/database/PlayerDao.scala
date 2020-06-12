@@ -7,7 +7,7 @@ trait PlayerDao {
 
   def createPlayer(desk: DeskInterface): Option[DeskInterface]
 
-  def readPlayer(): Option[PlayerInterface]
+  def readPlayer(name: String): Option[PlayerInterface]
 
   def createGame(deskAsJsonString: String): Boolean
 

@@ -8,6 +8,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import database.PlayerDao
+import database.mongo.MongoDb
 import database.relational.RelationalDb
 import model.DeskInterface
 import model.deskComp.deskBaseImpl.deskImpl.Tile
@@ -20,7 +21,7 @@ object GameService {
   var initAmountOfTiles: Int = 12
   private val INTERFACE = "0.0.0.0"
   private val PORT = 9001
-  private val database: PlayerDao = RelationalDb;
+  private val database: PlayerDao = new MongoDb();
 
 
   private implicit val system: ActorSystem = ActorSystem("my-system")
@@ -121,12 +122,13 @@ object GameService {
     complete(response)
   })
 
+
   private[game] def loadPlayerPath(): Route = post({
-    println(s"PlayerService --- load request came in")
-    complete(database.readPlayer() match {
-      case Some(player) => HttpResponse(OK, entity = player.toString)
-      case None => handleWrong("Could not find player in database")
-    })
+    complete({
+      database.readPlayer("mike") match { //todo add name input validation
+        case Some(player) => HttpResponse(OK, entity = player.toString)
+        case None => handleWrong("Could not find player in database")
+      }})
   })
   private[game] def loadGamePath(): Route = post({
     println(s"GameService --- load request came in")

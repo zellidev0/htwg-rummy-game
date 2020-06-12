@@ -105,7 +105,7 @@ object Wui {
     }
 
   private def unmarshallName(input: String) =
-    (Json.parse(input) \ "answer").as[String]
+    (Json.parse(input) \ "name").as[String]
 
   private def handleCorrect(c: ControllerInterface) =
     HttpResponse(OK, entity = ControllerJson.controllerToJson(c).toString())

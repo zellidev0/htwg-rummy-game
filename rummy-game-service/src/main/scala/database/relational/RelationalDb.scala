@@ -23,7 +23,7 @@ object RelationalDb extends PlayerDao {
     }
   }
 
-  def readPlayer(): Option[PlayerInterface] = {
+  def readPlayer(name:String): Option[PlayerInterface] = {
     try {
       playerMappings.readPlayer()
     } catch {
