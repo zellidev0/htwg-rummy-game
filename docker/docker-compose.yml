@@ -14,18 +14,25 @@ services:
   game:
     image: rummy-docker
     ports:
-      - 9001:9001
+      - 27017:27017
     networks:
       default:
         aliases:
           - game
     command: bash -c "cd ~/htwg-rummy-game/rummy-game-service && sbt run"
-  player:
-    image: rummy-docker
-    ports:
-      - 9002:9002
+  mongo:
+    image: mongo
+    command: --serviceExecutor adaptive
     networks:
       default:
         aliases:
-          - player
-    command: bash -c "cd ~/htwg-rummy-game/rummy-player-service && sbt run"
+          - mongo
+#  player:
+#    image: rummy-docker
+#    ports:
+#      - 9002:9002
+#    networks:
+#      default:
+#        aliases:
+#          - player
+#    command: bash -c "cd ~/htwg-rummy-game/rummy-player-service && sbt run"

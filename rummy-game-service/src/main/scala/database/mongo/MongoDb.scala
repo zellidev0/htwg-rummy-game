@@ -21,7 +21,7 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
 class MongoDb extends PlayerDao {
   val DURATION: FiniteDuration = Duration.fromNanos(1000000000)
   // To directly connect to the default server localhost on port 27017
-  val mongoClient: MongoClient = MongoClient()
+  val mongoClient =  MongoClient("mongodb://mongo:27017/")
   val database: MongoDatabase = mongoClient.getDatabase("rummy")
   val playerCollection: MongoCollection[Document] = database.getCollection("players")
   val deskCollection: MongoCollection[Document] = database.getCollection("desks")

@@ -19,7 +19,10 @@ import scala.concurrent.ExecutionContextExecutor
 
 object GameService {
   var initAmountOfTiles: Int = 12
+  //docker
   private val INTERFACE = "0.0.0.0"
+  //local
+//  private val INTERFACE = "127.0.0.1"
   private val PORT = 9001
   private val database: PlayerDao = new MongoDb();
 

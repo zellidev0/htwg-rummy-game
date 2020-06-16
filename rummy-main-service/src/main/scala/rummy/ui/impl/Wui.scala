@@ -19,7 +19,10 @@ import scala.concurrent.ExecutionContextExecutor
 import scala.util.Try
 
 object Wui {
+  //dpocker
   private val INTERFACE = "0.0.0.0"
+//  local
+//  private val INTERFACE = "127.0.0.1"
   private val PORT = 9000
 
   private implicit val system: ActorSystem = ActorSystem("my-system")
