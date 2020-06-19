@@ -31,12 +31,12 @@ case class Controller(desk: DeskInterface,
   type ControllerI = ControllerInterface
 
   //docker
-  private val URL_PLAYER = "http://game:9001/players/"
-  private val URL_GAME = "http://game:9001/game/"
+//  private val URL_PLAYER = "http://game:9001/players/"
+//  private val URL_GAME = "http://game:9001/game/"
 
   //local
-//  private val URL_PLAYER = "http://localhost:9001/players/"
-//  private val URL_GAME = "http://localhost:9001/game/"
+  private val URL_PLAYER = "http://localhost:9001/players/"
+  private val URL_GAME = "http://localhost:9001/game/"
 
   private val fileIO = new FileIOJson()
   private implicit val system: ActorSystem = ActorSystem()

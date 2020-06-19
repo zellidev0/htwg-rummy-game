@@ -10,12 +10,13 @@ object RelationalDb extends PlayerDao {
 
   def createPlayer(desk: DeskInterface): Option[DeskInterface] = {
     try {
-      val worked = playerMappings.createPlayer(desk.players.head)
+      desk.players.foreach(player => playerMappings.createPlayer(player))
+      val worked = true
       if (worked) {
-        println("Saved player in database")
+        println("Saved players in database")
         Some(desk)
       } else {
-        println("Error saving player in database")
+        println("Error saving players in database")
         None
       }
     } catch {
@@ -23,9 +24,9 @@ object RelationalDb extends PlayerDao {
     }
   }
 
-  def readPlayer(name:String): Option[PlayerInterface] = {
+  def readPlayer(name: String): Option[PlayerInterface] = {
     try {
-      playerMappings.readPlayer()
+      playerMappings.readPlayer(name)
     } catch {
       case _: Throwable => None
     }

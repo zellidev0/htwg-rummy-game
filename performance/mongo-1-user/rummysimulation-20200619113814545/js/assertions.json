@@ -1,0 +1,10 @@
+{
+  "simulation": "rummy.RummySimulation",
+  "simulationId": "rummysimulation",
+  "start": 1592566694545,
+  "description": "mongo 1 user",
+  "scenarios": ["RecordedSimulation"],
+  "assertions": [
+
+  ]
+}

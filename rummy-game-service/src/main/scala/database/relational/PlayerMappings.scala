@@ -43,12 +43,14 @@ object PlayerMappings {
   }
 
 
-  def readPlayer(): Option[PlayerInterface] = {
+  def readPlayer(name: String): Option[PlayerInterface] = {
     var player: Option[PlayerInterface] = None
     Await.result(db.run(DBIO.seq(
       players.result.map(pl => {
         println(pl)
-        player = Some(Player(pl.head.name, Board(SortedSet())))
+        if (pl.head.name == name) {
+          player = Some(Player(pl.head.name, Board(SortedSet())))
+        }
       }))), Duration.Inf)
     player
   }
